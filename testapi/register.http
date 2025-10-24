@@ -1,0 +1,20 @@
+@BASE_URL=http://127.0.0.1:8000/api
+@TOKEN=3|r69wz8yG0DMJF7toxfltOMCYRZVC89tZQcw8Y7PZc9547080
+POST {{BASE_URL}}/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "tes@gmail.com",
+  "password": "secret123",
+  "password_confirmation": "secret123"
+}
+
+###LOGIN
+POST {{BASE_URL}}/login
+Content-Type: application/json
+
+{
+  "email": "tes@gmail.com",
+  "password": "secret123"
+}

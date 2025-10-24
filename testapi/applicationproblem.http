@@ -1,0 +1,52 @@
+@BASE_URL = http://127.0.0.1:8000/api
+@TOKEN=2|CK5oy4Ik1SnZjc7f90ye7W5CJYYciqItXnwZ8sqlb3b4ac1b
+
+### =====================================
+### 1️⃣ GET All Application Problems
+### =====================================
+GET {{BASE_URL}}/application-problems
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+
+### =====================================
+### 2️⃣ GET Application Problem by ID
+### =====================================
+GET {{BASE_URL}}/application-problems/{id}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+
+### CREATE APPLICATION PROBLEM
+POST {{BASE_URL}}/application-problems
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "application_id": "019a0fc9-fa84-7303-86c2-7a45f184b913",
+  "problem_name": "Login Page Crash",
+  "description": "App crashes when user clicks login button",
+  "created_id": "123e4567-e89b-12d3-a456-426614174001",
+  "updated_id": "123e4567-e89b-12d3-a456-426614174002"
+}
+
+
+### =====================================
+### 4️⃣ UPDATE Application Problem
+### =====================================
+PUT {{BASE_URL}}/application-problems/019a0fc9-fa84-7303-86c2-7a45f184b913
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "problem_name": "Login Page Crash Fixed",
+  "description": "Crash issue resolved in new version"
+}
+
+
+### =====================================
+### 5️⃣ DELETE Application Problem
+### =====================================
+DELETE {{BASE_URL}}/application-problems/{id}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json

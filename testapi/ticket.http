@@ -1,0 +1,51 @@
+@BASE_URL=http://127.0.0.1:8000/api
+@TOKEN=15|IMmZ2kV46Yod6zk4KIxNZZMeg1VjUlPgzUbobifne065601f
+
+###LOGIN
+POST {{BASE_URL}}/login
+Content-Type: application/json
+
+{
+  "email": "tes@gmail.com",
+  "password": "secret123"
+}
+
+###POST Tiket
+POST {{BASE_URL}}/tickets
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "ticket_status_id": "ed114450-868a-46c4-9e9a-8d424aa0ea2f",
+  "ticket_priority_id": "02bd85e7-9783-4ca3-9815-b2f19ba2c4fd",
+  "application_id": "019a0fc9-fa84-7303-86c2-7a45f184b913",
+  "application_problem_id": "019a0fd6-cab1-72c5-8522-8ebfd87ba313", 
+  "employee_number": "EMP002",
+  "employee_name": "Adam",
+  "position_name": "Admin",
+  "organization_name": "IT Department PGN",
+  "subject": "App Error",
+  "description": "Application crashes on login screen and not login by my email"
+}
+
+###show id
+GET http://127.0.0.1:8000/api/tickets/019a0f1a-d410-70a1-b7bf-28d0039dbb8f
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+###show all
+GET {{BASE_URL}}/tickets
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+
+###update
+PUT {{BASE_URL}}/tickets/019a0f1a-d410-70a1-b7bf-28d0039dbb8f
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "ticket_status_id": "6a71c5ff-5f61-4409-bda6-292626536dac",
+  "subject": "Updated Subject",
+  "description": "Updated description here."
+}

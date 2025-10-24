@@ -1,0 +1,40 @@
+@BASE_URL = http://127.0.0.1:8000/api
+@TOKEN =2|CK5oy4Ik1SnZjc7f90ye7W5CJYYciqItXnwZ8sqlb3b4ac1b
+
+### Get all applications
+GET {{BASE_URL}}/applications
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+### Create new application
+POST {{BASE_URL}}/applications
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "organization_id": "123e4567-e89b-12d3-a456-426614174005",
+  "description": "sample",
+  "application_name": "Test APP",
+  "create_id": "123e4567-e89b-12d3-a456-426614174004",
+  "updated_id": "123e4567-e89b-12d3-a456-426614174008"
+}
+
+### Get single application
+GET {{BASE_URL}}/applications/019a0f90-136d-71d4-9214-839428802196
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+###Update
+PUT {{BASE_URL}}/applications/019a0f90-136d-71d4-9214-839428802196
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "description": "Updated description",
+  "application_name": "Updated App Name"
+}
+
+### Delete application
+DELETE {{BASE_URL}}/applications/019a0f77-d9d7-71ad-b2e8-559cbcfd1a94
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
