@@ -1,5 +1,5 @@
 @BASE_URL = http://127.0.0.1:8000/api
-@TOKEN =2|CK5oy4Ik1SnZjc7f90ye7W5CJYYciqItXnwZ8sqlb3b4ac1b
+@TOKEN =22|uwpwkOalyZb8qdZQJLfyNkrDboHtNXbJKrbsP2o89680b7d0
 
 ### Get all applications
 GET {{BASE_URL}}/applications

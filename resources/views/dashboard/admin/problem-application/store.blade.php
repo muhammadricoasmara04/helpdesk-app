@@ -19,10 +19,11 @@
             </div>
 
             <div>
-                <label for="application_id" class="block font-semibold mb-1">Application ID</label>
-                <input type="text" id="application_id" name="application_id"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" placeholder="UUID aplikasi terkait"
-                    required>
+                <label for="application_id" class="block font-semibold mb-1">Aplikasi</label>
+                <select id="application_id" name="application_id"
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" required>
+                    <option value="">Memuat daftar aplikasi...</option>
+                </select>
             </div>
 
             <div class="flex justify-end pt-4">

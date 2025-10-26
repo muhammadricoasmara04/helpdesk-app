@@ -1,0 +1,47 @@
+### 🧱 BASE URL
+@BASE_URL = http://127.0.0.1:8000/api
+@TOKEN = 19|P4iC0v2p4wAYBxWwUKYjeJebmx4nCwiKjRQzynE3704d5d11
+
+##############################
+# 🚀 TICKET PRIORITY API TESTS #
+##############################
+
+### 1️⃣ Get all ticket priorities
+GET {{BASE_URL}}/ticket-priority
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 2️⃣ Create a new ticket priority
+POST {{BASE_URL}}/ticket-priority
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Very High",
+  "description": "Tiket dengan prioritas paling tinggi"
+}
+
+### 3️⃣ Show single ticket priority
+GET {{BASE_URL}}/ticket-priority/{id}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 4️⃣ Update a ticket priority
+PUT {{BASE_URL}}/ticket-priority/{id}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Low",
+  "description": "Tiket dengan prioritas rendah"
+}
+
+### 5️⃣ Delete a ticket priority
+DELETE {{BASE_URL}}/ticket-priority/{id}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class TicketPriority extends Model
 {
     use HasFactory, HasUuids;
-     protected $table = 'ticket_priority';
+    protected $table = 'ticket_priority';
     protected $fillable = [
         'name',
         'slug',

@@ -1,8 +1,22 @@
 import axios from "axios";
 
 document.addEventListener("DOMContentLoaded", () => {
-    getDataApplication();
-    storeApplication();
+    const path = window.location.pathname;
+    console.log("🔍 Current PATH:", path);
+    const match = path.match(/\/dashboard\/application\/([^/]+)/);
+
+    if (match) {
+        const id = match[1];
+        console.log("🟡 Halaman detail aplikasi. ID =", id);
+        getDataById(id);
+    } else if (path.includes("/dashboard/application")) {
+        console.log("🟢 Halaman daftar aplikasi.");
+        getDataApplication();
+        const form = document.getElementById("applicationForm");
+        if (form) {
+            form.addEventListener("submit", storeApplication);
+        }
+    }
 });
 
 async function getDataApplication() {
@@ -27,7 +41,6 @@ async function getDataApplication() {
             return;
         }
 
-        // 🔄 Ambil data aplikasi dari API
         const response = await axios.get(`${baseUrl}/applications`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -42,16 +55,22 @@ async function getDataApplication() {
             applications.forEach((app) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td class="border px-4 py-2">${
-                        app.application_name || "-"
-                    }</td>
-                    <td class="border px-4 py-2">${app.description || "-"}</td>
-                    <td class="border px-4 py-2">${app.create_id || "-"}</td>
-                    <td class="border px-4 py-2">${app.updated_id || "-"}</td>
-                    <td class="border px-4 py-2">${formatDate(
-                        app.created_at
-                    )}</td>
-                `;
+    <td class="border px-4 py-2">${app.application_name || "-"}</td>
+    <td class="border px-4 py-2">${app.description || "-"}</td>
+    <td class="border px-4 py-2">${app.create_id || "-"}</td>
+    <td class="border px-4 py-2">${app.updated_id || "-"}</td>
+    <td class="border px-4 py-2">${formatDate(app.created_at)}</td>
+    <td class="border px-4 py-2 text-center">
+        <a href="/dashboard/application/${app.id}" 
+           class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">
+           Detail
+        </a>
+        <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 delete-btn" 
+                data-id="${app.id}">
+            Hapus
+        </button>
+    </td>
+`;
                 tableBody.appendChild(row);
             });
         } else {
@@ -157,5 +176,36 @@ async function storeApplication(e) {
             messageEl.textContent = `Gagal menyimpan: ${error.message}`;
         }
         messageEl.className = "text-red-500";
+    }
+}
+
+async function getDataById(id) {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+    const detailEl = document.getElementById("applicationDetail");
+
+    try {
+        const response = await axios.get(`${baseUrl}/applications/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = response.data?.data;
+
+        if (response.data.success && data) {
+            document.getElementById("application_name").textContent =
+                data.application_name;
+            document.getElementById("description").textContent =
+                data.description;
+            document.getElementById("organization_id").textContent =
+                data.organization_id;
+            document.getElementById("create_id").textContent = data.create_id;
+            document.getElementById("updated_id").textContent = data.updated_id;
+            console.log("Response data:", response.data);
+        } else {
+            detailEl.innerHTML = `<p class="text-red-500">Data aplikasi tidak ditemukan.</p>`;
+        }
+    } catch (error) {
+        console.error("Error getDataById:", error);
+        detailEl.innerHTML = `<p class="text-red-500">Terjadi kesalahan saat memuat data.</p>`;
     }
 }

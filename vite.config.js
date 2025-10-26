@@ -12,6 +12,8 @@ export default defineConfig({
                 "resources/js/dashboard.js",
                 "resources/js/dashboard/application.js",
                 "resources/js/dashboard/application-problem.js",
+                "resources/js/dashboard/ticket-status.js",
+                "resources/js/dashboard/ticket-priority.js",
             ],
             refresh: true,
         }),

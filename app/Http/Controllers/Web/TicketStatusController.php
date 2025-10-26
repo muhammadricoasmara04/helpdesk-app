@@ -7,5 +7,10 @@ use Illuminate\Http\Request;
 
 class TicketStatusController extends Controller
 {
-    //
+    public function index(){
+        return view('dashboard.admin.ticket-status.index');
+    }
+    public function store(){
+        return view('dashboard.admin.ticket-status.store');
+    }
 }

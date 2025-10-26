@@ -11,9 +11,11 @@
                 <tr>
                     <th class="border px-4 py-2 text-left">Masalah</th>
                     <th class="border px-4 py-2 text-left">Deskripsi</th>
+                    <th class="border px-4 py-2 text-left">Aplikasi</th>
                     <th class="border px-4 py-2 text-left">Pembuatan ID</th>
                     <th class="border px-4 py-2 text-left">Pembaruan ID</th>
                     <th class="border px-4 py-2 text-left">Tanggal Dibuat</th>
+                    <th class="border px-4 py-2 text-left">Actions</th>
                 </tr>
             </thead>
             <tbody id="problems-table-body" class="bg-white">

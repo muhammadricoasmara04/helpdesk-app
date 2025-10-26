@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,12 +38,14 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'role' => ['nullable', 'string', 'in:admin,user'],
         ]);
-
+        $role = Role::where('name', $request->role ?? 'user')->first();
         $user = User::create([
             'name' => $register['name'],
             'email' => $register['email'],
             'password' => bcrypt($register['password']),
+            'role_id' => $role->id,
         ]);
         $token = $user->createToken('register_token')->plainTextToken;
 

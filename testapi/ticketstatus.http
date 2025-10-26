@@ -1,0 +1,47 @@
+### 🧱 BASE URL
+@BASE_URL = http://127.0.0.1:8000/api
+@TOKEN =19|P4iC0v2p4wAYBxWwUKYjeJebmx4nCwiKjRQzynE3704d5d11
+
+##############################
+# 🚀 TICKET STATUS API TESTS #
+##############################
+
+### 1️⃣ Get all ticket statuses
+GET {{BASE_URL}}/ticket-status
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 2️⃣ Create a new ticket status
+POST {{BASE_URL}}/ticket-status
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Pending",
+  "description": "Ticket baru yang belum diproses"
+}
+
+### 3️⃣ Show single ticket status
+GET {{BASE_URL}}/ticket-status/{id}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 4️⃣ Update a ticket status
+PUT {{BASE_URL}}/ticket-status/{id}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Closed",
+  "description": "Ticket sudah selesai ditangani"
+}
+
+### 5️⃣ Delete a ticket status
+DELETE {{BASE_URL}}/ticket-status/{id}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{TOKEN}}

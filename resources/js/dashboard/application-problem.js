@@ -2,83 +2,65 @@ import axios from "axios";
 
 document.addEventListener("DOMContentLoaded", () => {
     getDataApplicationProblems();
+    loadApplications();
 });
 
 async function getDataApplicationProblems() {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const tableBody = document.getElementById("problems-table-body");
-    if (tableBody) {
-        getDataApplicationProblems(tableBody);
-    }
     if (!tableBody) return;
-    const setMessageRow = (message, color = "text-gray-500") => {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="5" class="text-center py-4 ${color}">${message}</td>
-            </tr>
-        `;
-    };
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
     try {
-        const token = localStorage.getItem("token");
+        const [problemsRes, appsRes] = await Promise.all([
+            axios.get(`${baseUrl}/application-problems`, {
+                headers: { Authorization: `Bearer ${token}` },
+            }),
+            axios.get(`${baseUrl}/applications`, {
+                headers: { Authorization: `Bearer ${token}` },
+            }),
+        ]);
 
-        if (!token) {
-            setMessageRow(
-                "Belum login. Silakan login terlebih dahulu.",
-                "text-red-500"
+        const problems = problemsRes.data.data || [];
+        const applications = appsRes.data.data || [];
+
+        tableBody.innerHTML = "";
+
+        problems.forEach((problem) => {
+            const app = applications.find(
+                (a) => a.id === problem.application_id
             );
-            return;
-        }
+            const appName = app?.application_name || "-";
 
-        const response = await axios.get(`${baseUrl}/application-problems`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td class="border px-4 py-2">${problem.problem_name || "-"}</td>
+                <td class="border px-4 py-2">${problem.description || "-"}</td>
+                <td class="border px-4 py-2">${appName}</td>
+                <td class="border px-4 py-2">${
+                    problem.application_id || "-"
+                }</td>
+                <td class="border px-4 py-2">${problem.created_id || "-"}</td>
+                <td class="border px-4 py-2">${formatDate(
+                    problem.created_at
+                )}</td>
+                <td class="border px-4 py-2 text-center space-x-2">
+                   <a href="/dashboard/application-problem/${problem.id}"
+                    class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition">
+                    Show
+                    </a>
+                    <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition delete-btn"
+                            data-id="${problem.id}">
+                        Delete
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
         });
-
-        const problems = response.data?.data || [];
-
-        if (response.data.success && problems.length > 0) {
-            tableBody.innerHTML = "";
-
-            problems.forEach((problem) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td class="border px-4 py-2">${
-                        problem.problem_name || "-"
-                    }</td>
-                    <td class="border px-4 py-2">${
-                        problem.description || "-"
-                    }</td>
-                    <td class="border px-4 py-2">${
-                        problem.application_id || "-"
-                    }</td>
-                    <td class="border px-4 py-2">${
-                        problem.created_id || "-"
-                    }</td>
-                    <td class="border px-4 py-2">${formatDate(
-                        problem.created_at
-                    )}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-        } else {
-            setMessageRow("Tidak ada data problem aplikasi tersedia.");
-        }
     } catch (error) {
-        console.error("Error saat memuat application problems:", error);
-
-        if (error.response && error.response.status === 401) {
-            setMessageRow(
-                "Sesi login berakhir. Silakan login ulang.",
-                "text-red-500"
-            );
-        } else {
-            setMessageRow(
-                `Gagal memuat data problem aplikasi: ${error.message}`,
-                "text-red-500"
-            );
-        }
+        console.error(error);
     }
 }
 
@@ -92,6 +74,38 @@ function formatDate(dateString) {
         hour: "2-digit",
         minute: "2-digit",
     });
+}
+
+async function loadApplications() {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+    const selectApp = document.getElementById("application_id");
+
+    if (!selectApp) return;
+
+    if (!token) {
+        selectApp.innerHTML = `<option value="">Silakan login terlebih dahulu</option>`;
+        return;
+    }
+
+    try {
+        const response = await axios.get(`${baseUrl}/applications`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const applications = response.data.data || [];
+
+        selectApp.innerHTML = `<option value="">Pilih Aplikasi...</option>`;
+        applications.forEach((app) => {
+            const option = document.createElement("option");
+            option.value = app.id;
+            option.textContent = app.application_name;
+            selectApp.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Gagal memuat aplikasi:", error);
+        selectApp.innerHTML = `<option value="">Gagal memuat data aplikasi</option>`;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -114,7 +128,6 @@ async function storeApplicationProblem(e) {
         return;
     }
 
-    // Ambil data dari form
     const formData = {
         problem_name: document.getElementById("problem_name").value.trim(),
         description: document.getElementById("description").value.trim(),
@@ -123,7 +136,6 @@ async function storeApplicationProblem(e) {
         updated_id: crypto.randomUUID(),
     };
 
-    // Validasi sederhana
     if (
         !formData.problem_name ||
         !formData.description ||
@@ -142,17 +154,13 @@ async function storeApplicationProblem(e) {
             `${baseUrl}/application-problems`,
             formData,
             {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             }
         );
 
         if (response.data.success) {
             messageEl.textContent = "Problem aplikasi berhasil ditambahkan!";
             messageEl.className = "text-green-600";
-
-            // Reset form
             e.target.reset();
         } else {
             messageEl.textContent = "Gagal menambahkan problem aplikasi.";
@@ -160,12 +168,10 @@ async function storeApplicationProblem(e) {
         }
     } catch (error) {
         console.error("Error saat menambahkan problem aplikasi:", error);
-
-        if (error.response && error.response.status === 401) {
-            messageEl.textContent = "Sesi login berakhir. Silakan login ulang.";
-        } else {
-            messageEl.textContent = `Gagal menyimpan: ${error.message}`;
-        }
+        messageEl.textContent =
+            error.response?.status === 401
+                ? "Sesi login berakhir. Silakan login ulang."
+                : `Gagal menyimpan: ${error.message}`;
         messageEl.className = "text-red-500";
     }
 }

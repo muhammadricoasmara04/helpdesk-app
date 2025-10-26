@@ -5,7 +5,7 @@
 
     <div class="flex items-center space-x-4">
         <div class="flex items-center space-x-2">
-            <img src="{{ Auth::user()->profile_photo_url ?? 'https://via.placeholder.com/32' }}" 
+            <img src="{{ Auth::user()->profile_photo_url ?? '' }}" 
                  alt="User Avatar"
                  class="w-8 h-8 rounded-full object-cover" />
             <span class="text-gray-700 font-medium">{{ Auth::user()->name ?? 'User' }}</span>

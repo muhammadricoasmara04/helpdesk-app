@@ -21,6 +21,17 @@
            {{ request()->routeIs('application-problems') ? 'bg-indigo-200 font-semibold' : '' }}">
             Masalah Aplikasi
         </a>
+        <a href="{{ route('ticket-status') }}"
+            class="block px-3 py-2 rounded-md hover:bg-indigo-100
+           {{ request()->routeIs('ticket-status') ? 'bg-indigo-200 font-semibold' : '' }}">
+            Tiket Status
+        </a>
+
+        <a href="{{ route('ticket-priority') }}"
+            class="block px-3 py-2 rounded-md hover:bg-indigo-100
+           {{ request()->routeIs('ticket-priority') ? 'bg-indigo-200 font-semibold' : '' }}">
+            Tiket Prioritas
+        </a>
     </nav>
 
     <div class="p-4 border-t border-gray-200">
