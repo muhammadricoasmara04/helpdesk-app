@@ -19,19 +19,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 password,
                 _token: csrfToken,
             });
-
+            console.log(response)
             // Pastikan respons berisi token
             const token = response.data?.token;
             if (!token) {
                 alert("Login gagal: token tidak ditemukan di respons API.");
                 return;
             }
-
+            const role = response.data.user.role_id === 1 ? "admin" : "user";
             // Simpan token ke localStorage
             localStorage.setItem("token", token);
 
             alert("Login berhasil!");
-            window.location.href = "/dashboard";
+
+            if (role === "admin") {
+                window.location.href = "/dashboard";
+            } else {
+                window.location.href = "/dashboard/user";
+            }
         } catch (error) {
             console.error("Login error:", error);
             alert(error.response?.data?.message || "Login gagal!");

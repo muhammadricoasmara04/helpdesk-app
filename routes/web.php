@@ -6,11 +6,15 @@ use App\Http\Controllers\Web\AuthPageController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TicketPriorityController;
 use App\Http\Controllers\Web\TicketStatusController;
+use App\Http\Controllers\Web\User\DashboardUserController;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthPageController::class, 'index'])->name('login');
+
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/user', [DashboardUserController::class, 'index'])->name('dashboard.user');
 
 Route::get('/dashboard/application', [ApplicationController::class, 'index'])->name('application');
 Route::get('/dashboard/application/addapp', [ApplicationController::class, 'store'])->name('application-store');

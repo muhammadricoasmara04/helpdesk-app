@@ -5,10 +5,19 @@ Content-Type: application/json
 
 {
   "name": "Test User",
-  "email": "tes@gmail.com",
+  "email": "user@gmail.com",
   "password": "secret123",
   "password_confirmation": "secret123"
 }
+
+
+# {
+#   "name": "Admin Satu",
+#   "email": "admin@gmail.com",
+#   "password": "secret123",
+#   "password_confirmation": "secret123",
+#   "role": "admin"
+# }
 
 ###LOGIN
 POST {{BASE_URL}}/login
