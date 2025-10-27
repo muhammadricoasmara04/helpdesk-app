@@ -26,6 +26,11 @@
 
     </div>
     @stack('scripts')
+    <script>
+        @if (session('api_token'))
+            localStorage.setItem('token', "{{ session('api_token') }}");
+        @endif
+    </script>
 </body>
 
 </html>

@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.getElementById("tickets-table-body");
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+    const token = localStorage.getItem("token");
 
     function formatDate(dateString) {
         if (!dateString) return "-";
@@ -17,24 +18,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    if (!token) {
+        tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-red-500">Belum login. Silakan login terlebih dahulu.</td></tr>`;
+        return;
+    }
+    
     try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-red-500">Belum login. Silakan login terlebih dahulu.</td></tr>`;
-            return;
-        }
-
-        // Request data tiket
         const response = await axios.get(`${baseUrl}/tickets`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
         });
 
         const tickets = response.data?.data || [];
 
-        if (response.data.success && tickets.length > 0) {
+        if (tickets.length > 0) {
             tableBody.innerHTML = "";
             tickets.forEach((ticket) => {
                 const row = document.createElement("tr");
@@ -55,6 +51,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     } catch (error) {
         console.error("Error saat memuat tiket:", error);
-        tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-red-500">Gagal memuat data tiket: ${error.message}</td></tr>`;
+        const message =
+            error.response?.data?.message ||
+            "Token tidak valid atau sesi login telah berakhir.";
+        tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-red-500">${message}</td></tr>`;
+
+        // Jika unauthorized (401), paksa logout
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+        }
     }
 });

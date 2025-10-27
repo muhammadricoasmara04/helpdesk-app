@@ -25,6 +25,7 @@
                 </tr>
             </tbody>
         </table>
+        <div id="user-info"></div>
 
     </div>
 @endsection

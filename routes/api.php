@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('application-problems', ApplicationProblemController::class);
     Route::apiResource('ticket-status', TicketsStatusController::class);
     Route::apiResource('ticket-priority', TicketsPriorityController::class);
-
+    
+    Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });

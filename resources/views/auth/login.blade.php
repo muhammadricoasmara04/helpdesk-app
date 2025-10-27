@@ -5,7 +5,7 @@
         <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
             <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
 
-            <form id="loginForm">
+            <form action="{{ route('login') }}" method="POST">
                 @csrf
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
@@ -31,7 +31,4 @@
             </p>
         </div>
     </div>
-    @push('scripts')
-        @vite('resources/js/auth.js')
-    @endpush
 @endsection
