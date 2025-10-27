@@ -9,6 +9,6 @@ class DashboardUserController extends Controller
 {
     public function index()
     {
-        return response()->json(['message' => 'Welcome User Dashboard']);
+        return view('');
     }
 }

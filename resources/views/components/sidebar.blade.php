@@ -7,7 +7,6 @@
         @php $user = session('user'); @endphp
 
         @if ($user['role_id'] === 1)
-            <!-- Menu admin -->
             <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Dashboard</a>
             <a href="{{ route('application') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Aplikasi</a>
             <a href="{{ route('application-problems') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Masalah
@@ -17,7 +16,6 @@
             <a href="{{ route('ticket-priority') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Tiket
                 Prioritas</a>
         @else
-            <!-- Menu user -->
             <a href="{{ route('dashboard.user') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Dashboard
                 User</a>
             <a href="/my-tickets" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Tiket Saya</a>
@@ -32,10 +30,5 @@
                 Logout
             </button>
         </form>
-        <div class="mt-4">
-            <p>Selamat datang, {{ $user['name'] }}</p>
-            <p>Email: {{ $user['email'] }}</p>
-            <p>Role ID: {{ $user['role_id'] }}</p>
-        </div>
     </div>
 </aside>

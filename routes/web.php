@@ -13,8 +13,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthPageController::class, 'index'])->name('login');
 Route::post('/', [AuthPageController::class, 'login']);
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/dashboard/user', [DashboardUserController::class, 'index'])->name('dashboard.user');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/dashboard/user', [DashboardUserController::class, 'index'])->name('dashboard.user');
+});
 
 Route::get('/dashboard/application', [ApplicationController::class, 'index'])->name('application');
 Route::get('/dashboard/application/addapp', [ApplicationController::class, 'store'])->name('application-store');
