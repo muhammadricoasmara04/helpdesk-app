@@ -23,12 +23,17 @@
     </nav>
 
     <div class="p-4 border-t border-gray-200">
-        <form method="POST" action="">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
                 class="w-full text-left px-3 py-2 rounded-md hover:bg-red-100 text-red-600 font-semibold">
                 Logout
             </button>
         </form>
+        <div class="mt-4">
+            <p>Selamat datang, {{ $user['name'] }}</p>
+
+            <p>Role ID: {{ $user['role_id'] }}</p>
+        </div>
     </div>
 </aside>
