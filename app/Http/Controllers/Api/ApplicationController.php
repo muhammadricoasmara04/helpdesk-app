@@ -34,6 +34,7 @@ class ApplicationController extends Controller
             'organization_id' => 'required|uuid',
             'description' => 'required|string',
             'application_name' => 'required|string|max:255',
+            'application_code' => 'required|string|max:25',
             'create_id' => 'required|uuid',
             'updated_id' => 'required|uuid',
         ]);
@@ -78,6 +79,7 @@ class ApplicationController extends Controller
             'organization_id' => 'sometimes|uuid',
             'description' => 'sometimes|string',
             'application_name' => 'sometimes|string|max:255',
+            'application_code' => 'required|string|max:25',
             'create_id' => 'sometimes|uuid',
             'updated_id' => 'sometimes|uuid',
         ]);
@@ -87,6 +89,7 @@ class ApplicationController extends Controller
             $data = $request->only([
                 'organization_id',
                 'application_name',
+                'application_code',
                 'description',
                 'create_id',
                 'updated_id',

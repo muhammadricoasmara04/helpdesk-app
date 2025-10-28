@@ -40,7 +40,7 @@
                 {{-- Aplikasi --}}
                 <div>
                     <label class="block text-sm font-medium mb-1">Aplikasi</label>
-                    <select name="application_id" class="w-full border rounded p-2" required>
+                    <select id="application_id" name="application_id" class="w-full border rounded p-2" required>
                         <option value="">-- Pilih Aplikasi --</option>
                         @foreach ($applications as $app)
                             <option value="{{ $app->id }}">{{ $app->application_name }}</option>
@@ -51,11 +51,9 @@
                 {{-- Jenis Masalah --}}
                 <div>
                     <label class="block text-sm font-medium mb-1">Jenis Masalah</label>
-                    <select name="application_problem_id" class="w-full border rounded p-2" required>
+                    <select id="application_problem_id" name="application_problem_id" class="w-full border rounded p-2"
+                        required>
                         <option value="">-- Pilih Masalah --</option>
-                        @foreach ($problems as $problem)
-                            <option value="{{ $problem->id }}">{{ $problem->problem_name }}</option>
-                        @endforeach
                     </select>
                 </div>
             </div>
@@ -85,4 +83,27 @@
             </button>
         </form>
     </div>
+    <script>
+        // Ambil semua data problem dari backend ke JavaScript
+        const problems = @json($problems);
+
+        const appSelect = document.getElementById('application_id');
+        const problemSelect = document.getElementById('application_problem_id');
+
+        appSelect.addEventListener('change', function() {
+            const selectedAppId = this.value;
+            problemSelect.innerHTML = '<option value="">-- Pilih Masalah --</option>';
+
+            // Filter problem berdasarkan application_id yang dipilih
+            const filteredProblems = problems.filter(p => p.application_id === selectedAppId);
+
+            // Tambahkan hasilnya ke dropdown
+            filteredProblems.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.problem_name;
+                problemSelect.appendChild(opt);
+            });
+        });
+    </script>
 @endsection

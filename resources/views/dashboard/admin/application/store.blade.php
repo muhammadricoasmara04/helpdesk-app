@@ -11,6 +11,11 @@
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" placeholder="Masukkan nama aplikasi"
                     required>
             </div>
+            <div>
+                <label for="application_code" class="block font-semibold mb-1">Aplikasi Code</label>
+                <input id="application_code" name="application_code" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
+                    rows="3" placeholder="Contoh: SM, SA, TS, AS" required></input>
+            </div>
 
             <div>
                 <label for="description" class="block font-semibold mb-1">Deskripsi</label>

@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('ticket_reply', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('ticked_id');
-            $table->string('slug');
-            $table->text('description');
+            $table->text('message');
             $table->timestamps();
         });
     }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('organization_id');
             $table->text('description');
             $table->string('application_name');
+            $table->string('application_code');
             $table->uuid('create_id');
             $table->uuid('updated_id');
             $table->timestamps();

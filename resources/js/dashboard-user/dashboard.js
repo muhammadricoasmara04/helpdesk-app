@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
     };
 
-    // ✅ Ambil semua tiket milik user login
     async function getMyTickets() {
         try {
             const token = localStorage.getItem("token");
@@ -70,6 +69,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Jalankan saat halaman dimuat
     getMyTickets();
 });

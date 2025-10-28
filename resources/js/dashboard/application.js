@@ -129,6 +129,9 @@ async function storeApplication(e) {
         application_name: document
             .getElementById("application_name")
             .value.trim(),
+        application_code: document
+            .getElementById("application_code")
+            .value.trim(),
         description: document.getElementById("description").value.trim(),
         organization_id: document
             .getElementById("organization_id")
@@ -139,6 +142,7 @@ async function storeApplication(e) {
 
     if (
         !formData.application_name ||
+        !formData.application_code ||
         !formData.description ||
         !formData.organization_id
     ) {

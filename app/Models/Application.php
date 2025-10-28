@@ -14,6 +14,7 @@ class Application extends Model
     protected $fillable = [
         'organization_id',
         'application_name',
+        'application_code',
         'description',
         'create_id',
         'updated_id'
