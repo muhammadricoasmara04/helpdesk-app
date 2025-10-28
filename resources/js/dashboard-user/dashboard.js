@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td class="border px-4 py-2">${
-                            data.ticked_code || "-"
+                            data.ticket_code || "-"
                         }</td>
                         <td class="border px-4 py-2">${data.subject || "-"}</td>
                         <td class="border px-4 py-2">${

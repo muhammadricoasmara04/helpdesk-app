@@ -34,10 +34,25 @@ class TicketUserController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $ticket = new Ticket();
-        $ticket->ticked_code = 'TCK-' . strtoupper(Str::random(8));
+        $application = Application::findOrFail($validated['application_id']);
+        $now = now();
+        $month = $now->format('m');
+        $year = $now->format('Y');
 
-        // ambil dari user login
+        $sequence = Ticket::where('application_id', $application->id)
+            ->whereYear('created_at', $year)
+            ->count() + 1;
+        $numberFormatted = str_pad($sequence, 5, '0', STR_PAD_LEFT);
+
+        $ticketCode = sprintf(
+            '%s-TCK-%s/%s/%s',
+            strtoupper($application->application_code),
+            $numberFormatted,
+            $month,
+            $year
+        );
+        $ticket = new Ticket();
+        $ticket->ticket_code = $ticketCode;
         $ticket->employee_number = Auth::id();
         $ticket->employee_name = Auth::user()->name;
 

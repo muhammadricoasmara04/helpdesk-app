@@ -14,7 +14,7 @@ class Ticket extends Model
         'ticket_priority_id',
         'application_id',
         'application_problem_id',
-        'ticked_code',
+        'ticket_code',
         'employee_number',
         'employee_name',
         'position_name',

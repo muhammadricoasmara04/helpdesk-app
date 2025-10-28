@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('ticket_priority_id')->nullable();
             $table->uuid('application_id')->nullable();
             $table->uuid('application_problem_id')->nullable();
-            $table->string('ticked_code');
+            $table->string('ticket_code');
             $table->string('employee_number');
             $table->string('employee_name');
             $table->text('position_name')->nullable();

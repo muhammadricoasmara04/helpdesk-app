@@ -54,7 +54,7 @@ class TicketsControllers extends Controller
                 'ticket_priority_id' => $validated['ticket_priority_id'],
                 'application_id' => $validated['application_id'],
                 'application_problem_id' => $validated['application_problem_id'],
-                'ticked_code' => 'TCK-' . strtoupper(Str::random(8)),
+                'ticket_code' => 'TCK-' . strtoupper(Str::random(8)),
                 'employee_number' => $validated['employee_number'],
                 'employee_name' => $validated['employee_name'],
                 'position_name' => $validated['position_name'],
