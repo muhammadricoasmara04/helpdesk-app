@@ -4,8 +4,8 @@ POST {{BASE_URL}}/register
 Content-Type: application/json
 
 {
-  "name": "Test User",
-  "email": "user@gmail.com",
+  "name": "user2",
+  "email": "user2@gmail.com",
   "password": "secret123",
   "password_confirmation": "secret123"
 }

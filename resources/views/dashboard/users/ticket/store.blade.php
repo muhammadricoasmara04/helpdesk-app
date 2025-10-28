@@ -23,16 +23,6 @@
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-                {{-- Status Ticket --}}
-                <div>
-                    <label class="block text-sm font-medium mb-1">Status</label>
-                    <select name="ticket_status_id" class="w-full border rounded p-2" required>
-                        <option value="">-- Pilih Status --</option>
-                        @foreach ($statuses as $status)
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
 
                 {{-- Prioritas --}}
                 <div>

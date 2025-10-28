@@ -175,4 +175,27 @@ class TicketsControllers extends Controller
             ], 500);
         }
     }
+
+    public function myTickets(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $tickets = Ticket::with(['status', 'priority', 'application', 'problem'])
+                ->where('employee_number', $user->id) 
+                ->latest()
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User tickets retrieved successfully.',
+                'data' => $tickets
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error while retrieving user tickets.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
