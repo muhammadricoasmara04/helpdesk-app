@@ -41,4 +41,13 @@ class Ticket extends Model
     {
         return $this->belongsTo(ApplicationProblem::class, 'application_problem_id');
     }
+    public function replies()
+    {
+        return $this->hasMany(TicketReply::class);
+    }
+
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 }

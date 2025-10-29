@@ -9,7 +9,7 @@
             </div>
         @endif
 
-        <form action="{{ route('ticket.store') }}" method="POST">
+        <form action="{{ route('ticket.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             {{-- Hidden employee id & name --}}
@@ -78,15 +78,20 @@
                 <input type="text" name="organization_name" class="w-full border rounded p-2">
             </div>
 
+            <div class="mt-3">
+                <label class="block text-sm font-medium mb-1">Lampiran (boleh lebih dari satu)</label>
+                <input type="file" name="attachments[]" multiple
+                    class="w-full border rounded p-2 cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, PDF, DOCX — Maks. 5MB per file</p>
+            </div>
+
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
                 Kirim Tiket
             </button>
         </form>
     </div>
     <script>
-        // Ambil semua data problem dari backend ke JavaScript
         const problems = @json($problems);
-
         const appSelect = document.getElementById('application_id');
         const problemSelect = document.getElementById('application_problem_id');
 

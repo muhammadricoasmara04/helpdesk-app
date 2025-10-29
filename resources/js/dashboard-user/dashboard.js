@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             data.status?.name || "-"
                         }</td>
                         <td class="border px-4 py-2">${
-                            data.priority?.name|| "-"
+                            data.priority?.name || "-"
                         }</td>
                         <td class="border px-4 py-2">${
                             data.application?.application_name || "-"
@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         <td class="border px-4 py-2">${new Date(
                             data.created_at
                         ).toLocaleString()}</td>
+                        <td class="border px-4 py-2 text-center">
+        <a href="/ticket-reply/${data.id}"
+           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+            💬 Chat
+        </a>
+    </td>
                     `;
                     tableBody.appendChild(row);
                 });

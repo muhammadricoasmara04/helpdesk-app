@@ -5,9 +5,11 @@ use App\Http\Controllers\Web\ApplicationController;
 use App\Http\Controllers\Web\AuthPageController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TicketPriorityController;
+use App\Http\Controllers\Web\TicketReplyController;
 use App\Http\Controllers\Web\TicketStatusController;
 use App\Http\Controllers\Web\User\DashboardUserController;
 use App\Http\Controllers\Web\User\TicketUserController;
+use App\Http\Controllers\Web\User\TicketUserReplyController;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
@@ -59,5 +61,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::prefix('user')->middleware(['auth'])->group(function () {
         Route::get('/ticket/create', [TicketUserController::class, 'index'])->name('ticket.index');
         Route::post('/ticket/store', [TicketUserController::class, 'store'])->name('ticket.store');
+    });
+
+    Route::prefix('ticket-reply')->group(function () {
+        Route::get('/{id}', [TicketUserReplyController::class, 'index'])->name('ticket-replied');
     });
 });

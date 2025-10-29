@@ -19,6 +19,7 @@
                     <th class="border px-4 py-2">Masalah</th>
                     <th class="border px-4 py-2">Nama Pegawai</th>
                     <th class="border px-4 py-2">Dibuat Pada</th>
+                    <th class="border px-4 py-2">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tickets-table-body">

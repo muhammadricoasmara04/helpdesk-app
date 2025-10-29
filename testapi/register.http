@@ -3,29 +3,36 @@
 POST {{BASE_URL}}/register
 Content-Type: application/json
 
-[
-  {
+ {
     "name": "User Satu",
-    "email": "user1@gmail.com",
-    "password": "secret123",
-    "password_confirmation": "secret123",
-    "role": "user"
-  },
-  {
-    "name": "Admin Satu",
-    "email": "admin@gmail.com",
-    "password": "secret123",
-    "password_confirmation": "secret123",
-    "role": "admin"
-  },
-  {
-    "name": "User Dua",
-    "email": "user2@gmail.com",
-    "password": "secret123",
-    "password_confirmation": "secret123",
+   "email": "user1@gmail.com",
+   "password": "secret123",
+   "password_confirmation": "secret123",
     "role": "user"
   }
-]
+# [
+#   {
+#     "name": "User Satu",
+#     "email": "user1@gmail.com",
+#     "password": "secret123",
+#     "password_confirmation": "secret123",
+#     "role": "user"
+#   },
+#   {
+#     "name": "Admin Satu",
+#     "email": "admin@gmail.com",
+#     "password": "secret123",
+#     "password_confirmation": "secret123",
+#     "role": "admin"
+#   },
+#   {
+#     "name": "User Dua",
+#     "email": "user2@gmail.com",
+#     "password": "secret123",
+#     "password_confirmation": "secret123",
+#     "role": "user"
+#   }
+# ]
 
 ###LOGIN
 POST {{BASE_URL}}/login

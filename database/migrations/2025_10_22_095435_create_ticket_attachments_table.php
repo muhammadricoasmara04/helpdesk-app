@@ -16,6 +16,12 @@ return new class extends Migration
             $table->uuid('ticket_id');
             $table->text('file_path');
             $table->timestamps();
+
+            
+            $table->foreign('ticket_id')
+                ->references('id')
+                ->on('tickets')
+                ->onDelete('cascade'); 
         });
     }
 

@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('ticket_reply', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('ticked_id');
+            $table->uuid('ticket_id');
+            $table->uuid('user_id');
             $table->text('message');
             $table->timestamps();
+
+            $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

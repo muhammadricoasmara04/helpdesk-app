@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             tickets.forEach((ticket) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
+                
                     <td>${ticket.ticket_code || "-"}</td>
                     <td>${ticket.subject || "-"}</td>
                     <td>${ticket.status?.name || "-"}</td>

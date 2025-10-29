@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('organization_name')->nullable();
             $table->string('subject');
             $table->text('description')->nullable();
+            $table->uuid('assigned_to')->nullable();
             $table->timestamps();
 
 
@@ -33,6 +34,10 @@ return new class extends Migration
             $table->foreign('ticket_priority_id')->references('id')->on('ticket_priority')->onDelete('cascade');
             $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
             $table->foreign('application_problem_id')->references('id')->on('application_problems')->onDelete('cascade');
+            $table->foreign('assigned_to')
+                ->references('id')
+                ->on('users') 
+                ->onDelete('set null');
         });
     }
 
