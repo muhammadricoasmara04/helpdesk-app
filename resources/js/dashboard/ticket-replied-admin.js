@@ -2,7 +2,7 @@ import axios from "axios";
 import "../echo";
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("💬 Ticket Reply Chat Loaded");
+    console.log("💬 Ticket Reply Chat Admin Loaded");
 
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
@@ -11,13 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatBox = document.getElementById("chat-box");
     const form = document.getElementById("chat-form");
     const messageInput = document.getElementById("message");
+    const statusSelect = document.getElementById("ticket-status"); // tambahan khusus admin
 
     if (!ticketId) {
         console.error("❌ Ticket ID not found");
         return;
     }
 
-    const addMessage = (message, isOwn = false, time = null) => {
+    // Fungsi untuk menambahkan pesan ke tampilan chat
+    const addMessage = (message, isOwn = false, time = null, sender = null) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add(
             "flex",
@@ -40,11 +42,20 @@ document.addEventListener("DOMContentLoaded", () => {
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
 
+        // Nama pengirim (hanya ditampilkan untuk pesan user)
+        if (sender && !isOwn) {
+            const senderEl = document.createElement("div");
+            senderEl.classList.add("text-xs", "text-gray-500", "mb-1");
+            senderEl.textContent = sender;
+            msgDiv.appendChild(senderEl);
+        }
+
         const text = document.createElement("div");
         text.textContent = message;
         msgDiv.appendChild(text);
 
         if (time) {
+            const t = new Date(time);
             const timeEl = document.createElement("div");
             timeEl.classList.add(
                 "text-xs",
@@ -52,8 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "text-right",
                 "mt-1"
             );
-            // format waktu jadi jam:menit misal 13:45
-            const t = new Date(time);
             timeEl.textContent = `${t
                 .getHours()
                 .toString()
@@ -70,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 
+    // Ambil semua pesan awal dari API
     const loadMessages = async () => {
         try {
             const response = await axios.get(
@@ -82,7 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
             chatBox.innerHTML = "";
             const replies = response.data.data || response.data || [];
             replies.forEach((reply) =>
-                addMessage(reply.message, reply.is_own, reply.created_at)
+                addMessage(
+                    reply.message,
+                    reply.is_own,
+                    reply.created_at,
+                    reply.sender_name
+                )
             );
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
@@ -91,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    // Kirim pesan baru ke API
     const sendMessage = async (message) => {
         try {
             const response = await axios.post(
@@ -111,13 +127,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    // Event submit form chat
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
-    const myId = localStorage.getItem("user_id");
-
     window.Echo.private(`ticket.${ticketId}`)
         .listen(".TicketReplied", (e) => {
             console.log("📩 Realtime reply diterima:", e);
@@ -127,5 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("❌ Channel error:", err);
         });
 
+    // Load pesan pertama kali
     loadMessages();
 });

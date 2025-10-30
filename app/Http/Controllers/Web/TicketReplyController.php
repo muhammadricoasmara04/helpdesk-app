@@ -8,5 +8,8 @@ use Illuminate\Http\Request;
 
 class TicketReplyController extends Controller
 {
-    
+    public function index($ticket_id){
+        $ticket = Ticket::findOrFail($ticket_id);
+        return view('dashboard.admin.chat.index',compact('ticket'));
+    }
 }

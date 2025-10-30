@@ -55,6 +55,10 @@ Route::middleware(['auth', 'role:admin'])
             Route::get('/', [TicketPriorityController::class, 'index'])->name('ticket-priority');
             Route::get('/addticketpriority', [TicketPriorityController::class, 'store'])->name('ticket-priority-store');
         });
+
+        Route::prefix('ticket-reply-admin')->group(function () {
+            Route::get('/{id}', [TicketReplyController::class, 'index'])->name('ticket-replied-admin');
+        });
     });
 
 Route::middleware(['auth', 'role:user'])->group(function () {

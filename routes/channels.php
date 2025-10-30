@@ -1,13 +1,12 @@
 <?php
 
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    Log::info('User mencoba join channel', [
-        'user_id' => $user?->id,
-        'ticket_id' => $id,
-    ]);
-return true;
-    // return (int) $user->id === (int) $id;
+Broadcast::channel('ticket.{ticketId}', function ($user, $ticketId) {
+    // cek apakah user punya akses ke ticket
+    $ticket = Ticket::find($ticketId);
+    if (!$ticket) return false;
+    return $user->id === $ticket->user_id || $user->is_admin;
 });

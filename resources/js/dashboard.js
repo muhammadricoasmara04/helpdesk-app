@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-red-500">Belum login. Silakan login terlebih dahulu.</td></tr>`;
         return;
     }
-    
+
     try {
         const response = await axios.get(`${baseUrl}/tickets`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -44,6 +44,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <td>${ticket.problem?.problem_name || "-"}</td>
                     <td>${ticket.employee_name || "-"}</td>
                     <td>${formatDate(ticket.created_at)}</td>
+                    <a href="dashboard/ticket-reply-admin/${ticket.id}"
+           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+            💬 Chat
+        </a>
                 `;
                 tableBody.appendChild(row);
             });
