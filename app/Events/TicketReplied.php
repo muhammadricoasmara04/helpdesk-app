@@ -41,8 +41,9 @@ class TicketReplied implements ShouldBroadcast
             'id' => $this->reply->id,
             'ticket_id' => $this->reply->ticket_id,
             'message' => $this->reply->message,
+            'user_id' => $this->reply->user_id,
             'sender_name' => $this->reply->user->name ?? 'User',
-            'created_at' => $this->reply->created_at->toDateTimeString(),
+            'created_at' => $this->reply->created_at->toIso8601String(),
         ];
     }
 

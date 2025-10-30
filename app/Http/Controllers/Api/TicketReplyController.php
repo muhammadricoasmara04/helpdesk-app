@@ -34,9 +34,15 @@ class TicketReplyController extends Controller
     public function show($ticket_id)
     {
 
+        $userId = Auth::id();
+
         $replies = TicketReply::where('ticket_id', $ticket_id)
             ->orderBy('created_at', 'asc')
-            ->get();
+            ->get()
+            ->map(function ($reply) use ($userId) {
+                $reply->is_own = $reply->user_id === $userId;
+                return $reply;
+            });
 
         return response()->json([
             'success' => true,

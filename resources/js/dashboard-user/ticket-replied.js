@@ -17,21 +17,59 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const addMessage = (message, isOwn = false) => {
+    const addMessage = (message, isOwn = false, time = null) => {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add(
+            "flex",
+            "my-2",
+            isOwn ? "justify-end" : "justify-start"
+        );
+
         const msgDiv = document.createElement("div");
+        msgDiv.classList.add(
+            "p-2",
+            "rounded-2xl",
+            "inline-block",
+            "break-words",
+            "shadow",
+            "relative",
+            isOwn ? "bg-blue-500" : "bg-gray-200",
+            isOwn ? "text-white" : "text-black"
+        );
 
-        const baseClasses = ["my-2", "p-2", "rounded", "max-w-[75%]"];
-        const variantClasses = isOwn
-            ? ["ml-auto", "bg-blue-500", "text-white"]
-            : ["bg-gray-200", "text-black"];
+        msgDiv.style.maxWidth = "75%";
+        msgDiv.style.width = "fit-content";
 
-        msgDiv.classList.add(...baseClasses, ...variantClasses);
-        msgDiv.textContent = message;
-        chatBox.appendChild(msgDiv);
+        const text = document.createElement("div");
+        text.textContent = message;
+        msgDiv.appendChild(text);
+
+        if (time) {
+            const timeEl = document.createElement("div");
+            timeEl.classList.add(
+                "text-xs",
+                isOwn ? "text-blue-100" : "text-gray-500",
+                "text-right",
+                "mt-1"
+            );
+            // format waktu jadi jam:menit misal 13:45
+            const t = new Date(time);
+            timeEl.textContent = `${t
+                .getHours()
+                .toString()
+                .padStart(2, "0")}:${t
+                .getMinutes()
+                .toString()
+                .padStart(2, "0")}`;
+            msgDiv.appendChild(timeEl);
+        }
+
+        wrapper.appendChild(msgDiv);
+        chatBox.appendChild(wrapper);
+
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 
-    // Ambil semua pesan awal dari API
     const loadMessages = async () => {
         try {
             const response = await axios.get(
@@ -43,7 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             chatBox.innerHTML = "";
             const replies = response.data.data || response.data || [];
-            replies.forEach((reply) => addMessage(reply.message, reply.is_own));
+            replies.forEach((reply) =>
+                addMessage(reply.message, reply.is_own, reply.created_at)
+            );
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
             chatBox.innerHTML =
@@ -51,32 +91,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Kirim pesan baru ke API
     const sendMessage = async (message) => {
         try {
-            await axios.post(
+            const response = await axios.post(
                 `${baseUrl}/ticket-replies`,
                 { ticket_id: ticketId, message },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            addMessage(message, true);
+
+            const reply = response.data.data;
+            const time = reply.created_at
+                ? new Date(reply.created_at)
+                : new Date();
+
+            addMessage(message, true, time);
             messageInput.value = "";
         } catch (error) {
             console.error("❌ Gagal mengirim pesan:", error);
         }
     };
 
-    // Event listener untuk submit form
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
+    window.Echo.private(`ticket.${ticketId}`).listen(
+        ".TicketReplied",
+        (event) => {
+            const time = event.created_at
+                ? new Date(event.created_at)
+                : new Date();
 
-    window.Echo.private(`ticket.${ticketId}`).listen(".TicketReplied", (e) => {
-        console.log("📨 Pesan baru diterima:", e);
-        addMessage(e.message);
-    });
-    // Load pesan pertama kali
+            addMessage(event.message, false, time);
+        }
+    );
     loadMessages();
 });

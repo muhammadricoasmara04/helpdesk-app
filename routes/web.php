@@ -10,9 +10,11 @@ use App\Http\Controllers\Web\TicketStatusController;
 use App\Http\Controllers\Web\User\DashboardUserController;
 use App\Http\Controllers\Web\User\TicketUserController;
 use App\Http\Controllers\Web\User\TicketUserReplyController;
+use Illuminate\Support\Facades\Broadcast;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::get('/', [AuthPageController::class, 'index'])->name('login');
 Route::post('/', [AuthPageController::class, 'login']);
 Route::post('/logout', [AuthPageController::class, 'logout'])->name('logout');
@@ -67,3 +69,5 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/{id}', [TicketUserReplyController::class, 'index'])->name('ticket-replied');
     });
 });
+
+Broadcast::routes(['middleware' => ['auth']]);
