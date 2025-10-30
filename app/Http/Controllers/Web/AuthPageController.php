@@ -28,7 +28,7 @@ class AuthPageController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        
+
         Auth::login($user);
 
         // Buat token untuk kebutuhan API
@@ -38,10 +38,14 @@ class AuthPageController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'role_id' => $user->role_id,
+            'role' => $user->role->name ?? 'user',
         ]]);
 
-        // Redirect sesuai role
-        return redirect($user->role->name === 'admin' ? '/dashboard' : '/dashboard/user');
+        $roleName = $user->role->name ?? 'user';
+
+        $redirectUrl = $roleName === 'admin' ? '/dashboard' : '/dashboard/user';
+
+        return redirect($redirectUrl);
     }
 
 
@@ -51,9 +55,9 @@ class AuthPageController extends Controller
         $user = Auth::user();
 
         if ($user) {
-           
-            $user->tokens()->delete(); 
-            Auth::logout(); 
+
+            $user->tokens()->delete();
+            Auth::logout();
         }
 
         // Hapus session yang dibuat sebelumnya

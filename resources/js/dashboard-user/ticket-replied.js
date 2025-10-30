@@ -1,6 +1,5 @@
-// resources/js/dashboard-user/ticket-replied.js
 import axios from "axios";
-import "../echo"; // pastikan path ke echo.js sesuai lokasi kamu
+import "../echo";
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("💬 Ticket Reply Chat Loaded");
@@ -18,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Helper function untuk menampilkan pesan di UI
     const addMessage = (message, isOwn = false) => {
         const msgDiv = document.createElement("div");
 

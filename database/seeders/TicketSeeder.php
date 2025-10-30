@@ -67,30 +67,5 @@ class TicketSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
-
-        // Isi applications
-        $appId = Str::uuid();
-        DB::table('applications')->insert([
-            'id' => $appId,
-            'organization_id' => Str::uuid(),   // Asumsikan buat random dulu
-            'application_name'=>'Hello Aps',
-            'description' => 'Helpdesk Application',
-            'create_id' => Str::uuid(),
-            'updated_id' => Str::uuid(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // Isi application_problems
-        DB::table('application_problems')->insert([
-            'id' => Str::uuid(),
-            'application_id' => $appId,
-            'problem_name'=>'App crashes',
-            'description' => 'Login screen crashes',
-            'created_id' => Str::uuid(),
-            'updated_id' => Str::uuid(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 }

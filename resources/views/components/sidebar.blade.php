@@ -6,7 +6,7 @@
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-auto">
         @php $user = session('user'); @endphp
 
-        @if ($user['role_id'] === 1)
+        @if ($user['role'] === 'admin')
             <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Dashboard</a>
             <a href="{{ route('application') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Aplikasi</a>
             <a href="{{ route('application-problems') }}" class="block px-3 py-2 rounded-md hover:bg-indigo-100">Masalah

@@ -20,6 +20,7 @@ class TicketReplyController extends Controller
         $reply = TicketReply::create([
             'ticket_id' => $validated['ticket_id'],
             'message' => $validated['message'],
+            'user_id' => Auth::id(),
         ]);
 
         broadcast(new TicketReplied($reply))->toOthers();

@@ -16,15 +16,14 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $roles): Response
     {
         $user = $request->user();
-
+       
         if (!$user) {
             return redirect('/login')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
-       
-        if (!in_array($user->role->name, (array) $roles)) {
-     
-            if ($user->role->name === 'admin') {
+
+        if (!$user->role || !in_array($user->role->name, (array) $roles)) {
+            if ($user->role && $user->role->name === 'admin') {
                 return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke halaman user.');
             }
             return redirect('/dashboard/user')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
