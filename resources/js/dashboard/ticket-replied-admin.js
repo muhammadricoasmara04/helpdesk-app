@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
-    const token = localStorage.getItem("token");
+    const token =
+        localStorage.getItem("token") || sessionStorage.getItem("api_token");
+
     const ticketId = document.getElementById("ticket_id")?.value;
     const chatBox = document.getElementById("chat-box");
     const form = document.getElementById("chat-form");

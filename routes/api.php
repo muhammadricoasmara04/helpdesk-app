@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Broadcast::routes(['middleware' => ['auth:sanctum']]);

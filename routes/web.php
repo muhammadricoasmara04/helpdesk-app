@@ -74,4 +74,4 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     });
 });
 
-Broadcast::routes(['middleware' => ['auth']]);
+Broadcast::routes(['middleware' => ['auth:sanctum']]);

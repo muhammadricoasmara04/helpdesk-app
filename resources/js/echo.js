@@ -12,11 +12,7 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? "https") === "https",
     enabledTransports: ["ws", "wss"],
     authEndpoint: "http://127.0.0.1:8000/api/broadcasting/auth", // 🔥 penting
-    // auth: {
-    //     headers: {
-    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //         Accept: "application/json",
-    //     },
-    // },
-    withCredentials: true,
+    auth: {
+        withCredentials: true, // wajib biar session cookie terkirim
+    },
 });
