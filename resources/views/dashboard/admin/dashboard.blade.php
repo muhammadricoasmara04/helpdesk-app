@@ -17,7 +17,7 @@
                         <th class="px-5 py-3">Status</th>
                         <th class="px-5 py-3">Prioritas</th>
                         <th class="px-5 py-3">Aplikasi</th>
-                        <th class="px-5 py-3">Problem</th>
+                        <th class="px-5 py-3">Masalah</th>
                         <th class="px-5 py-3">Pelapor</th>
                         <th class="px-5 py-3">Tanggal Dibuat</th>
                         <th class="px-5 py-3 text-center">Aksi</th>

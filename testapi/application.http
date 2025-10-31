@@ -1,5 +1,5 @@
 @BASE_URL = http://127.0.0.1:8000/api
-@TOKEN =22|uwpwkOalyZb8qdZQJLfyNkrDboHtNXbJKrbsP2o89680b7d0
+@TOKEN =3|KKy7IGVUWSIUzO9WvQGYGHi9VAZNMjdzjAlS4SiK270589b3
 
 ### Get all applications
 GET {{BASE_URL}}/applications
@@ -12,15 +12,15 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "organization_id": "123e4567-e89b-12d3-a456-426614174005",
-  "description": "sample",
-  "application_name": "Test APP",
-  "create_id": "123e4567-e89b-12d3-a456-426614174004",
-  "updated_id": "123e4567-e89b-12d3-a456-426614174008"
+  "organization_id": "b62d110c-6943-42b2-87e9-32fd293457d3",
+  "description": "sampleTest123",
+  "application_name": "Test APPtest",
+  "create_id": "4be30288-23fb-4150-b0e2-36fff6ac3712",
+  "updated_id": "4be30288-23fb-4150-b0e2-36fff6ac3712"
 }
 
 ### Get single application
-GET {{BASE_URL}}/applications/019a0f90-136d-71d4-9214-839428802196
+GET {{BASE_URL}}/applications/019a38bd-30e5-7268-9355-5ded2355445f
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 

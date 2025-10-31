@@ -10,14 +10,27 @@ use App\Http\Controllers\Api\TicketsProtityController;
 use App\Http\Controllers\Api\TicketsStatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 
+
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+Route::post('/broadcasting/auth', function (Request $request) {
+    Log::info('Broadcast AUTH debug:', [
+        'token' => $request->bearerToken(),
+        'user' => $request->user(),
+    ]);
+
+    if (! $request->user()) {
+        return response()->json(['error' => 'Unauthenticated', 'token' => $request->bearerToken()], 401);
+    }
+
+    return Broadcast::auth($request);
+})->middleware('auth:sanctum');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/tickets', [TicketsControllers::class, 'myTickets']);
     Route::apiResource('tickets', TicketsControllers::class);

@@ -31,8 +31,7 @@ class TicketReplied implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        // gunakan PrivateChannel agar hanya user tertentu yang bisa mendengar
-        return new PrivateChannel('ticket.' . $this->reply->ticket_id);
+        return [new PrivateChannel('ticket.' . $this->reply->ticket_id)];
     }
 
     public function broadcastWith()

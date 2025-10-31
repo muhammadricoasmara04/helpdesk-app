@@ -6,9 +6,17 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class AuthPageController extends Controller
 {
+    protected $apiBaseUrl;
+
+    public function __construct()
+    {
+        $this->apiBaseUrl = config('app.api_base_ur');
+    }
     public function index()
     {
         return view('auth.login');
@@ -28,18 +36,18 @@ class AuthPageController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-
-        Auth::login($user);
-
         // Buat token untuk kebutuhan API
         $token = $user->createToken('auth_token')->plainTextToken;
-        session(['api_token' => $token]);
-        session(['user' => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'role_id' => $user->role_id,
-            'role' => $user->role->name ?? 'user',
-        ]]);
+        session([
+            'api_token' => $token,
+            'token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'role_id' => $user->role_id,
+                'role' => $user->role->name ?? 'user',
+            ],
+        ]);
 
         $roleName = $user->role->name ?? 'user';
 

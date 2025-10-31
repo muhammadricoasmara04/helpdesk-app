@@ -1,12 +1,12 @@
 @BASE_URL=http://127.0.0.1:8000/api
-@TOKEN=15|IMmZ2kV46Yod6zk4KIxNZZMeg1VjUlPgzUbobifne065601f
+@TOKEN=6|4xHSm3x4ajolETaP5Tn2Io0Pu6mdzDWlxPP4EAMP93e8c63
 
 ###LOGIN
 POST {{BASE_URL}}/login
 Content-Type: application/json
 
 {
-  "email": "tes@gmail.com",
+  "email": "user1@gmail.com",
   "password": "secret123"
 }
 
@@ -34,7 +34,7 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 ###show all
-GET {{BASE_URL}}/tickets
+{{BASE_URL}}/tickets/506b3828-a289-4c23-9c25-a869e2281d9c
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 

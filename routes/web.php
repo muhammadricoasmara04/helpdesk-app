@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
+// Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
 Route::get('/', [AuthPageController::class, 'index'])->name('login');
 Route::post('/', [AuthPageController::class, 'login']);
 Route::post('/logout', [AuthPageController::class, 'logout'])->name('logout');

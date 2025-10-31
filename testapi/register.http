@@ -4,11 +4,11 @@ POST {{BASE_URL}}/register
 Content-Type: application/json
 
  {
-   "name": "User Satu",
-     "email": "user1@gmail.com",
+   "name": "Admin satu",
+     "email": "admin@gmail.com",
      "password": "secret123",
-    "password_confirmation": "secret123",
-    "role": "user"
+     "password_confirmation": "secret123",
+    "role": "admin"
   }
 # [
 #   {

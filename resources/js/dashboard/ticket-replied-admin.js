@@ -37,14 +37,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "break-words",
             "shadow",
             "relative",
-            isOwn ? "bg-blue-500" : "bg-gray-200",
-            isOwn ? "text-white" : "text-black"
+            ...(isOwn
+                ? ["bg-blue-500", "text-white"]
+                : ["bg-gray-200", "text-black"])
         );
 
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
 
-        // Nama pengirim (hanya ditampilkan untuk pesan user)
         if (sender && !isOwn) {
             const senderEl = document.createElement("div");
             senderEl.classList.add("text-xs", "text-gray-500", "mb-1");
@@ -77,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         wrapper.appendChild(msgDiv);
         chatBox.appendChild(wrapper);
-
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 
@@ -135,15 +134,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
-    window.Echo.private(`ticket.${ticketId}`)
-        .listen(".TicketReplied", (e) => {
-            console.log("📩 Realtime reply diterima:", e);
-            // tampilkan e.message di UI
-        })
-        .error((err) => {
-            console.error("❌ Channel error:", err);
-        });
 
-    // Load pesan pertama kali
+    window.Echo.private(`ticket.${ticketId}`)
+        .subscribed(() =>
+            console.log("✅ SUBSCRIBED ke channel ticket." + ticketId)
+        )
+        .listen(".TicketReplied", (e) => {
+            console.log("📩 Event TicketReplied diterima:", e);
+            addMessage(
+                e.message,
+                e.user_id === myUserId,
+                e.created_at,
+                e.sender_name
+            );
+        })
+        .error((err) => console.error("❌ CHANNEL ERROR:", err));
     loadMessages();
 });

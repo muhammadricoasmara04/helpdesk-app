@@ -34,36 +34,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 tickets.forEach((data) => {
                     const row = document.createElement("tr");
+                    row.classList.add("hover:bg-gray-50", "transition");
+
+                    // Tentukan warna status
+                    let statusClass = "";
+                    const statusName = data.status?.name?.toLowerCase() || "-";
+                    switch (statusName) {
+                        case "open":
+                            statusClass = "text-blue-600 font-semibold";
+                            break;
+                        case "on progress":
+                            statusClass = "text-yellow-500 font-semibold";
+                            break;
+                        case "close":
+                            statusClass = "text-red-600 font-semibold";
+                            break;
+                        default:
+                            statusClass = "text-gray-600";
+                    }
+
                     row.innerHTML = `
-                        <td class="border px-4 py-2">${
-                            data.ticket_code || "-"
-                        }</td>
-                        <td class="border px-4 py-2">${data.subject || "-"}</td>
-                        <td class="border px-4 py-2">${
-                            data.status?.name || "-"
-                        }</td>
-                        <td class="border px-4 py-2">${
-                            data.priority?.name || "-"
-                        }</td>
-                        <td class="border px-4 py-2">${
-                            data.application?.application_name || "-"
-                        }</td>
-                        <td class="border px-4 py-2">${
-                            data.problem?.problem_name || "-"
-                        }</td>
-                        <td class="border px-4 py-2">${
-                            data.employee_name || "-"
-                        }</td>
-                        <td class="border px-4 py-2">${new Date(
-                            data.created_at
-                        ).toLocaleString()}</td>
-                        <td class="border px-4 py-2 text-center">
-        <a href="/ticket-reply/${data.id}"
-           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
-            💬 Chat
-        </a>
-    </td>
-                    `;
+                    <td class="px-5 py-3">${data.ticket_code || "-"}</td>
+                    <td class="px-5 py-3">${data.subject || "-"}</td>
+                    <td class="px-5 py-3 ${statusClass}">${
+                        data.status?.name || "-"
+                    }</td>
+                    <td class="px-5 py-3">${data.priority?.name || "-"}</td>
+                    <td class="px-5 py-3">${
+                        data.application?.application_name || "-"
+                    }</td>
+                    <td class="px-5 py-3">${
+                        data.problem?.problem_name || "-"
+                    }</td>
+                    <td class="px-5 py-3">${data.employee_name || "-"}</td>
+                    <td class="px-5 py-3">${new Date(
+                        data.created_at
+                    ).toLocaleString()}</td>
+                    <td class="px-5 py-3 text-center">
+                        <a href="/ticket-reply/${data.id}"
+                           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+                           💬 Chat
+                        </a>
+                    </td>
+                `;
                     tableBody.appendChild(row);
                 });
             } else {
