@@ -1,5 +1,5 @@
 import axios from "axios";
-import "../echo";
+
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("💬 Ticket Reply Chat Loaded");
@@ -116,16 +116,5 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
-    const myId = localStorage.getItem("user_id");
-
-    window.Echo.private(`ticket.${ticketId}`)
-        .listen(".TicketReplied", (e) => {
-            console.log("📩 Realtime reply diterima:", e);
-            // tampilkan e.message di UI
-        })
-        .error((err) => {
-            console.error("❌ Channel error:", err);
-        });
-
     loadMessages();
 });

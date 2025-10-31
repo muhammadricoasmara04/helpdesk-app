@@ -15,9 +15,10 @@ use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 // Broadcast::routes(['middleware' => ['auth:sanctum']]);
+Route::get('/', fn() => redirect()->route('login'));
 
-Route::get('/', [AuthPageController::class, 'index'])->name('login');
-Route::post('/', [AuthPageController::class, 'login']);
+Route::get('/login', [AuthPageController::class, 'index'])->name('login');
+Route::post('/login', [AuthPageController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthPageController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'role:admin'])
     ->prefix('dashboard')
@@ -25,7 +26,6 @@ Route::middleware(['auth', 'role:admin'])
 
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
         // Applications
         Route::prefix('application')->group(function () {
             Route::get('/', [ApplicationController::class, 'index'])->name('application');

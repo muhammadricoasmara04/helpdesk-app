@@ -1,5 +1,5 @@
 import axios from "axios";
-import "../echo";
+
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("💬 Ticket Reply Chat Admin Loaded");
@@ -134,20 +134,5 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
-
-    window.Echo.private(`ticket.${ticketId}`)
-        .subscribed(() =>
-            console.log("✅ SUBSCRIBED ke channel ticket." + ticketId)
-        )
-        .listen(".TicketReplied", (e) => {
-            console.log("📩 Event TicketReplied diterima:", e);
-            addMessage(
-                e.message,
-                e.user_id === myUserId,
-                e.created_at,
-                e.sender_name
-            );
-        })
-        .error((err) => console.error("❌ CHANNEL ERROR:", err));
     loadMessages();
 });

@@ -15,8 +15,9 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $roles): Response
     {
-        $user = $request->user();
-       
+        $user = $request->user() ?? auth('sanctum')->user();
+
+
         if (!$user) {
             return redirect('/login')->with('error', 'Anda harus login terlebih dahulu.');
         }

@@ -17,18 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-Route::post('/broadcasting/auth', function (Request $request) {
-    Log::info('Broadcast AUTH debug:', [
-        'token' => $request->bearerToken(),
-        'user' => $request->user(),
-    ]);
 
-    if (! $request->user()) {
-        return response()->json(['error' => 'Unauthenticated', 'token' => $request->bearerToken()], 401);
-    }
-
-    return Broadcast::auth($request);
-})->middleware('auth:sanctum');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
