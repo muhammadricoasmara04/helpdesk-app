@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import "../bootstrap";
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("💬 Ticket Reply Chat Loaded");
@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
 
+        
         const text = document.createElement("div");
         text.textContent = message;
         msgDiv.appendChild(text);
@@ -115,6 +116,15 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
+    });
+
+    window.Echo.channel(`ticket.${ticketId}`).listen(".TicketReplied", (e) => {
+        console.log("💬 New reply:", e);
+        // Kalau bukan own message, tampilkan
+        if (e.user_id !== token) {
+            // optional: cek sendiri
+            addMessage(e.message, false, e.created_at, e.sender_name);
+        }
     });
     loadMessages();
 });

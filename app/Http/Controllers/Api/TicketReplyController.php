@@ -23,7 +23,8 @@ class TicketReplyController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        broadcast(new TicketReplied($reply));
+        broadcast(new TicketReplied($reply))->toOthers();
+
 
         return response()->json([
             'success' => true,

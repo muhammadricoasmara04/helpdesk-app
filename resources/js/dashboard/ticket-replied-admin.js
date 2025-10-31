@@ -1,14 +1,12 @@
 import axios from "axios";
-
+import "../bootstrap";
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("💬 Ticket Reply Chat Admin Loaded");
 
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
-    const token =
-        localStorage.getItem("token") || sessionStorage.getItem("api_token");
-
+    const token = localStorage.getItem("token");
     const ticketId = document.getElementById("ticket_id")?.value;
     const chatBox = document.getElementById("chat-box");
     const form = document.getElementById("chat-form");
@@ -20,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Fungsi untuk menambahkan pesan ke tampilan chat
     const addMessage = (message, isOwn = false, time = null, sender = null) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add(
@@ -37,9 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "break-words",
             "shadow",
             "relative",
-            ...(isOwn
-                ? ["bg-blue-500", "text-white"]
-                : ["bg-gray-200", "text-black"])
+            isOwn ? "bg-blue-500" : "bg-gray-200",
+            isOwn ? "text-white" : "text-black"
         );
 
         msgDiv.style.maxWidth = "75%";
@@ -93,12 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             chatBox.innerHTML = "";
             const replies = response.data.data || response.data || [];
             replies.forEach((reply) =>
-                addMessage(
-                    reply.message,
-                    reply.is_own,
-                    reply.created_at,
-                    reply.sender_name
-                )
+                addMessage(reply.message, reply.is_own, reply.created_at)
             );
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
@@ -134,5 +125,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
+    window.Echo.channel(`ticket.${ticketId}`).listen(".TicketReplied", (e) => {
+        console.log("💬 New reply:", e);
+        // Kalau bukan own message, tampilkan
+        if (e.user_id !== token) {
+            // optional: cek sendiri
+            addMessage(e.message, false, e.created_at, e.sender_name);
+        }
+    });
+
     loadMessages();
 });

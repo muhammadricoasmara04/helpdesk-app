@@ -10,8 +10,9 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class TicketReplied implements ShouldBroadcast
+class TicketReplied implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -31,7 +32,7 @@ class TicketReplied implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return [new PrivateChannel('ticket.' . $this->reply->ticket_id)];
+        return [new Channel('ticket.' . $this->reply->ticket_id)];
     }
 
     public function broadcastWith()
