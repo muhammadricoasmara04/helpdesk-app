@@ -32,7 +32,7 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'application_name' => 'required|string|max:255',
             'description' => 'required|string',
-            'organization_id' => 'required|uuid',
+            'application_code' => 'required|string',
         ]);
 
         $application = Application::findOrFail($id);

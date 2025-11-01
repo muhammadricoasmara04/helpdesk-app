@@ -33,4 +33,8 @@ class Application extends Model
     {
         return $this->belongsTo(User::class, 'updated_id');
     }
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
 }

@@ -133,16 +133,12 @@ async function storeApplication(e) {
             .getElementById("application_code")
             .value.trim(),
         description: document.getElementById("description").value.trim(),
-        organization_id: document
-            .getElementById("organization_id")
-            .value.trim(),
     };
 
     if (
         !formData.application_name ||
         !formData.application_code ||
-        !formData.description ||
-        !formData.organization_id
+        !formData.description
     ) {
         messageEl.textContent = "Semua field wajib diisi.";
         messageEl.className = "text-red-500";
@@ -196,10 +192,12 @@ async function getDataById(id) {
         if (response.data.success && data) {
             document.getElementById("application_name").textContent =
                 data.application_name;
+            document.getElementById("application_code").textContent =
+                data.application_code;
             document.getElementById("description").textContent =
                 data.description;
             document.getElementById("organization_id").textContent =
-                data.organization_id;
+                data.organization?.organization;
             document.getElementById("create_id").textContent =
                 data.creator?.name || "-";
             document.getElementById("updated_id").textContent =

@@ -6,6 +6,7 @@
     <div id="applicationDetail" class="max-w-2xl bg-white rounded-2xl shadow p-6">
         <div class="space-y-3">
             <p><strong>Nama Aplikasi:</strong> <span id="application_name"></span></p>
+            <p><strong>Kode Aplikasi:</strong> <span id="application_code"></span></p>
             <p><strong>Deskripsi:</strong> <span id="description"></span></p>
             <p><strong>Organization ID:</strong> <span id="organization_id"></span></p>
             <p><strong>Dibuat oleh:</strong> <span id="create_id"></span></p>

@@ -31,7 +31,6 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'organization_id' => 'required|uuid',
             'description' => 'required|string',
             'application_name' => 'required|string|max:255',
             'application_code' => 'required|string|max:25',
@@ -39,15 +38,22 @@ class ApplicationController extends Controller
 
         try {
             $user = $request->user();
-
+            $organizationId = $user->organization_id;
             if (!$user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User tidak ditemukan atau tidak login.',
                 ], 401);
             }
+
+            if (!$organizationId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User belum terhubung ke organisasi.',
+                ], 400);
+            }
             $application = Application::create([
-                'organization_id' => $request->organization_id,
+                'organization_id' => $organizationId,
                 'description' => $request->description,
                 'application_name' => $request->application_name,
                 'application_code' => $request->application_code,
@@ -70,7 +76,7 @@ class ApplicationController extends Controller
     public function show($id)
     {
         try {
-            $application = Application::with(['creator:id,name', 'updater:id,name'])->findOrFail($id);
+            $application = Application::with(['creator:id,name', 'updater:id,name', 'organization:id,organization'])->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Application retrieved successfully.',

@@ -14,17 +14,16 @@
                     value="{{ old('application_name', $application->application_name) }}"
                     class="w-full border rounded-lg px-3 py-2" required>
             </div>
+            <div>
+                <label for="application_code" class="block font-semibold mb-1">Aplikasi Code</label>
+                <input id="application_code" name="application_code"
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" rows="3"
+                    value="{{ old('application_name', $application->application_code) }}"></input>
+            </div>
 
             <div class="mb-4">
                 <label class="block font-medium">Deskripsi</label>
                 <textarea name="description" class="w-full border rounded-lg px-3 py-2" required>{{ old('description', $application->description) }}</textarea>
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-medium">Organization ID</label>
-                <input type="text" name="organization_id"
-                    value="{{ old('organization_id', $application->organization_id) }}"
-                    class="w-full border rounded-lg px-3 py-2" required>
             </div>
 
             <div class="flex justify-end space-x-2">
