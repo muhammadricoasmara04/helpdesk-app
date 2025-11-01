@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->uuid('role_id')->nullable();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->uuid('organization_id')->nullable();
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

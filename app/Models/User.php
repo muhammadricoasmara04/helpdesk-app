@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'organization_id'
     ];
     protected $keyType = 'string';
     public $incrementing = false;

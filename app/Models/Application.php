@@ -24,4 +24,13 @@ class Application extends Model
     {
         return $this->hasMany(ApplicationProblem::class, 'application_id');
     }
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'create_id');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_id');
+    }
 }

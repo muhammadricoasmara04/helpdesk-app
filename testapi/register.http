@@ -4,11 +4,12 @@ POST {{BASE_URL}}/register
 Content-Type: application/json
 
  {
-   "name": "Admin satu",
-     "email": "admin@gmail.com",
+ "name": "User Satu",
+     "email": "user1@gmail.com",
      "password": "secret123",
      "password_confirmation": "secret123",
-    "role": "admin"
+     "role": "user",
+     "organization":"Acme Corp"
   }
 # [
 #   {
@@ -16,7 +17,8 @@ Content-Type: application/json
 #     "email": "user1@gmail.com",
 #     "password": "secret123",
 #     "password_confirmation": "secret123",
-#     "role": "user"
+#     "role": "user",
+#     "organization":"Acme Corp"
 #   },
 #   {
 #     "name": "Admin Satu",

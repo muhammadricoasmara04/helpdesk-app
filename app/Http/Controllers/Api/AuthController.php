@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Hapus token lama (opsional tapi aman)
+
         $user->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -58,15 +59,20 @@ class AuthController extends Controller
             'email'                 => 'required|email|unique:users,email',
             'password'              => 'required|string|min:6|confirmed',
             'role'                  => 'nullable|string|in:admin,user',
+            'organization' => 'nullable|string|exists:organizations,organization',
         ]);
 
         $role = Role::where('name', $data['role'] ?? 'user')->first();
-
+        $organization = null;
+        if ($request->organization) {
+            $organization = Organization::where('organization', $request->organization)->first();
+        }
         $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
             'role_id'  => $role?->id,
+            'organization_id' => $organization?->id,
         ]);
 
         $token = $user->createToken('register_token')->plainTextToken;
@@ -79,6 +85,7 @@ class AuthController extends Controller
                 'email'   => $user->email,
                 'role_id' => $user->role_id,
                 'role'    => $role->name ?? 'user',
+                'organization' => $organization?->organization,
             ],
             'token' => $token,
             'token_type' => 'Bearer',

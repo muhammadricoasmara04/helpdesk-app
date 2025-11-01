@@ -13,8 +13,8 @@
                 <tr>
                     <th class="border px-4 py-2 text-left">Nama Aplikasi</th>
                     <th class="border px-4 py-2 text-left">Deskripsi</th>
-                    <th class="border px-4 py-2 text-left">Pembuatan ID</th>
-                    <th class="border px-4 py-2 text-left">Pembaruan ID</th>
+                    <th class="border px-4 py-2 text-left">Dibuat Oleh</th>
+                    <th class="border px-4 py-2 text-left">Diperbarui Oleh</th>
                     <th class="border px-4 py-2 text-left">Tanggal Dibuat</th>
                     <th class="border px-4 py-2 text-center w-32">Aksi</th>
                 </tr>

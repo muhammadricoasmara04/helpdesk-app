@@ -39,8 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
-
-        
         const text = document.createElement("div");
         text.textContent = message;
         msgDiv.appendChild(text);

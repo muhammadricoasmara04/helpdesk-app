@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Organization;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 use Illuminate\Support\Str;
@@ -23,6 +24,18 @@ class RoleSeeder extends Seeder
                 ['id' => $uuid],
                 ['name' => $roleName]
             );
+
+            $organizations = [
+                'Acme Corp' => 'f2a5976f-a0a6-4b47-b3f1-ed3dee8e586e',
+                'Beta Ltd'  => '38cf7d3c-0618-4f9b-b0bb-74e544c736d0',
+            ];
+
+            foreach ($organizations as $orgName => $uuid) {
+                Organization::updateOrCreate(
+                    ['id' => $uuid],
+                    ['organization' => $orgName, 'status' => 'active']
+                );
+            }
         }
     }
 }

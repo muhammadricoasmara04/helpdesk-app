@@ -57,8 +57,8 @@ async function getDataApplication() {
                 row.innerHTML = `
     <td class="border px-4 py-2">${app.application_name || "-"}</td>
     <td class="border px-4 py-2">${app.description || "-"}</td>
-    <td class="border px-4 py-2">${app.create_id || "-"}</td>
-    <td class="border px-4 py-2">${app.updated_id || "-"}</td>
+   <td class="border px-4 py-2">${app.creator?.name || "-"}</td>
+    <td class="border px-4 py-2">${app.updater?.name || "-"}</td>
     <td class="border px-4 py-2">${formatDate(app.created_at)}</td>
     <td class="border px-4 py-2 text-center">
         <a href="/dashboard/application/${app.id}" 
@@ -136,8 +136,6 @@ async function storeApplication(e) {
         organization_id: document
             .getElementById("organization_id")
             .value.trim(),
-        create_id: crypto.randomUUID(),
-        updated_id: crypto.randomUUID(),
     };
 
     if (
@@ -202,9 +200,10 @@ async function getDataById(id) {
                 data.description;
             document.getElementById("organization_id").textContent =
                 data.organization_id;
-            document.getElementById("create_id").textContent = data.create_id;
-            document.getElementById("updated_id").textContent = data.updated_id;
-            console.log("Response data:", response.data);
+            document.getElementById("create_id").textContent =
+                data.creator?.name || "-";
+            document.getElementById("updated_id").textContent =
+                data.updater?.name || "-";
         } else {
             detailEl.innerHTML = `<p class="text-red-500">Data aplikasi tidak ditemukan.</p>`;
         }

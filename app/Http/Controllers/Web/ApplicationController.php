@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
@@ -35,6 +36,13 @@ class ApplicationController extends Controller
         ]);
 
         $application = Application::findOrFail($id);
+
+        // Ambil user login untuk updated_id
+        $user = Auth::user();
+        if ($user) {
+            $validated['updated_id'] = $user->id;
+        }
+
         $application->update($validated);
 
         return redirect('/dashboard/application')->with('success', 'Aplikasi berhasil diperbarui.');

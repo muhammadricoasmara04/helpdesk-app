@@ -13,7 +13,7 @@ class ApplicationController extends Controller
     public function index()
     {
         try {
-            $applications = Application::all();
+            $applications = Application::with(['creator:id,name', 'updater:id,name'])->get();
 
             return response()->json([
                 'success' => true,
@@ -35,13 +35,25 @@ class ApplicationController extends Controller
             'description' => 'required|string',
             'application_name' => 'required|string|max:255',
             'application_code' => 'required|string|max:25',
-            'create_id' => 'required|uuid',
-            'updated_id' => 'required|uuid',
         ]);
 
         try {
-            $application = Application::create($request->all());
+            $user = $request->user();
 
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User tidak ditemukan atau tidak login.',
+                ], 401);
+            }
+            $application = Application::create([
+                'organization_id' => $request->organization_id,
+                'description' => $request->description,
+                'application_name' => $request->application_name,
+                'application_code' => $request->application_code,
+                'create_id' => $user->id,
+                'updated_id' => $user->id,
+            ]);
             return response()->json([
                 'success' => true,
                 'message' => 'Application created successfully.',
@@ -58,8 +70,7 @@ class ApplicationController extends Controller
     public function show($id)
     {
         try {
-            $application = Application::findOrFail($id);
-
+            $application = Application::with(['creator:id,name', 'updater:id,name'])->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Application retrieved successfully.',
@@ -79,31 +90,34 @@ class ApplicationController extends Controller
             'organization_id' => 'sometimes|uuid',
             'description' => 'sometimes|string',
             'application_name' => 'sometimes|string|max:255',
-            'application_code' => 'required|string|max:25',
-            'create_id' => 'sometimes|uuid',
-            'updated_id' => 'sometimes|uuid',
+            'application_code' => 'sometimes|string|max:25',
         ]);
 
         try {
             $application = Application::findOrFail($id);
+
+            // Ambil data dari request
             $data = $request->only([
                 'organization_id',
                 'application_name',
                 'application_code',
                 'description',
-                'create_id',
-                'updated_id',
             ]);
 
-            Log::info('Data to update:', $data);
-            $updated = $application->update($data);
-            Log::info('Update result:', ['updated' => $updated]);
+            // Ambil user yang login untuk updated_id
+            $user = $request->user();
+            if ($user) {
+                $data['updated_id'] = $user->id; // otomatis isi updated_id
+            }
+
+            $application->update($data);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Application updated successfully.',
                 'data' => $application,
             ], 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Application not found or server error.',
