@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center">
             <h1 class="text-3xl font-bold text-gray-800">Dashboard Tiket</h1>
         </div>
-
+        
         <!-- Card Wrapper -->
         <div class="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
             <table class="min-w-full text-sm text-gray-700">

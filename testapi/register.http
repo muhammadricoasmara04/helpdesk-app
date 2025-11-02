@@ -5,8 +5,8 @@ Content-Type: application/json
 
  {
   
-    "name": "Admin Satu",
-     "email": "admin@gmail.com",
+    "name": "Admin dua",
+     "email": "admi2n@gmail.com",
      "password": "secret123",
      "password_confirmation": "secret123",
      "role": "admin",

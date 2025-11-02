@@ -22,6 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/tickets', [TicketsControllers::class, 'myTickets']);
+    Route::post('/tickets/{id}/assign', [TicketsControllers::class, 'assign']);
     Route::apiResource('tickets', TicketsControllers::class);
     Route::apiResource('applications', ApplicationController::class);
     Route::apiResource('application-problems', ApplicationProblemController::class);

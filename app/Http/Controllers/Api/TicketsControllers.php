@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\TicketStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -11,12 +12,20 @@ use Exception;
 
 class TicketsControllers extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $tickets = Ticket::with(['status', 'priority', 'application', 'problem'])
-                ->latest()
-                ->get();
+            $user = $request->user(); // Ambil user dari token login
+
+            $query = Ticket::with(['status', 'priority', 'application', 'problem'])
+                ->latest();
+
+            // Jika role admin, hanya tampilkan tiket yang di-assign ke dia
+            if ($user->role === 'admin') {
+                $query->where('assigned_to', $user->id);
+            }
+
+            $tickets = $query->get();
 
             return response()->json([
                 'success' => true,
@@ -152,6 +161,30 @@ class TicketsControllers extends Controller
         }
     }
 
+    public function assign($id, Request $request)
+    {
+        $user = $request->user();
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->assigned_to) {
+            return response()->json(['message' => 'Tiket sudah di-handle oleh admin lain.'], 403);
+        }
+
+        // Ambil ID status "On Progress"
+        $onProgressStatus = TicketStatus::where('name', 'In Progress')->first();
+
+        $ticket->assigned_to = $user->id;
+        if ($onProgressStatus) {
+            $ticket->ticket_status_id = $onProgressStatus->id;
+        }
+        $ticket->save();
+
+        return response()->json([
+            'message' => 'Tiket berhasil di-assign ke Anda dan status diperbarui menjadi On Progress.',
+            'data' => $ticket
+        ]);
+    }
+
     public function destroy(string $id)
     {
         try {
@@ -181,7 +214,7 @@ class TicketsControllers extends Controller
         try {
             $user = $request->user();
             $tickets = Ticket::with(['status', 'priority', 'application', 'problem'])
-                ->where('employee_number', $user->id) 
+                ->where('employee_number', $user->id)
                 ->latest()
                 ->get();
 

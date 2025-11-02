@@ -1,5 +1,4 @@
-<div x-cloak :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
-    class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
+
 
 <div x-cloak :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
     class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0">
@@ -90,15 +89,4 @@
             </a>
         @endif
     </nav>
-
-    <!-- Footer -->
-    <div class="p-4 border-t border-gray-700 mt-10">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit"
-                class="w-full text-left px-3 py-2 rounded-md hover:bg-red-100 text-red-400 font-semibold transition-colors duration-200">
-                Logout
-            </button>
-        </form>
-    </div>
 </div>

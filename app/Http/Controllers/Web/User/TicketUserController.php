@@ -20,7 +20,6 @@ class TicketUserController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         $statuses = TicketStatus::all();
         $priorities = TicketPriority::all();
         $applications = Application::all();
