@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('application_problems', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('application_id');
+            $table->uuid('ticket_priority_id');
             $table->string('problem_name');
             $table->text('description');
             $table->uuid('created_id');
@@ -25,6 +26,11 @@ return new class extends Migration
                 ->references('id')
                 ->on('applications')
                 ->onDelete('cascade');
+            $table
+                ->foreign('ticket_priority_id')
+                ->references('id')
+                ->on('ticket_priority')
+                ->onDelete('cascade'); 
         });
     }
 

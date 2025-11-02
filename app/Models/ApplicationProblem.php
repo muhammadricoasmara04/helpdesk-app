@@ -12,6 +12,7 @@ class ApplicationProblem extends Model
     protected $table = 'application_problems';
     protected $fillable = [
         'application_id',
+        'ticket_priority_id',
         'problem_name',
         'description',
         'created_id',
@@ -21,5 +22,19 @@ class ApplicationProblem extends Model
     public function application()
     {
         return $this->belongsTo(Application::class, 'application_id');
+    }
+    public function ticketPriority()
+    {
+        return $this->belongsTo(TicketPriority::class, 'ticket_priority_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_id');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_id');
     }
 }

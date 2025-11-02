@@ -13,7 +13,7 @@ class ApplicationProblemController extends Controller
     public function index()
     {
         try {
-            $problems = ApplicationProblem::latest()->get();
+          $problems = ApplicationProblem::with('creator:id,name','updater:id,name')->latest()->get();
 
             return response()->json([
                 'success' => true,
@@ -31,7 +31,8 @@ class ApplicationProblemController extends Controller
     public function show($id)
     {
         try {
-            $problem = ApplicationProblem::findOrFail($id);
+
+            $problem = ApplicationProblem::with(['creator:id,name', 'updater:id,name'])->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -50,14 +51,27 @@ class ApplicationProblemController extends Controller
     {
         $request->validate([
             'application_id' => 'required|uuid',
+            'ticket_priority_id' => 'required|uuid|exists:ticket_priority,id',
             'problem_name' => 'required|string|max:255',
             'description' => 'required|string',
-            'created_id' => 'nullable|uuid',
-            'updated_id' => 'nullable|uuid',
         ]);
 
         try {
-            $problem = ApplicationProblem::create($request->all());
+            $user = $request->user();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User tidak ditemukan atau tidak login.',
+                ], 401);
+            }
+            $problem = ApplicationProblem::create([
+                'application_id' => $request->application_id,
+                'ticket_priority_id' => $request->ticket_priority_id,
+                'problem_name' => $request->problem_name,
+                'description' => $request->description,
+                'created_id' => $user->id,
+                'updated_id' => $user->id,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -76,15 +90,22 @@ class ApplicationProblemController extends Controller
     {
         $request->validate([
             'application_id' => 'sometimes|uuid',
+            'ticket_priority_id' => 'sometimes|uuid|exists:ticket_priority,id',
             'problem_name' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
-            'created_id' => 'sometimes|uuid',
-            'updated_id' => 'sometimes|uuid',
         ]);
 
         try {
             $problem = ApplicationProblem::findOrFail($id);
-            $problem->update($request->all());
+
+            $data = $request->only(['application_id', 'ticket_priority_id', 'problem_name', 'description']);
+
+            $user = $request->user();
+            if ($user) {
+                $data['updated_id'] = $user->id;
+            }
+
+            $problem->update($data);
             $problem->refresh();
 
             return response()->json([

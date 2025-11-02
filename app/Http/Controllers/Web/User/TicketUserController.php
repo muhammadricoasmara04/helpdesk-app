@@ -12,17 +12,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Events\TicketCreated;
+use App\Models\Organization;
 use App\Models\TicketAttachment;
 
 class TicketUserController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
         $statuses = TicketStatus::all();
         $priorities = TicketPriority::all();
         $applications = Application::all();
         $problems = ApplicationProblem::all();
-        return view('dashboard.users.ticket.store', compact('statuses', 'priorities', 'applications', 'problems'));
+        $organization = $user->organization;
+        return view('dashboard.users.ticket.store', compact('statuses', 'priorities', 'applications', 'problems', 'organization'));
     }
 
     public function store(Request $request)
@@ -88,7 +92,7 @@ class TicketUserController extends Controller
                 ]);
             }
         }
-        
+
 
         event(new TicketCreated($ticket));
 

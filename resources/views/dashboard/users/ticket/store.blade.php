@@ -22,19 +22,18 @@
                     readonly>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-
-                {{-- Prioritas --}}
-                <div>
-                    <label class="block text-sm font-medium mb-1">Prioritas</label>
-                    <select name="ticket_priority_id" class="w-full border rounded p-2" required>
-                        <option value="">-- Pilih Prioritas --</option>
-                        @foreach ($priorities as $priority)
-                            <option value="{{ $priority->id }}">{{ $priority->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="mt-3">
+                <label class="block text-sm font-medium mb-1">Nama Jabatan</label>
+                <input type="text" name="position_name" class="w-full border rounded p-2">
             </div>
+
+            <div class="mt-3">
+                <label class="block text-sm font-medium mb-1">Nama Organisasi</label>
+                <input type="text" name="organization_name" value="{{ old('organization', $organization) }}"
+                    class="w-full border rounded p-2" readonly>
+            </div>
+
+
 
             <div class="grid grid-cols-2 gap-3 mt-3">
                 {{-- Aplikasi --}}
@@ -57,6 +56,26 @@
                     </select>
                 </div>
             </div>
+            <div class="grid grid-cols-2 gap-3">
+
+                {{-- Prioritas --}}
+                <div class="grid grid-cols-2 gap-3 mt-3">
+                    {{-- Prioritas --}}
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Prioritas</label>
+                        <select id="ticket_priority_id" class="w-full border rounded p-2 bg-gray-100 cursor-not-allowed"
+                            disabled>
+                            <option value="">-- Prioritas akan terisi otomatis --</option>
+                            @foreach ($priorities as $priority)
+                                <option value="{{ $priority->id }}">{{ $priority->name }}</option>
+                            @endforeach
+                        </select>
+
+                        {{-- Hidden input untuk dikirim ke server --}}
+                        <input type="hidden" name="ticket_priority_id" id="ticket_priority_hidden">
+                    </div>
+                </div>
+            </div>
 
             <div class="mt-3">
                 <label class="block text-sm font-medium mb-1">Subjek</label>
@@ -68,15 +87,7 @@
                 <textarea name="description" class="w-full border rounded p-2" rows="4"></textarea>
             </div>
 
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Nama Jabatan</label>
-                <input type="text" name="position_name" class="w-full border rounded p-2">
-            </div>
 
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Nama Organisasi</label>
-                <input type="text" name="organization_name" class="w-full border rounded p-2">
-            </div>
 
             <div class="mt-3">
                 <label class="block text-sm font-medium mb-1">Lampiran (boleh lebih dari satu)</label>
@@ -94,21 +105,41 @@
         const problems = @json($problems);
         const appSelect = document.getElementById('application_id');
         const problemSelect = document.getElementById('application_problem_id');
+        const prioritySelect = document.getElementById('ticket_priority_id');
+        const priorityHidden = document.getElementById('ticket_priority_hidden');
 
+        // Saat aplikasi berubah → filter masalah
         appSelect.addEventListener('change', function() {
             const selectedAppId = this.value;
             problemSelect.innerHTML = '<option value="">-- Pilih Masalah --</option>';
 
-            // Filter problem berdasarkan application_id yang dipilih
-            const filteredProblems = problems.filter(p => p.application_id === selectedAppId);
+            // Filter problem berdasarkan application_id
+            const filteredProblems = problems.filter(p => p.application_id == selectedAppId);
 
-            // Tambahkan hasilnya ke dropdown
             filteredProblems.forEach(p => {
                 const opt = document.createElement('option');
                 opt.value = p.id;
                 opt.textContent = p.problem_name;
                 problemSelect.appendChild(opt);
             });
+
+            // Reset prioritas
+            prioritySelect.value = '';
+            priorityHidden.value = '';
+        });
+
+        // Saat user pilih jenis masalah → otomatis isi prioritas
+        problemSelect.addEventListener('change', function() {
+            const selectedProblemId = this.value;
+            const selectedProblem = problems.find(p => p.id == selectedProblemId);
+
+            if (selectedProblem && selectedProblem.ticket_priority_id) {
+                prioritySelect.value = selectedProblem.ticket_priority_id;
+                priorityHidden.value = selectedProblem.ticket_priority_id;
+            } else {
+                prioritySelect.value = '';
+                priorityHidden.value = '';
+            }
         });
     </script>
 @endsection

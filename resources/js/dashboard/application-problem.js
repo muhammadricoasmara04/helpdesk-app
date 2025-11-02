@@ -3,6 +3,7 @@ import axios from "axios";
 document.addEventListener("DOMContentLoaded", () => {
     getDataApplicationProblems();
     loadApplications();
+    loadTicketPriorities();
 });
 
 async function getDataApplicationProblems() {
@@ -40,9 +41,11 @@ async function getDataApplicationProblems() {
                 <td class="border px-4 py-2">${problem.description || "-"}</td>
                 <td class="border px-4 py-2">${appName}</td>
                 <td class="border px-4 py-2">${
-                    problem.application_id || "-"
+                    problem.creator?.name || "-"
                 }</td>
-                <td class="border px-4 py-2">${problem.created_id || "-"}</td>
+                <td class="border px-4 py-2">${
+                    problem.updater?.name || "-"
+                }</td>
                 <td class="border px-4 py-2">${formatDate(
                     problem.created_at
                 )}</td>
@@ -115,6 +118,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+async function loadTicketPriorities() {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+    const selectPriority = document.getElementById("ticket_priority_id");
+    if (!selectPriority) return;
+
+    try {
+        const res = await axios.get(`${baseUrl}/ticket-priority`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const priorities = res.data.data || [];
+
+        selectPriority.innerHTML = `<option value="">Pilih Prioritas...</option>`;
+        priorities.forEach((p) => {
+            const opt = document.createElement("option");
+            opt.value = p.id;
+            opt.textContent = p.name;
+            selectPriority.appendChild(opt);
+        });
+    } catch (err) {
+        console.error("Gagal memuat prioritas:", err);
+        selectPriority.innerHTML = `<option value="">Gagal memuat prioritas</option>`;
+    }
+}
+
 async function storeApplicationProblem(e) {
     e.preventDefault();
 
@@ -132,14 +160,16 @@ async function storeApplicationProblem(e) {
         problem_name: document.getElementById("problem_name").value.trim(),
         description: document.getElementById("description").value.trim(),
         application_id: document.getElementById("application_id").value.trim(),
-        created_id: crypto.randomUUID(),
-        updated_id: crypto.randomUUID(),
+        ticket_priority_id: document
+            .getElementById("ticket_priority_id")
+            .value.trim(),
     };
 
     if (
         !formData.problem_name ||
         !formData.description ||
-        !formData.application_id
+        !formData.application_id ||
+        !formData.ticket_priority_id
     ) {
         messageEl.textContent = "Semua field wajib diisi.";
         messageEl.className = "text-red-500";

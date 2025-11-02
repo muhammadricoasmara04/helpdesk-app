@@ -13,6 +13,15 @@
             </div>
 
             <div>
+                <label for="ticket_priority_id" class="block font-semibold mb-1">Prioritas</label>
+                <select id="ticket_priority_id" name="ticket_priority_id"
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" required>
+                    <option value="">Memuat daftar prioritas...</option>
+                </select>
+            </div>
+
+
+            <div>
                 <label for="description" class="block font-semibold mb-1">Deskripsi</label>
                 <textarea id="description" name="description" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
                     rows="3" placeholder="Masukkan deskripsi problem" required></textarea>

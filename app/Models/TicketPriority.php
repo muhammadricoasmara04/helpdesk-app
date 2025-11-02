@@ -15,4 +15,8 @@ class TicketPriority extends Model
         'slug',
         'description',
     ];
+    public function applicationProblems()
+    {
+        return $this->hasMany(ApplicationProblem::class, 'ticket_priority_id');
+    }
 }
