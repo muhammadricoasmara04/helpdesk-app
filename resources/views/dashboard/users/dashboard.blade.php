@@ -7,100 +7,117 @@
             <h1 class="text-3xl font-bold text-gray-800">Dashboard Tiket</h1>
         </div>
 
-        <div class="flex flex-wrap -mx-3 mt-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
+
             <!-- Total Tickets -->
-            <div class="w-full sm:w-1/2 xl:w-1/4 px-3 mb-4">
-                <div class="flex items-center px-4 py-4 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-blue-600 bg-opacity-75">
-                        <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M3 7h18M3 12h18M3 17h18" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <div class="mx-4">
-                        <h4 class="text-2xl font-semibold text-gray-700">{{ $totalTickets }}</h4>
-                        <div class="text-gray-500">Total Tickets</div>
-                    </div>
+            <div
+                class="flex items-center p-5 bg-linear-to-br from-blue-500 to-indigo-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-3 bg-white/20 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h4 class="text-3xl font-bold">{{ $totalTickets }}</h4>
+                    <p class="text-sm opacity-90">Total Tickets</p>
                 </div>
             </div>
 
             <!-- Open Tickets -->
-            <div class="w-full sm:w-1/2 xl:w-1/4 px-3 mb-4">
-                <div class="flex items-center px-4 py-4 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-orange-600 bg-opacity-75">
-                        <svg class="h-8 w-8 text-white" viewBox="0 0 28 28" fill="none">
-                            <path d="M4.2 1.4H6.99999L8.25 13.57L6.99992 14.82H21" fill="currentColor" />
-                        </svg>
-                    </div>
-                    <div class="mx-4">
-                        <h4 class="text-2xl font-semibold text-gray-700">{{ $openTickets }}</h4>
-                        <div class="text-gray-500">Open Tickets</div>
-                    </div>
+            <div
+                class="flex items-center p-5 bg-linear-to-br from-green-500 to-emerald-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-3 bg-white/20 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h4 class="text-3xl font-bold">{{ $openTickets }}</h4>
+                    <p class="text-sm opacity-90">Open Tickets</p>
                 </div>
             </div>
 
             <!-- On Progress Tickets -->
-            <div class="w-full sm:w-1/2 xl:w-1/4 px-3 mb-4">
-                <div class="flex items-center px-4 py-4 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-pink-600 bg-opacity-75">
-                        <svg class="h-8 w-8 text-white" viewBox="0 0 28 28" fill="none">
-                            <path d="M6.99998 11.2H21L22.4 23.8H5.59998L6.99998 11.2Z" fill="currentColor" />
-                        </svg>
-                    </div>
-                    <div class="mx-4">
-                        <h4 class="text-2xl font-semibold text-gray-700">{{ $onProgressTickets }}</h4>
-                        <div class="text-gray-500">Progress Tickets</div>
-                    </div>
+            <div
+                class="flex items-center p-5 bg-linear-to-br from-yellow-400 to-amber-500 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-3 bg-white/20 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h4 class="text-3xl font-bold">{{ $onProgressTickets }}</h4>
+                    <p class="text-sm opacity-90">In Progress Ticket</p>
                 </div>
             </div>
 
             <!-- Closed Tickets -->
-            <div class="w-full sm:w-1/2 xl:w-1/4 px-3 mb-4">
-                <div class="flex items-center px-4 py-4 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-green-600 bg-opacity-75">
-                        <svg class="h-8 w-8 text-white" viewBox="0 0 28 28" fill="none">
-                            <path d="M9 12l2 2 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <div class="mx-4">
-                        <h4 class="text-2xl font-semibold text-gray-700">{{ $closedTickets }}</h4>
-                        <div class="text-gray-500">Closed Tickets</div>
-                    </div>
+            <div
+                class="flex items-center p-5 bg-linear-to-br from-red-500 to-rose-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div class="p-3 bg-white/20 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
                 </div>
+                <div class="ml-4">
+                    <h4 class="text-3xl font-bold">{{ $closedTickets }}</h4>
+                    <p class="text-sm opacity-90">Closed Tickets</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Card Table -->
+        <div class="bg-white shadow-lg rounded-2xl border border-gray-100 overflow-hidden">
+            <div
+                class="p-5 border-b border-gray-200 flex justify-between items-center bg-linear-to-r from-blue-600 to-indigo-600">
+                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                    Daftar Tiket
+                </h2>
+                <a href="{{ route('ticket.index') }}"
+                    class="inline-flex items-center gap-2 bg-white text-blue-700 font-medium px-4 py-2 rounded-md shadow hover:bg-gray-100 transition">
+                    + Buat Tiket
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-gray-700">
+                    <thead>
+                        <tr class="bg-blue-100 text-left text-gray-700 uppercase text-xs tracking-wider">
+                            <th class="px-5 py-3 font-semibold">Kode Tiket</th>
+                            <th class="px-5 py-3 font-semibold">Subject</th>
+                            <th class="px-5 py-3 font-semibold">Status</th>
+                            <th class="px-5 py-3 font-semibold">Prioritas</th>
+                            <th class="px-5 py-3 font-semibold">Aplikasi</th>
+                            <th class="px-5 py-3 font-semibold">Masalah</th>
+                            <th class="px-5 py-3 font-semibold">Pelapor</th>
+                            <th class="px-5 py-3 font-semibold">Tanggal Dibuat</th>
+                            <th class="px-5 py-3 text-center font-semibold">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tickets-table-body" class="divide-y divide-gray-100">
+                        
+
+                        <!-- Placeholder saat loading -->
+                        <tr>
+                            <td colspan="9" class="text-center py-6 text-gray-400 italic">
+                                Memuat data tiket...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-
-        <!-- Card Table -->
-        <a href="{{ route('ticket.index') }}"
-            class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-            ➕ Buat Tiket Pengaduan
-        </a>
-        <div class="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
-            <table class="min-w-full text-sm text-gray-700">
-                <thead class="bg-gray-50 border-b">
-                    <tr class="text-left text-gray-600 uppercase text-xs tracking-wider">
-                        <th class="px-5 py-3">Kode Tiket</th>
-                        <th class="px-5 py-3">Subjek</th>
-                        <th class="px-5 py-3">Status</th>
-                        <th class="px-5 py-3">Prioritas</th>
-                        <th class="px-5 py-3">Aplikasi</th>
-                        <th class="px-5 py-3">Masalah</th>
-                        <th class="px-5 py-3">Nama Pegawai</th>
-                        <th class="px-5 py-3">Dibuat Pada</th>
-                        <th class="px-5 py-3 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tickets-table-body" class="divide-y divide-gray-100">
-                    <tr>
-                        <td colspan="9" class="text-center py-6 text-gray-400 italic">
-                            Memuat data tiket...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 @endsection
 

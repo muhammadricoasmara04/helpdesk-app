@@ -20,6 +20,10 @@ class TicketsControllers extends Controller
             $query = Ticket::with(['status', 'priority', 'application', 'problem'])
                 ->latest();
 
+            if ($request->has('employee_number')) {
+                $query->where('employee_number', $request->employee_number);
+            }
+
             // Jika role admin, hanya tampilkan tiket yang di-assign ke dia
             if ($user->role === 'admin') {
                 $query->where('assigned_to', $user->id);
@@ -170,7 +174,6 @@ class TicketsControllers extends Controller
             return response()->json(['message' => 'Tiket sudah di-handle oleh admin lain.'], 403);
         }
 
-        // Ambil ID status "On Progress"
         $onProgressStatus = TicketStatus::where('name', 'In Progress')->first();
 
         $ticket->assigned_to = $user->id;

@@ -1,106 +1,120 @@
 @extends('layouts.main-dashboard')
+
 @section('container')
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow mt-10">
-        <h2 class="text-xl font-semibold mb-4">Buat Tiket Pengaduan</h2>
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-10 border border-gray-100">
+        <h2 class="text-2xl font-semibold mb-2 text-gray-800">Buat Tiket Pengaduan</h2>
+        <p class="text-sm text-gray-500 mb-6">
+            Isi form di bawah untuk melaporkan kendala atau permintaan bantuan terkait aplikasi yang kamu gunakan.
+        </p>
 
         @if (session('success'))
-            <div class="bg-green-100 text-green-700 p-3 rounded mb-3">
-                {{ session('success') }}
+            <div class="bg-green-100 text-green-700 p-3 rounded mb-4 border border-green-200">
+                ✅ {{ session('success') }}
             </div>
         @endif
 
-        <form action="{{ route('ticket.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('ticket.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
 
-            {{-- Hidden employee id & name --}}
+            <!-- Hidden employee data -->
             <input type="hidden" name="employee_number" value="{{ auth()->id() }}">
             <input type="hidden" name="employee_name" value="{{ auth()->user()->name }}">
 
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Nama Karyawan</label>
-                <input type="text" value="{{ auth()->user()->name }}" class="w-full border rounded p-2 bg-gray-100"
-                    readonly>
-            </div>
-
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Nama Jabatan</label>
-                <input type="text" name="position_name" class="w-full border rounded p-2">
-            </div>
-
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Nama Organisasi</label>
-                <input type="text" name="organization_name" value="{{ old('organization', $organization) }}"
-                    class="w-full border rounded p-2" readonly>
-            </div>
-
-
-
-            <div class="grid grid-cols-2 gap-3 mt-3">
-                {{-- Aplikasi --}}
+            <!-- Data Pengguna -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1">Aplikasi</label>
-                    <select id="application_id" name="application_id" class="w-full border rounded p-2" required>
+                    <label class="block text-sm font-medium mb-1 text-gray-700">Nama Karyawan</label>
+                    <input type="text" value="{{ auth()->user()->name }}"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-700">Nama Jabatan</label>
+                    <input type="text" name="position_name" placeholder="Masukkan jabatanmu (contoh: Staf IT)"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Nama Organisasi</label>
+                <input type="text" name="organization_name" value="{{ old('organization', $organization) }}"
+                    class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
+            </div>
+
+            <!-- Aplikasi & Masalah -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-700">Aplikasi</label>
+                    <select id="application_id" name="application_id"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
+                        required>
                         <option value="">-- Pilih Aplikasi --</option>
                         @foreach ($applications as $app)
                             <option value="{{ $app->id }}">{{ $app->application_name }}</option>
                         @endforeach
                     </select>
+                    <p class="text-xs text-gray-500 mt-1">Pilih aplikasi yang mengalami kendala.</p>
                 </div>
 
-                {{-- Jenis Masalah --}}
                 <div>
-                    <label class="block text-sm font-medium mb-1">Jenis Masalah</label>
-                    <select id="application_problem_id" name="application_problem_id" class="w-full border rounded p-2"
+                    <label class="block text-sm font-medium mb-1 text-gray-700">Jenis Masalah</label>
+                    <select id="application_problem_id" name="application_problem_id"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
                         required>
                         <option value="">-- Pilih Masalah --</option>
                     </select>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-
-                {{-- Prioritas --}}
-                <div class="grid grid-cols-2 gap-3 mt-3">
-                    {{-- Prioritas --}}
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Prioritas</label>
-                        <select id="ticket_priority_id" class="w-full border rounded p-2 bg-gray-100 cursor-not-allowed"
-                            disabled>
-                            <option value="">-- Prioritas akan terisi otomatis --</option>
-                            @foreach ($priorities as $priority)
-                                <option value="{{ $priority->id }}">{{ $priority->name }}</option>
-                            @endforeach
-                        </select>
-
-                        {{-- Hidden input untuk dikirim ke server --}}
-                        <input type="hidden" name="ticket_priority_id" id="ticket_priority_hidden">
-                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Jenis masalah akan menyesuaikan dengan aplikasi yang kamu pilih.
+                    </p>
                 </div>
             </div>
 
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Subjek</label>
-                <input type="text" name="subject" class="w-full border rounded p-2" required>
+            <!-- Prioritas -->
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Prioritas</label>
+                <select id="ticket_priority_id"
+                    class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 cursor-not-allowed text-gray-500"
+                    disabled>
+                    <option value="">-- Prioritas akan terisi otomatis --</option>
+                    @foreach ($priorities as $priority)
+                        <option value="{{ $priority->id }}">{{ $priority->name }}</option>
+                    @endforeach
+                </select>
+                <input type="hidden" name="ticket_priority_id" id="ticket_priority_hidden">
             </div>
 
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Deskripsi</label>
-                <textarea name="description" class="w-full border rounded p-2" rows="4"></textarea>
+            <!-- Subjek & Deskripsi -->
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Subjek</label>
+                <input type="text" name="subject" placeholder="Contoh: Tidak bisa login"
+                    class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
+                    required>
             </div>
 
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Deskripsi</label>
+                <textarea name="description" rows="4" placeholder="Jelaskan secara detail kendala yang kamu alami..."
+                    class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"></textarea>
+            </div>
 
-
-            <div class="mt-3">
-                <label class="block text-sm font-medium mb-1">Lampiran (boleh lebih dari satu)</label>
+            <!-- Lampiran -->
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-700">Bukti Masalah</label>
                 <input type="file" name="attachments[]" multiple
-                    class="w-full border rounded p-2 cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
-                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, PDF, DOCX — Maks. 5MB per file</p>
+                    class="w-full border border-gray-300 rounded-lg p-2.5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                <p class="text-xs text-gray-500 mt-1">Kamu bisa mengunggah beberapa file (JPG, PNG, PDF, DOCX). Maks 5MB per
+                    file.</p>
             </div>
 
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
-                Kirim Tiket
-            </button>
+            <!-- Tombol Kirim -->
+            <div class="flex justify-end">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors duration-200">
+                     Kirim Tiket
+                </button>
+            </div>
         </form>
     </div>
+
     <script>
         const problems = @json($problems);
         const appSelect = document.getElementById('application_id');
@@ -108,12 +122,11 @@
         const prioritySelect = document.getElementById('ticket_priority_id');
         const priorityHidden = document.getElementById('ticket_priority_hidden');
 
-        // Saat aplikasi berubah → filter masalah
+        // Saat aplikasi berubah → tampilkan problem yang relevan
         appSelect.addEventListener('change', function() {
             const selectedAppId = this.value;
             problemSelect.innerHTML = '<option value="">-- Pilih Masalah --</option>';
 
-            // Filter problem berdasarkan application_id
             const filteredProblems = problems.filter(p => p.application_id == selectedAppId);
 
             filteredProblems.forEach(p => {
@@ -128,7 +141,7 @@
             priorityHidden.value = '';
         });
 
-        // Saat user pilih jenis masalah → otomatis isi prioritas
+        // Saat masalah dipilih → isi prioritas otomatis
         problemSelect.addEventListener('change', function() {
             const selectedProblemId = this.value;
             const selectedProblem = problems.find(p => p.id == selectedProblemId);

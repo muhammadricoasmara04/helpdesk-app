@@ -54,65 +54,109 @@ document.addEventListener("DOMContentLoaded", async () => {
     function renderTickets(tickets) {
         if (!tickets.length) {
             tableBody.innerHTML = `
-                <tr>
-                    <td colspan="9" class="text-center py-6 text-gray-400 italic">
-                        Tidak ada data tiket tersedia.
-                    </td>
-                </tr>`;
+            <tr>
+                <td colspan="9" class="text-center py-6 text-gray-400 italic">
+                    Tidak ada data tiket tersedia.
+                </td>
+            </tr>`;
             return;
         }
 
         tableBody.innerHTML = "";
 
-        tickets.forEach((ticket) => {
-            let statusClass = "";
-            const statusName = ticket.status?.name || "-";
+        tickets.forEach((ticket, index) => {
+            // === Zebra color (selang-seling baris)
+            const row = document.createElement("tr");
+            row.classList.add(
+                index % 2 === 0 ? "bg-white" : "bg-gray-50",
+                "hover:bg-blue-50",
+                "transition-colors",
+                "duration-200"
+            );
 
-            switch (statusName.toLowerCase()) {
+            // === Status badge
+            const statusName = (ticket.status?.slug || "-").toLowerCase();
+            let statusBadge = "";
+
+            switch (statusName) {
                 case "open":
-                    statusClass = "text-blue-600 font-semibold";
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 whitespace-nowrap">Open</span>`;
                     break;
-                case "on progress":
-                    statusClass = "text-yellow-500 font-semibold";
+                case "in-progress":
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 whitespace-nowrap">On&nbsp;Progress</span>`;
                     break;
                 case "close":
-                    statusClass = "text-red-600 font-semibold";
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-700 whitespace-nowrap">Closed</span>`;
+                    break;
+                case "resolved":
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 whitespace-nowrap">Resolved</span>`;
                     break;
                 default:
-                    statusClass = "text-gray-600";
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">-</span>`;
             }
 
-            const actionButton = ticket.assigned_to
-                ? ticket.assigned_to === currentUserId
-                    ? `<a href="dashboard/ticket-reply-admin/${ticket.id}"
-                        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
-                        💬 Chat
-                      </a>`
-                    : `<span class="bg-yellow-500 text-white px-3 py-1 rounded">
-                        ⏳ Sedang Proses
-                      </span>`
-                : `<button data-id="${ticket.id}"
-                    class="assign-btn bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition">
-                    🔧 Assign to Me
-                  </button>`;
+            // === Prioritas badge
+            const priorityName = (ticket.priority?.name || "-").toLowerCase();
+            let priorityBadge = "";
+            switch (priorityName) {
+                case "high":
+                    priorityBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 whitespace-nowrap">High</span>`;
+                    break;
+                case "medium":
+                    priorityBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-700 whitespace-nowrap">Medium</span>`;
+                    break;
+                case "low":
+                    priorityBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 whitespace-nowrap">Low</span>`;
+                    break;
+                default:
+                    priorityBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">-</span>`;
+            }
 
-            const row = document.createElement("tr");
-            row.classList.add("hover:bg-gray-50");
+            // === Tombol Aksi (kondisional)
+            let actionButton = "";
+            if (ticket.assigned_to) {
+                if (ticket.assigned_to === currentUserId) {
+                    // Admin yang sedang menangani
+                    actionButton = `
+                    <a href="dashboard/ticket-reply-admin/${ticket.id}"
+                       class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
+                        💬 Chat
+                    </a>`;
+                } else {
+                    // Tiket sedang di-handle admin lain
+                    actionButton = `
+                    <span class="inline-flex items-center gap-1 bg-yellow-500 text-white text-xs font-medium px-3 py-1.5 rounded-md">
+                        ⏳ Proses
+                    </span>`;
+                }
+            } else {
+                // Belum ada admin handle → tampil tombol assign
+                actionButton = `
+                <button data-id="${ticket.id}"
+                        class="assign-btn inline-flex items-center gap-1 bg-green-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-green-700 transition">
+                    🔧 Assign to Me
+                </button>`;
+            }
+
+            // === Susunan tabel ===
             row.innerHTML = `
-                <td class="px-5 py-3">${ticket.ticket_code || "-"}</td>
-                <td class="px-5 py-3">${ticket.subject || "-"}</td>
-                <td class="px-5 py-3 ${statusClass}">${statusName}</td>
-                <td class="px-5 py-3">${ticket.priority?.name || "-"}</td>
-                <td class="px-5 py-3">${
-                    ticket.application?.application_name || "-"
-                }</td>
-                <td class="px-5 py-3">${
-                    ticket.problem?.problem_name || "-"
-                }</td>
-                <td class="px-5 py-3">${ticket.employee_name || "-"}</td>
-                <td class="px-5 py-3">${formatDate(ticket.created_at)}</td>
-                <td class="px-5 py-3 text-center">${actionButton}</td>
-            `;
+            <td class="px-5 py-3 font-medium text-gray-800">${
+                ticket.ticket_code || "-"
+            }</td>
+            <td class="px-5 py-3">${ticket.subject || "-"}</td>
+            <td class="px-5 py-3">${statusBadge}</td>
+            <td class="px-5 py-3">${priorityBadge}</td>
+            <td class="px-5 py-3">${
+                ticket.application?.application_name || "-"
+            }</td>
+            <td class="px-5 py-3">${ticket.problem?.problem_name || "-"}</td>
+            <td class="px-5 py-3">${ticket.employee_name || "-"}</td>
+            <td class="px-5 py-3 text-gray-500">${formatDate(
+                ticket.created_at
+            )}</td>
+            <td class="px-5 py-3 text-center">${actionButton}</td>
+        `;
+
             tableBody.appendChild(row);
         });
     }

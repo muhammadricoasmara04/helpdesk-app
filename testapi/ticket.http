@@ -1,5 +1,5 @@
 @BASE_URL=http://127.0.0.1:8000/api
-@TOKEN=6|4xHSm3x4ajolETaP5Tn2Io0Pu6mdzDWlxPP4EAMP93e8c63
+@TOKEN=24|WoQlvfVa7XRlg8yHZK4onOubuxo89TCajwgs9t0S6a536cca
 
 ###LOGIN
 POST {{BASE_URL}}/login
@@ -34,7 +34,7 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 ###show all
-{{BASE_URL}}/tickets/506b3828-a289-4c23-9c25-a869e2281d9c
+{{BASE_URL}}/tickets?employee_number=019a4287-f70d-701d-b339-e27abe1e9b85
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 

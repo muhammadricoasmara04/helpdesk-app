@@ -5,11 +5,11 @@ Content-Type: application/json
 
  {
   
-    "name": "Admin dua",
-     "email": "admi2n@gmail.com",
+    "name": "User dua",
+     "email": "user2@gmail.com",
      "password": "secret123",
      "password_confirmation": "secret123",
-     "role": "admin",
+     "role": "user",
      "organization":"Beta Ltd"
   }
 # [

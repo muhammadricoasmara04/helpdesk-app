@@ -14,16 +14,16 @@ class DashboardUserController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        // Ambil jumlah tiket per user
+       
         $totalTickets = Ticket::where('employee_number', $userId)->count();
 
-        // Tiket berdasarkan status
+
         $openTickets = Ticket::where('employee_number', $userId)
             ->whereHas('status', fn($q) => $q->where('slug', 'open'))
             ->count();
 
         $onProgressTickets = Ticket::where('employee_number', $userId)
-            ->whereHas('status', fn($q) => $q->where('slug', 'onprogress'))
+            ->whereHas('status', fn($q) => $q->where('slug', 'in-progress'))
             ->count();
 
         $closedTickets = Ticket::where('employee_number', $userId)

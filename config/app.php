@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Jakarta',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => 'id',
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
@@ -125,5 +125,5 @@ return [
 
     'api_base_url' => env('API_BASE_URL', 'http://127.0.0.1:8000/api'),
 
-    
+
 ];
