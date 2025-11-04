@@ -34,6 +34,8 @@ Route::middleware(['auth', 'role:admin'])
             Route::get('/{id}/edit', [ApplicationController::class, 'edit']);
             Route::put('/{id}', [ApplicationController::class, 'update']);
             Route::get('/updateapp', [ApplicationController::class, 'update'])->name('application-update');
+            Route::delete('/{id}', [ApplicationController::class, 'destroy'])
+                ->name('application.destroy');
         });
 
         // Application Problems
@@ -59,6 +61,8 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::prefix('ticket-reply-admin')->group(function () {
             Route::get('/{id}', [TicketReplyController::class, 'index'])->name('ticket-replied-admin');
+            Route::put('/tickets/{id}/priority', [TicketReplyController::class, 'update'])
+                ->name('tickets.updatePriority');
         });
     });
 

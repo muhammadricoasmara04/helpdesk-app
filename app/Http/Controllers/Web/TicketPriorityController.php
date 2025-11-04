@@ -16,4 +16,5 @@ class TicketPriorityController extends Controller
     {
         return view('dashboard.admin.ticket-priority.store');
     }
+    
 }

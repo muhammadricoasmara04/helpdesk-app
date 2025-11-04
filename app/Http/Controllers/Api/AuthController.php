@@ -54,25 +54,43 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'name'                  => 'required|string|max:255',
-            'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|string|min:6|confirmed',
-            'role'                  => 'nullable|string|in:admin,user',
-            'organization' => 'nullable|string|exists:organizations,organization',
-        ]);
+        try {
+            $data = $request->validate([
+                'name'          => 'required|string|max:255',
+                'email'         => 'required|email|unique:users,email',
+                'password'      => 'required|string|min:6|confirmed',
+                'role'          => 'nullable|string|in:admin,user',
+                'organization'  => 'nullable|string|exists:organizations,organization',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Cek apakah email sudah terdaftar
+            if (isset($e->errors()['email'])) {
+                return response()->json([
+                    'message' => 'Email sudah terdaftar.'
+                ], 409); // 409 Conflict
+            }
 
+            // Tangani error validasi lain
+            return response()->json([
+                'message' => 'Data tidak valid.',
+                'errors'  => $e->errors(),
+            ], 422);
+        }
+
+        // Role dan organization
         $role = Role::where('name', $data['role'] ?? 'user')->first();
         $organization = null;
         if ($request->organization) {
             $organization = Organization::where('organization', $request->organization)->first();
         }
+
+        // Buat user baru
         $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role_id'  => $role?->id,
-            'organization_id' => $organization?->id,
+            'name'             => $data['name'],
+            'email'            => $data['email'],
+            'password'         => Hash::make($data['password']),
+            'role_id'          => $role?->id,
+            'organization_id'  => $organization?->id,
         ]);
 
         $token = $user->createToken('register_token')->plainTextToken;
@@ -80,17 +98,18 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Registrasi berhasil.',
             'user'    => [
-                'id'      => $user->id,
-                'name'    => $user->name,
-                'email'   => $user->email,
-                'role_id' => $user->role_id,
-                'role'    => $role->name ?? 'user',
-                'organization' => $organization?->organization,
+                'id'            => $user->id,
+                'name'          => $user->name,
+                'email'         => $user->email,
+                'role_id'       => $user->role_id,
+                'role'          => $role->name ?? 'user',
+                'organization'  => $organization?->organization,
             ],
             'token' => $token,
             'token_type' => 'Bearer',
         ], 201);
     }
+
 
     /**
      * LOGOUT USER

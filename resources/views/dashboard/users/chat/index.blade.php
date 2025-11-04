@@ -27,7 +27,7 @@
                 <div class="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
                     <h2 class="text-lg font-semibold">💬 Live Chat Tiket</h2>
                     <span
-                        class="text-sm opacity-90">{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Menunggu' }}</span>
+                        class="ttext-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Menunggu' }}</span>
                 </div>
 
                 {{-- Chat Box --}}
@@ -46,83 +46,120 @@
 
                         <button type="submit"
                             class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full transition-all duration-150">
-                            Kirim
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                            </svg>
+
                         </button>
                     </form>
                 </div>
             </div>
 
             {{-- Ticket Description / Info Sidebar --}}
-            <div class="w-80 bg-gray-100 p-5 flex flex-col rounded-lg shadow-sm overflow-y-auto space-y-6">
-                <h1 class="font-bold text-3xl">Ticket Detail</h1>
+            <div
+                class="w-80 bg-linear-to-b from-white to-gray-50 border border-gray-200 p-6 flex flex-col rounded-2xl shadow-lg overflow-y-auto space-y-6 transition-all duration-300 hover:shadow-xl">
 
-                <div class="mt-4 text-sm text-gray-700 grid grid-cols-2 gap-y-2 space-y-4">
+                <!-- Header -->
+                <div class="text-center border-b pb-3">
+                    <h1 class="font-bold text-2xl text-gray-800 tracking-tight mb-1">🎟️ Ticket Detail</h1>
+                    <p class="text-xs text-gray-500">Informasi lengkap tiket pengguna</p>
+                </div>
+
+                <!-- Info Utama -->
+                <div class="text-sm text-gray-700 grid grid-cols-2 gap-y-3 gap-x-2">
                     <div class="font-semibold text-gray-600">Ticket</div>
-                    <div>{{ $ticket->ticket_code }}</div>
+                    <div class="text-gray-900">{{ $ticket->ticket_code }}</div>
 
                     <div class="font-semibold text-gray-600">Client</div>
-                    <div>{{ $ticket->employee_name }}</div>
+                    <div class="text-gray-900">{{ $ticket->employee_name }}</div>
 
                     <div class="font-semibold text-gray-600">Aplikasi</div>
-                    <div>{{ $ticket->application->application_name }}</div>
+                    <div class="text-gray-900">{{ $ticket->application->application_name }}</div>
 
                     <div class="font-semibold text-gray-600">Assigned</div>
-                    <div>{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Belum ditugaskan' }}</div>
+                    <div class="text-gray-900">
+                        {{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Belum ditugaskan' }}
+                    </div>
 
-                    <div class="font-semibold text-gray-600">Status</div>
-                    <span class="{{ $statusColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block">
-                        {{ $ticket->status->name }}
-                    </span>
-
-                    <div class="font-semibold text-gray-600">Priority</div>
-                    <span class="{{ $priorityColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block">
-                        {{ $ticket->priority->name }}
-                    </span>
+                    <div class="font-semibold text-gray-600">Status</div> <span
+                        class="{{ $statusColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block w-fit">
+                        {{ $ticket->status->name }} </span>
+                    <div class="font-semibold text-gray-600">Priority</div> <span
+                        class="{{ $priorityColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block w-fit">
+                        {{ $ticket->priority->name }} </span>
 
                     <div class="font-semibold text-gray-600">Created At</div>
-                    <div class="text-sm text-gray-700 mb-3">
+                    <div class="text-gray-900">
                         {{ $ticket->created_at->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
                     </div>
 
-                    <div class="font-semibold text-gray-600">Deskripsi</div>
-                    <div class="text-sm text-gray-700 mb-3">
-                        {{ $ticket->subject }}
+                    <div class="font-semibold text-gray-600">Updated At</div>
+                    <div class="text-gray-900">
+                        {{ $ticket->updated_at->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
                     </div>
 
+                    <div class="font-semibold text-gray-600">Deskripsi</div>
+                    <div class="text-gray-800 italic leading-relaxed">
+                        {{ $ticket->subject }}
+                    </div>
                 </div>
 
-                <div class="mt-4">
-                    <h2 class="font-semibold text-gray-600 mb-2">Lampiran</h2>
+                <!-- Lampiran -->
+                <div class="mt-6">
+                    <h2 class="font-semibold text-gray-700 mb-3 border-b pb-1 flex items-center gap-2">
+                        📎 Lampiran
+                    </h2>
+
                     @if ($ticket->attachments->isNotEmpty())
-                        <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-4">
                             @foreach ($ticket->attachments as $attachment)
                                 @php
                                     $filePath = asset('storage/' . $attachment->file_path);
-                                    $extension = pathinfo($attachment->file_path, PATHINFO_EXTENSION);
+                                    $extension = strtolower(pathinfo($attachment->file_path, PATHINFO_EXTENSION));
                                 @endphp
 
-                                @if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png']))
-                                    <div class="border rounded p-2">
+                                @if (in_array($extension, ['jpg', 'jpeg', 'png']))
+                                    <!-- Preview Gambar -->
+                                    <div
+                                        class="border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition-transform transform hover:scale-105">
                                         <a href="{{ $filePath }}" target="_blank">
                                             <img src="{{ $filePath }}" alt="Lampiran"
-                                                class="w-full h-auto object-cover rounded cursor-pointer transform hover:scale-105 transition duration-200">
+                                                class="w-full h-28 object-cover rounded-xl">
                                         </a>
                                     </div>
-                                @else
-                                    <div class="border rounded p-2 flex items-center justify-between">
-                                        <span>{{ basename($attachment->file_path) }}</span>
+                                @elseif ($extension === 'pdf')
+                                    <!-- PDF Icon -->
+                                    <div
+                                        class="border border-gray-200 rounded-xl bg-gray-50 p-3 flex flex-col items-center justify-center hover:bg-gray-100 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-7 text-red-600 mb-1">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                        </svg>
                                         <a href="{{ $filePath }}" target="_blank"
-                                            class="text-blue-600 hover:underline">Download</a>
+                                            class="text-blue-600 text-sm hover:underline">Lihat PDF</a>
+                                    </div>
+                                @else
+                                    <!-- File Lain -->
+                                    <div
+                                        class="border border-gray-200 rounded-xl bg-white p-3 flex flex-col items-center justify-center hover:shadow-md transition">
+                                        <span class="text-gray-600 text-xs truncate max-w-[100px] mb-1">
+                                            {{ basename($attachment->file_path) }}
+                                        </span>
+                                        <a href="{{ $filePath }}" target="_blank"
+                                            class="text-blue-600 text-xs hover:underline">Download</a>
                                     </div>
                                 @endif
                             @endforeach
                         </div>
+                    @else
+                        <p class="text-gray-400 text-sm italic text-center mt-3">Tidak ada lampiran.</p>
                     @endif
-
-
                 </div>
-
             </div>
+
 
         </div>
     </div>

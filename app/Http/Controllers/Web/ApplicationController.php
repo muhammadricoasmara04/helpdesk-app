@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class ApplicationController extends Controller
 {
@@ -46,5 +47,25 @@ class ApplicationController extends Controller
         $application->update($validated);
 
         return redirect('/dashboard/application')->with('success', 'Aplikasi berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        // Ambil token user dari session atau storage
+        $token = session('token'); // pastikan token ini di-set saat login
+
+        // URL ke API kamu
+        $apiUrl = env('API_BASE_URL') . "/applications/{$id}";
+
+        // Panggil API DELETE
+        $response = Http::withToken($token)->delete($apiUrl);
+
+        if ($response->successful()) {
+            return redirect('/dashboard/application')
+                ->with('success', 'Aplikasi berhasil dihapus melalui API.');
+        } else {
+            return redirect('/dashboard/application')
+                ->with('error', 'Gagal menghapus aplikasi: ' . $response->json('message'));
+        }
     }
 }

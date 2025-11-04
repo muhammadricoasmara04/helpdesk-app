@@ -210,3 +210,45 @@ async function getDataById(id) {
         detailEl.innerHTML = `<p class="text-red-500">Terjadi kesalahan saat memuat data.</p>`;
     }
 }
+
+async function deleteApplication(id) {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Belum login. Silakan login terlebih dahulu.");
+        return;
+    }
+
+    const confirmDelete = confirm(
+        "Apakah Anda yakin ingin menghapus aplikasi ini?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+        const response = await axios.delete(`${baseUrl}/applications/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.data.success) {
+            alert("Aplikasi berhasil dihapus!");
+            // Reload data aplikasi setelah delete
+            getDataApplication();
+        } else {
+            alert("Gagal menghapus aplikasi.");
+        }
+    } catch (error) {
+        console.error("Error saat menghapus aplikasi:", error);
+        if (error.response && error.response.status === 401) {
+            alert("Sesi login berakhir. Silakan login ulang.");
+        } else {
+            alert(`Gagal menghapus aplikasi: ${error.message}`);
+        }
+    }
+}
+document.addEventListener("click", (e) => {
+    if (e.target && e.target.classList.contains("delete-btn")) {
+        const id = e.target.getAttribute("data-id");
+        deleteApplication(id);
+    }
+});
