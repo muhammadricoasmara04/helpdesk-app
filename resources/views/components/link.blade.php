@@ -1,9 +1,14 @@
 @props(['route', 'icon'])
-
 @php
-    use Illuminate\Support\Str;
+$current = Route::currentRouteName();
 
-    $isActive = Str::startsWith(Route::currentRouteName(), $route);
+$isActive =
+    $current === $route || // kalau sama persis
+    Str::startsWith($current, $route . '.') || // turunan pakai titik
+    (
+        Str::startsWith($current, $route . '-') &&
+        !Str::startsWith($current, $route . '-problems') // hindari bentrok khusus problems
+    );
 @endphp
 
 <a href="{{ route($route) }}"

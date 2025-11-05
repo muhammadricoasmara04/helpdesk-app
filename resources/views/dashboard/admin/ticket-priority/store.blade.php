@@ -13,13 +13,6 @@
             </div>
 
             <div>
-                <label for="slug" class="block font-semibold mb-1">Slug</label>
-                <input type="text" id="slug" name="slug"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
-                    placeholder="Slug unik, contoh: high" required>
-            </div>
-
-            <div>
                 <label for="description" class="block font-semibold mb-1">Deskripsi</label>
                 <textarea id="description" name="description" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
                     rows="3" placeholder="Masukkan deskripsi singkat" required></textarea>

@@ -37,7 +37,6 @@ class TicketsStatusController extends Controller
             $status = TicketStatus::create([
                 'id' => Str::uuid(),
                 'name' => $request->name,
-                'slug' => Str::slug($request->name),
                 'description' => $request->description
             ]);
 

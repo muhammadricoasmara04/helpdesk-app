@@ -51,12 +51,18 @@ Route::middleware(['auth', 'role:admin'])
         Route::prefix('ticket-status')->group(function () {
             Route::get('/', [TicketStatusController::class, 'index'])->name('ticket-status');
             Route::get('/addticketstatus', [TicketStatusController::class, 'store'])->name('ticket-status-store');
+            Route::get('/{id}/edit', [TicketStatusController::class, 'edit'])->name('ticket-status.edit');
+            Route::get('/{id}', [TicketStatusController::class, 'show'])->name('ticket-status.show');
+            Route::put('/{id}', [TicketStatusController::class, 'update'])->name('ticket-status.update');
         });
 
         // Ticket Priority
         Route::prefix('ticket-priority')->group(function () {
             Route::get('/', [TicketPriorityController::class, 'index'])->name('ticket-priority');
             Route::get('/addticketpriority', [TicketPriorityController::class, 'store'])->name('ticket-priority-store');
+            Route::get('/{id}', [TicketPriorityController::class, 'show'])->name('ticket-priority.show');
+            Route::get('/{id}/edit', [TicketPriorityController::class, 'edit'])->name('ticket-priority.edit');
+            Route::put('/{id}', [TicketPriorityController::class, 'update'])->name('ticket-priority.update');
         });
 
         Route::prefix('ticket-reply-admin')->group(function () {

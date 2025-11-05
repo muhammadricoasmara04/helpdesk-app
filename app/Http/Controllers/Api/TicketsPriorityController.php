@@ -36,7 +36,6 @@ class TicketsPriorityController extends Controller
             $priority = TicketPriority::create([
                 'id' => Str::uuid(),
                 'name' => $request->name,
-                'slug' => Str::slug($request->name),
                 'description' => $request->description
             ]);
 

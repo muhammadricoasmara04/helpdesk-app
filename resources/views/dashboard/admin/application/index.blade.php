@@ -1,32 +1,35 @@
 @extends('layouts.main-dashboard')
+
 @section('container')
-    <h1 class="text-2xl font-bold mb-4">Dashboard Aplikasi</h1>
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Dashboard Aplikasi</h1>
+        <a href="{{ route('application-store') }}"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors">
+            + Tambah Aplikasi
+        </a>
+    </div>
 
-    <a href="{{ route('application-store') }}"
-        class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-        Tambah Aplikasi
-    </a>
-
-    <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="border px-4 py-2 text-left">Nama Aplikasi</th>
-                    <th class="border px-4 py-2 text-left">Deskripsi</th>
-                    <th class="border px-4 py-2 text-left">Dibuat Oleh</th>
-                    <th class="border px-4 py-2 text-left">Diperbarui Oleh</th>
-                    <th class="border px-4 py-2 text-left">Tanggal Dibuat</th>
-                    <th class="border px-4 py-2 text-center w-32">Aksi</th>
+    <div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
+        <table class="min-w-full border-collapse text-sm">
+            <thead class="bg-gray-50 sticky top-0 z-10">
+                <tr class="text-gray-700 text-left">
+                    <th class="px-6 py-3 border-b font-semibold">No</th>
+                    <th class="px-6 py-3 border-b font-semibold">Nama Aplikasi</th>
+                    <th class="px-6 py-3 border-b font-semibold">Deskripsi</th>
+                    <th class="px-6 py-3 border-b font-semibold">Dibuat Oleh</th>
+                    <th class="px-6 py-3 border-b font-semibold">Diperbarui Oleh</th>
+                    <th class="px-6 py-3 border-b font-semibold">Tanggal Dibuat</th>
+                    <th class="px-6 py-3 border-b font-semibold text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody id="application-table-body" class="bg-white">
-                <tr>
-                    <td colspan="6" class="text-center py-4 text-gray-500">Memuat data aplikasi...</td>
+            <tbody id="application-table-body" class="divide-y divide-gray-100">
+                <tr class="hover:bg-gray-50 transition">
+                    <td colspan="7" class="text-center py-6 text-gray-500">
+                        Memuat data aplikasi...
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <div id="user-info"></div>
-
     </div>
 @endsection
 
