@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\TicketStatusController;
 use App\Http\Controllers\Web\User\DashboardUserController;
 use App\Http\Controllers\Web\User\TicketUserController;
 use App\Http\Controllers\Web\User\TicketUserReplyController;
+use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
@@ -70,19 +71,37 @@ Route::middleware(['auth', 'role:admin'])
             Route::put('/tickets/{id}/priority', [TicketReplyController::class, 'update'])
                 ->name('tickets.updatePriority');
         });
+
+        // Users Management
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('users.index');
+            Route::get('/create', [UserController::class, 'create'])->name('users.create');
+            Route::post('/', [UserController::class, 'store'])->name('users.store');
+            Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
+            Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+            Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+            Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+        });
     });
 
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/dashboard/user', [DashboardUserController::class, 'index'])->name('dashboard.user');
+Route::middleware(['auth', 'role:user'])
+    ->prefix('dashboard/user')
+    ->group(function () {
 
-    Route::prefix('user')->middleware(['auth'])->group(function () {
-        Route::get('/ticket/create', [TicketUserController::class, 'index'])->name('ticket.index');
-        Route::post('/ticket/store', [TicketUserController::class, 'store'])->name('ticket.store');
+        // Dashboard user utama
+        Route::get('/', [DashboardUserController::class, 'index'])->name('dashboard.user');
+
+        // Tiket User
+        Route::prefix('ticket')->group(function () {
+            Route::get('/create', [TicketUserController::class, 'index'])->name('ticket.index');
+            Route::post('/store', [TicketUserController::class, 'store'])->name('ticket.store');
+        });
+
+        // Chat / Balasan tiket user
+        Route::prefix('ticket-reply')->group(function () {
+            Route::get('/{id}', [TicketUserReplyController::class, 'index'])->name('ticket-replied');
+        });
     });
 
-    Route::prefix('ticket-reply')->group(function () {
-        Route::get('/{id}', [TicketUserReplyController::class, 'index'])->name('ticket-replied');
-    });
-});
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);

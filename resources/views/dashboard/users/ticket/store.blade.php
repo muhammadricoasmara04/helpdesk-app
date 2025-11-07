@@ -19,24 +19,31 @@
             <!-- Hidden employee data -->
             <input type="hidden" name="employee_number" value="{{ auth()->id() }}">
             <input type="hidden" name="employee_name" value="{{ auth()->user()->name }}">
+            <input type="hidden" name="position_name" value="{{ auth()->user()->position_name }}">
 
             <!-- Data Pengguna -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1 text-gray-700">Nama Karyawan</label>
+                    <label class="block text-sm font-medium mb-1 text-gray-700">
+                        Nama Karyawan <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" value="{{ auth()->user()->name }}"
                         class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-1 text-gray-700">Nama Jabatan</label>
-                    <input type="text" name="position_name" placeholder="Masukkan jabatanmu (contoh: Staf IT)"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400">
+                    <label class="block text-sm font-medium mb-1 text-gray-700">
+                        Nama Jabatan <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="position_name" value="{{ auth()->user()->position_name }}" 
+                        class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-medium mb-1 text-gray-700">Nama Organisasi</label>
+                <label class="block text-sm font-medium mb-1 text-gray-700">
+                    Nama Organisasi <span class="text-red-500">*</span>
+                </label>
                 <input type="text" name="organization_name" value="{{ old('organization', $organization) }}"
                     class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
             </div>
@@ -44,7 +51,9 @@
             <!-- Aplikasi & Masalah -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1 text-gray-700">Aplikasi</label>
+                    <label class="block text-sm font-medium mb-1 text-gray-700">
+                        Aplikasi <span class="text-red-500">*</span>
+                    </label>
                     <select id="application_id" name="application_id"
                         class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
                         required>
@@ -57,20 +66,23 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-1 text-gray-700">Jenis Masalah</label>
+                    <label class="block text-sm font-medium mb-1 text-gray-700">
+                        Jenis Masalah <span class="text-red-500">*</span>
+                    </label>
                     <select id="application_problem_id" name="application_problem_id"
                         class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
                         required>
                         <option value="">-- Pilih Masalah --</option>
                     </select>
-                    <p class="text-xs text-gray-500 mt-1">Jenis masalah akan menyesuaikan dengan aplikasi yang kamu pilih.
-                    </p>
+                    <p class="text-xs text-gray-500 mt-1">Jenis masalah akan menyesuaikan dengan aplikasi yang kamu pilih.</p>
                 </div>
             </div>
 
             <!-- Prioritas -->
-            <div>
-                <label class="block text-sm font-medium mb-1 text-gray-700">Prioritas</label>
+            <div class="hidden">
+                <label class="block text-sm font-medium mb-1 text-gray-700">
+                    Prioritas <span class="text-red-500">*</span>
+                </label>
                 <select id="ticket_priority_id"
                     class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 cursor-not-allowed text-gray-500"
                     disabled>
@@ -84,25 +96,33 @@
 
             <!-- Subjek & Deskripsi -->
             <div>
-                <label class="block text-sm font-medium mb-1 text-gray-700">Subjek</label>
+                <label class="block text-sm font-medium mb-1 text-gray-700">
+                    Subjek <span class="text-red-500">*</span>
+                </label>
                 <input type="text" name="subject" placeholder="Contoh: Tidak bisa login"
                     class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
                     required>
             </div>
 
             <div>
-                <label class="block text-sm font-medium mb-1 text-gray-700">Deskripsi</label>
+                <label class="block text-sm font-medium mb-1 text-gray-700">
+                    Deskripsi <span class="text-red-500">*</span>
+                </label>
                 <textarea name="description" rows="4" placeholder="Jelaskan secara detail kendala yang kamu alami..."
-                    class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"></textarea>
+                    class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
+                    required></textarea>
             </div>
 
             <!-- Lampiran -->
             <div>
-                <label class="block text-sm font-medium mb-1 text-gray-700">Bukti Masalah</label>
+                <label class="block text-sm font-medium mb-1 text-gray-700">
+                    Bukti Masalah <span class="text-red-500">*</span>
+                </label>
                 <input type="file" name="attachments[]" multiple
                     class="w-full border border-gray-300 rounded-lg p-2.5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
-                <p class="text-xs text-gray-500 mt-1">Kamu bisa mengunggah beberapa file (JPG, PNG, PDF, DOCX). Maks 5MB per
-                    file.</p>
+                <p class="text-xs text-gray-500 mt-1">
+                    Kamu bisa mengunggah beberapa file (JPG, PNG, PDF, DOCX). Maks 5MB per file.
+                </p>
             </div>
 
             <!-- Tombol Kirim -->

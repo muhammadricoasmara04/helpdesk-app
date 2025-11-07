@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
     const tableBody = document.getElementById("tickets-table-body");
-
+   
     const setMessageRow = (message) => {
         tableBody.innerHTML = `
             <tr>
@@ -52,8 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         case "in-progress":
                             statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 whitespace-nowrap">In&nbsp;Progress</span>`;
                             break;
-                        case "close":
-                            statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-700 whitespace-nowrap">Closed</span>`;
+                        case "closed":
+                            statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-red-400 text-gray-700 whitespace-nowrap">Closed</span>`;
                             break;
                         default:
                             statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">-</span>`;
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         data.created_at
                     ).toLocaleString()}</td>
                     <td class="px-5 py-3 text-center">
-                        <a href="/ticket-reply/${data.id}"
+                        <a href="/dashboard/user/ticket-reply/${data.id}"
                            class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
                            💬 Chat
                         </a>

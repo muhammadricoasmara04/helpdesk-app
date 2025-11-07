@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TicketStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketStatus;
@@ -181,7 +182,7 @@ class TicketsControllers extends Controller
             $ticket->ticket_status_id = $onProgressStatus->id;
         }
         $ticket->save();
-
+        broadcast(new TicketStatusUpdated($ticket))->toOthers();
         return response()->json([
             'message' => 'Tiket berhasil di-assign ke Anda dan status diperbarui menjadi On Progress.',
             'data' => $ticket

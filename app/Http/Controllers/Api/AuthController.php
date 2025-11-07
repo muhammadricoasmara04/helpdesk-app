@@ -60,6 +60,7 @@ class AuthController extends Controller
                 'email'         => 'required|email|unique:users,email',
                 'password'      => 'required|string|min:6|confirmed',
                 'role'          => 'nullable|string|in:admin,user',
+                'position_name'          => 'required|string|max:255',
                 'organization'  => 'nullable|string|exists:organizations,organization',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -89,6 +90,7 @@ class AuthController extends Controller
             'name'             => $data['name'],
             'email'            => $data['email'],
             'password'         => Hash::make($data['password']),
+            'position_name'    => $data['position_name'],
             'role_id'          => $role?->id,
             'organization_id'  => $organization?->id,
         ]);
@@ -103,6 +105,7 @@ class AuthController extends Controller
                 'email'         => $user->email,
                 'role_id'       => $user->role_id,
                 'role'          => $role->name ?? 'user',
+                'position_name' => $user->position_name,
                 'organization'  => $organization?->organization,
             ],
             'token' => $token,

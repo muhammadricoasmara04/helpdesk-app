@@ -11,8 +11,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatBox = document.getElementById("chat-box");
     const form = document.getElementById("chat-form");
     const messageInput = document.getElementById("message");
-    const statusSelect = document.getElementById("ticket-status"); // tambahan khusus admin
+    const endChatBtn = document.getElementById("end-chat-btn");
+    const chatStatusLabel = document.getElementById("chat-status-label");
+    const ticketHeader = document.getElementById("ticket-header");
+    const rawStatus = ticketHeader?.dataset.status;
+    let ticketStatus;
 
+    try {
+        ticketStatus = JSON.parse(rawStatus);
+    } catch (e) {
+        ticketStatus = rawStatus;
+    }
+
+    const statusSlug =
+        typeof ticketStatus === "object" && ticketStatus !== null
+            ? ticketStatus.slug
+            : ticketStatus;
+
+    console.log("DEBUG: statusSlug =", statusSlug);
+
+ 
     if (!ticketId) {
         console.error("❌ Ticket ID not found");
         return;
@@ -125,14 +143,53 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message) sendMessage(message);
     });
-    window.Echo.channel(`ticket.${ticketId}`).listen(".TicketReplied", (e) => {
-        console.log("💬 New reply:", e);
-        // Kalau bukan own message, tampilkan
-        if (e.user_id !== token) {
-            // optional: cek sendiri
-            addMessage(e.message, false, e.created_at, e.sender_name);
+
+    const updateChatUI = (status) => {
+        if (!endChatBtn || !chatStatusLabel) return;
+        if ((status || "").toLowerCase() === "closed") {
+            endChatBtn.style.display = "none";
+            chatStatusLabel.style.display = "inline-block";
+        } else {
+            endChatBtn.style.display = "inline-flex";
+            chatStatusLabel.style.display = "none";
+        }
+    };
+
+    endChatBtn?.addEventListener("click", async () => {
+        if (!confirm("Yakin ingin mengakhiri chat ini?")) return;
+
+        try {
+            const response = await axios.put(
+                `${baseUrl}/tickets/${ticketId}/close`,
+                {},
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            if (response.data.success) {
+                updateChatUI("closed");
+            }
+        } catch (error) {
+            console.error("❌ Gagal mengakhiri chat:", error);
         }
     });
 
+    window.Echo.channel(`ticket.${ticketId}`)
+        .listen(".TicketReplied", (e) => {
+            console.log("💬 New reply:", e);
+            if (e.user_id !== token) {
+                
+                addMessage(e.message, false, e.created_at, e.sender_name);
+            }
+        })
+        .listen(".TicketStatusUpdated", (e) => {
+            console.log("💬 Ticket status updated:", e.status);
+            if (e.status === "closed") {
+                if (endChatBtn) endChatBtn.style.display = "none";
+                if (chatStatusLabel)
+                    chatStatusLabel.style.display = "inline-block";
+            }
+        });
+    updateChatUI(statusSlug);
     loadMessages();
 });

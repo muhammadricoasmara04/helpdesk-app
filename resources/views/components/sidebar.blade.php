@@ -20,7 +20,7 @@
 
     {{-- Navigation --}}
     <nav
-        class="flex flex-col flex-1 overflow-y-auto bg-gradient-to-b from-gray-700 to-blue-500 px-3 py-6 gap-2 rounded-b-2xl">
+        class="flex flex-col flex-1 overflow-y-auto bg-linear-to-b from-gray-700 to-blue-500 px-3 py-6 gap-2 rounded-b-2xl">
         @if ($user['role'] === 'admin')
             <x-link route="dashboard"
                 icon="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z">
@@ -45,6 +45,11 @@
             <x-link route="ticket-priority"
                 icon="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z">
                 Tiket Prioritas
+            </x-link>
+            
+            <x-link route="users.index"
+                icon="M5.121 17.804A7.975 7.975 0 0112 15c1.933 0 3.683.686 5.121 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z">
+                Manajemen User
             </x-link>
         @else
             <x-link route="dashboard.user"

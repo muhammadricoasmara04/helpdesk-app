@@ -18,20 +18,40 @@
 
         $priorityColor = $priorityColors[$ticket->priority->name ?? ''] ?? 'bg-gray-200 text-gray-800';
     @endphp
+    @if (session('success'))
+        <div class="bg-green-100 text-green-700 p-3 rounded mb-4 border border-green-200">
+            ✅ {{ session('success') }}
+        </div>
+    @endif
     <div class="max-w-6xl mx-auto mt-2">
         <div class="flex h-[600px] gap-x-6">
 
             {{-- Chat Section --}}
-            <div class="flex-1 flex flex-col border-r border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div id="ticket-header" data-status="{{ $ticket->status }}"
+                class="flex-1 flex flex-col border-r border-gray-200 rounded-lg shadow-sm overflow-hidden">
                 {{-- Header --}}
                 <div class="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
                     <h2 class="text-lg font-semibold">💬 Live Chat Tiket</h2>
                     <span
                         class="ttext-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Menunggu' }}</span>
+                    <button id="end-chat-btn"
+                        class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md transition-all duration-200 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Akhiri Chat
+                    </button>
+
+                    <span id="chat-status-label"
+                        class="bg-green-500 text-white text-xs px-3 py-1.5 rounded-full shadow-md hidden">
+                        ✅ Chat Selesai
+                    </span>
                 </div>
 
                 {{-- Chat Box --}}
-                <div id="chat-box" class="flex-1 p-5 space-y-4 overflow-y-auto bg-gray-50" style="scroll-behavior: smooth;">
+                <div id="chat-box" class="flex-1 p-5 space-y-4 overflow-y-auto bg-gray-50"
+                    style="scroll-behavior: smooth;">
                     <!-- Pesan akan ditampilkan di sini -->
                 </div>
 

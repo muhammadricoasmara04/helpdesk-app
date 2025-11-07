@@ -29,7 +29,7 @@ class TicketsStatusController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:ticket_status,name',
             'description' => 'nullable|string'
         ]);
 

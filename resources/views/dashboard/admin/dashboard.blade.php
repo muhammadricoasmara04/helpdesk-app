@@ -7,7 +7,7 @@
             <h1 class="text-3xl font-bold text-gray-800">Dashboard Tiket</h1>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
+       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
 
             <!-- Total Tickets -->
             <div

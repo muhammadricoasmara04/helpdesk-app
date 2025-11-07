@@ -95,6 +95,8 @@ class TicketUserController extends Controller
 
         event(new TicketCreated($ticket));
 
-        return redirect()->back()->with('success', 'Tiket pengaduan berhasil dikirim.');
+        return redirect()
+            ->route('ticket-replied', ['id' => $ticket->id])
+            ->with('success', 'Tiket pengaduan berhasil dikirim. Kamu bisa melanjutkan percakapan di halaman chat.');
     }
 }
