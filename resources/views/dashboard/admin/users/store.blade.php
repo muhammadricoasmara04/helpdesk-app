@@ -46,7 +46,7 @@
         <select name="organization_id" class="w-full border rounded p-2" required>
             <option value="">-- Pilih Organisasi --</option>
             @foreach ($organizations as $organization)
-                <option value="{{ $organization->id }}">{{ $organization->name }}</option>
+                <option value="{{ $organization->id }}">{{ $organization->organization }}</option>
             @endforeach
         </select>
     </div>

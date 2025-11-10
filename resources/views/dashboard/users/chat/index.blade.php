@@ -1,5 +1,4 @@
 @extends('layouts.main-dashboard')
-
 @section('container')
     @php
         $statusColors = [

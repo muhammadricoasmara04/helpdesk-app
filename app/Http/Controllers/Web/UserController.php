@@ -22,7 +22,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $organizations = Organization::all();
-        return view('dashboard.admin.users.create', compact('roles', 'organizations'));
+        return view('dashboard.admin.users.store', compact('roles', 'organizations'));
     }
     public function store(Request $request)
     {

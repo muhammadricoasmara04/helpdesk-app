@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Organization extends Model
 {
-    protected $fillable = ['id', 'organization', 'status'];
+    use HasFactory, HasUuids;
+    protected $fillable = ['organization', 'status'];
     protected $keyType = 'string';
     public $incrementing = false;
     public function organizations()

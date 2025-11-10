@@ -4,6 +4,8 @@ use App\Http\Controllers\Web\ApplicationProblemController;
 use App\Http\Controllers\Web\ApplicationController;
 use App\Http\Controllers\Web\AuthPageController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\OrganizationController;
+use App\Http\Controllers\Web\TicketController;
 use App\Http\Controllers\Web\TicketPriorityController;
 use App\Http\Controllers\Web\TicketReplyController;
 use App\Http\Controllers\Web\TicketStatusController;
@@ -48,6 +50,13 @@ Route::middleware(['auth', 'role:admin'])
             Route::put('/{id}', [ApplicationProblemController::class, 'update'])->name('application-problem.update');
         });
 
+        //Ticket 
+        Route::prefix('ticket')->group(function () {
+            Route::get('/', [TicketController::class, 'index'])->name('ticket.index');
+    
+            Route::get('/search', [TicketController::class, 'search'])->name('tickets.search');
+        });
+
         // Ticket Status
         Route::prefix('ticket-status')->group(function () {
             Route::get('/', [TicketStatusController::class, 'index'])->name('ticket-status');
@@ -75,12 +84,23 @@ Route::middleware(['auth', 'role:admin'])
         // Users Management
         Route::prefix('users')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('users.index');
-            Route::get('/create', [UserController::class, 'create'])->name('users.create');
+            Route::get('/addusers', [UserController::class, 'create'])->name('users.create');
             Route::post('/', [UserController::class, 'store'])->name('users.store');
             Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
             Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
             Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
             Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+        });
+
+        // 🔹 Organization Management
+        Route::prefix('organization')->group(function () {
+            Route::get('/', [OrganizationController::class, 'index'])->name('organization.index');
+            Route::get('/create', [OrganizationController::class, 'create'])->name('organization.create');
+            Route::post('/', [OrganizationController::class, 'store'])->name('organization.store');
+            Route::get('/{id}', [OrganizationController::class, 'show'])->name('organization.show');
+            Route::get('/{id}/edit', [OrganizationController::class, 'edit'])->name('organization.edit');
+            Route::put('/{id}', [OrganizationController::class, 'update'])->name('organization.update');
+            Route::delete('/{id}', [OrganizationController::class, 'destroy'])->name('organization.destroy');
         });
     });
 

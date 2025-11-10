@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (ticket.assigned_to === currentUserId) {
                     // Admin yang sedang menangani
                     actionButton = `
-                    <a href="dashboard/ticket-reply-admin/${ticket.id}"
+                    <a href="ticket-reply-admin/${ticket.id}"
                        class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
                         💬 Chat
                     </a>`;

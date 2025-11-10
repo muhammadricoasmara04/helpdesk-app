@@ -1,13 +1,16 @@
 @props(['route', 'icon'])
 @php
+use Illuminate\Support\Str;
+
 $current = Route::currentRouteName();
+$base = Str::beforeLast($route, '.'); // contoh: 'organization.index' -> 'organization'
 
 $isActive =
-    $current === $route || // kalau sama persis
-    Str::startsWith($current, $route . '.') || // turunan pakai titik
+    $current === $route ||
+    Str::startsWith($current, $base . '.') ||
     (
-        Str::startsWith($current, $route . '-') &&
-        !Str::startsWith($current, $route . '-problems') // hindari bentrok khusus problems
+        Str::startsWith($current, $base . '-') &&
+        !Str::startsWith($current, $base . '-problems')
     );
 @endphp
 
