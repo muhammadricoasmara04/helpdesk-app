@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatStatusLabel = document.getElementById("chat-status-label");
     const ticketHeader = document.getElementById("ticket-header");
     const rawStatus = ticketHeader?.dataset.status;
+    const uploadInput = document.getElementById("attachment-upload");
     let ticketStatus;
 
     try {
@@ -162,6 +163,37 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("❌ Gagal mengakhiri chat:", error);
         }
+    });
+
+    const uploadAttachment = async (files) => {
+        if (!files.length) return;
+
+        const formData = new FormData();
+        for (let file of files) {
+            formData.append("attachments[]", file);
+        }
+
+        try {
+            await axios.post(
+                `/dashboard/user/ticket-reply/${ticketId}/attachments`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            // Reload supaya Blade render ulang lampiran baru
+            location.reload();
+        } catch (error) {
+            console.error(error);
+            alert("Gagal mengunggah lampiran.");
+        }
+    };
+
+    uploadInput.addEventListener("change", async (e) => {
+        await uploadAttachment(e.target.files);
     });
 
     window.Echo.channel(`ticket.${ticketId}`)

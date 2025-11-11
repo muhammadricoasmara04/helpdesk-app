@@ -127,10 +127,22 @@
 
                 <!-- Lampiran -->
                 <div class="mt-6">
-                    <h2 class="font-semibold text-gray-700 mb-3 border-b pb-1 flex items-center gap-2">
-                        📎 Lampiran
-                    </h2>
+                    <div class="flex items-center justify-between mb-3 border-b pb-1">
+                        <h2 class="font-semibold text-gray-700 flex items-center gap-2">
+                            📎 Lampiran
+                        </h2>
 
+                        <label for="attachment-upload"
+                            class="flex items-center gap-1 text-blue-600 text-sm font-medium cursor-pointer hover:text-blue-800 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            Tambah
+                        </label>
+                        <input type="file" id="attachment-upload" name="attachments[]" class="hidden" multiple
+                            accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
                     @if ($ticket->attachments->isNotEmpty())
                         <div class="grid grid-cols-2 gap-4">
                             @foreach ($ticket->attachments as $attachment)

@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:admin'])
         //Ticket 
         Route::prefix('ticket')->group(function () {
             Route::get('/', [TicketController::class, 'index'])->name('ticket.index');
-    
+
             Route::get('/search', [TicketController::class, 'search'])->name('tickets.search');
         });
 
@@ -121,6 +121,7 @@ Route::middleware(['auth', 'role:user'])
         // Chat / Balasan tiket user
         Route::prefix('ticket-reply')->group(function () {
             Route::get('/{id}', [TicketUserReplyController::class, 'index'])->name('ticket-replied');
+            Route::post('/{id}/attachments', [TicketUserReplyController::class, 'uploadAttachment'])->name('ticket.uploadAttachment');
         });
     });
 
