@@ -7,9 +7,8 @@
             <h1 class="text-3xl font-bold text-gray-800">Dashboard Tiket</h1>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-
-
+        <!-- Statistik Kartu -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-4">
             <!-- Total Tickets -->
             <div
                 class="flex items-center p-5 bg-linear-to-br from-blue-500 to-indigo-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
@@ -54,7 +53,7 @@
                 </div>
                 <div class="ml-4">
                     <h4 class="text-3xl font-bold">{{ $onProgressTickets }}</h4>
-                    <p class="text-sm opacity-90">In Progress Ticket</p>
+                    <p class="text-sm opacity-90">In Progress Tickets</p>
                 </div>
             </div>
 
@@ -73,55 +72,80 @@
                     <p class="text-sm opacity-90">Closed Tickets</p>
                 </div>
             </div>
-
         </div>
 
-        <!-- Card Table -->
-        <div class="bg-white shadow-lg rounded-2xl border border-gray-100 overflow-hidden">
-            <div
-                class="p-5 border-b border-gray-200 flex justify-between items-center bg-linear-to-r from-blue-600 to-indigo-600">
-                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                    Daftar Tiket
+        <!-- Analisis Tiket Closed per Bulan -->
+        <div class="mt-4 bg-white rounded-xl shadow-md p-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-700">
+                    Analisis Tiket Closed per Bulan ({{ $year }})
                 </h2>
-                <a href="{{ route('ticket.index') }}"
-                    class="inline-flex items-center gap-2 bg-white text-blue-700 font-medium px-4 py-2 rounded-md shadow hover:bg-gray-100 transition">
-                    + Buat Tiket
-                </a>
+
+                <form method="GET" action="{{ route('dashboard.user') }}">
+
+                    <select name="year" onchange="this.form.submit()" class="border rounded-lg px-3 py-1 text-gray-700">
+                        @for ($y = now()->year; $y >= now()->year - 3; $y--)
+                            <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                {{ $y }}
+                            </option>
+                        @endfor
+                    </select>
+                </form>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-sm text-gray-700">
-                    <thead>
-                        <tr class="bg-blue-100 text-left text-gray-700 uppercase text-xs tracking-wider">
-                            <th class="px-5 py-3 font-semibold">Kode Tiket</th>
-                            <th class="px-5 py-3 font-semibold">Subject</th>
-                            <th class="px-5 py-3 font-semibold">Status</th>
-                            <th class="px-5 py-3 font-semibold">Prioritas</th>
-                            <th class="px-5 py-3 font-semibold">Aplikasi</th>
-                            <th class="px-5 py-3 font-semibold">Masalah</th>
-                            <th class="px-5 py-3 font-semibold">Pelapor</th>
-                            <th class="px-5 py-3 font-semibold">Tanggal Dibuat</th>
-                            <th class="px-5 py-3 text-center font-semibold">Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tickets-table-body" class="divide-y divide-gray-100">
-
-
-                        <!-- Placeholder saat loading -->
-                        <tr>
-                            <td colspan="9" class="text-center py-6 text-gray-400 italic">
-                                Memuat data tiket...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="flex justify-center">
+                <div class="md:w-[800px] lg:w-[1000px] xl:w-[1200px] h-[280px]">
+                    <canvas id="ticketChart"></canvas>
+                </div>
             </div>
         </div>
 
-    </div>
-@endsection
-
-@push('scripts')
-    @vite('resources/js/dashboard-user/dashboard.js')
-@endpush
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('ticketChart').getContext('2d');
+            const ticketChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                    ],
+                    datasets: [{
+                        label: 'Jumlah Tiket Closed',
+                        data: @json($monthlyData),
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Jumlah Tiket Closed per Bulan',
+                            font: {
+                                size: 16,
+                                weight: '600'
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endsection

@@ -7,7 +7,7 @@
             <h1 class="text-3xl font-bold text-gray-800">Dashboard Tiket</h1>
         </div>
 
-       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
 
             <!-- Total Tickets -->
             <div
@@ -74,7 +74,86 @@
             </div>
 
         </div>
+
+        <div class="mt-10 bg-white rounded-xl shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-700">
+                    Analisis Tiket Closed per Bulan ({{ $year }})
+                </h2>
+
+                <form method="GET" action="{{ route('dashboard') }}">
+                    <select name="year" onchange="this.form.submit()" class="border rounded-lg px-3 py-1 text-gray-700">
+                        @for ($y = now()->year; $y >= now()->year - 3; $y--)
+                            <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                {{ $y }}
+                            </option>
+                        @endfor
+                    </select>
+                </form>
+            </div>
+
+            <div class="flex justify-center">
+                <div class="w-full md:w-[900px] lg:w-[1100px] xl:w-[1300px]">
+                    <canvas id="ticketChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('ticketChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($months),
+                datasets: [{
+                    label: 'Closed Tickets',
+                    data: @json($closedTicketsPerMonth),
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            color: '#4b5563'
+                        },
+                        grid: {
+                            color: 'rgba(229, 231, 235, 0.5)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#4b5563'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Jumlah Tiket Closed per Bulan',
+                        font: {
+                            size: 16,
+                            weight: '600'
+                        },
+                        color: '#374151'
+                    }
+                }
+            }
+        });
+    </script>
 @endsection
-
-

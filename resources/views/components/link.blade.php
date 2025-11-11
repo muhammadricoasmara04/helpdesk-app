@@ -1,17 +1,21 @@
 @props(['route', 'icon'])
 @php
-use Illuminate\Support\Str;
+    use Illuminate\Support\Str;
 
-$current = Route::currentRouteName();
-$base = Str::beforeLast($route, '.'); // contoh: 'organization.index' -> 'organization'
+    $current = Route::currentRouteName();
+    $base = Str::beforeLast($route, '.'); // contoh: 'organization.index' -> 'organization'
 
-$isActive =
-    $current === $route ||
-    Str::startsWith($current, $base . '.') ||
-    (
-        Str::startsWith($current, $base . '-') &&
-        !Str::startsWith($current, $base . '-problems')
-    );
+    $isActive =
+        $current === $route ||
+        Str::startsWith($current, $base . '.') ||
+        (Str::startsWith($current, $base . '-') &&
+            !Str::startsWith($current, $base . '-problems') &&
+            !Str::startsWith($current, $base . '-status') &&
+            !Str::startsWith($current, $base . '-priority'));
+
+    if (Str::contains($current, 'ticket-replied') && Str::contains($base, 'user.ticket')) {
+        $isActive = true;
+    }
 @endphp
 
 <a href="{{ route($route) }}"

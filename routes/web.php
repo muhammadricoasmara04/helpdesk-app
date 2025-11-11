@@ -113,8 +113,9 @@ Route::middleware(['auth', 'role:user'])
 
         // Tiket User
         Route::prefix('ticket')->group(function () {
-            Route::get('/create', [TicketUserController::class, 'index'])->name('ticket.index');
-            Route::post('/store', [TicketUserController::class, 'store'])->name('ticket.store');
+            Route::get('/', [TicketUserController::class, 'index'])->name('user.ticket.index');
+            Route::get('/create', [TicketUserController::class, 'create'])->name('user.ticket.create');
+            Route::post('/store', [TicketUserController::class, 'store'])->name('user.ticket.store');
         });
 
         // Chat / Balasan tiket user

@@ -17,7 +17,11 @@ use App\Models\TicketAttachment;
 
 class TicketUserController extends Controller
 {
-    public function index()
+    public function index() {
+
+        return view('dashboard.users.tickets.index');
+    }
+    public function create()
     {
         $user = Auth::user();
         $statuses = TicketStatus::all();
@@ -25,7 +29,7 @@ class TicketUserController extends Controller
         $applications = Application::all();
         $problems = ApplicationProblem::all();
         $organization = $user->organization;
-        return view('dashboard.users.ticket.store', compact('statuses', 'priorities', 'applications', 'problems', 'organization'));
+        return view('dashboard.users.tickets.store', compact('statuses', 'priorities', 'applications', 'problems', 'organization'));
     }
 
     public function store(Request $request)

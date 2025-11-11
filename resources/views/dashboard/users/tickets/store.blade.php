@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <form action="{{ route('ticket.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <form action="{{ route('user.ticket.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
 
             <!-- Hidden employee data -->

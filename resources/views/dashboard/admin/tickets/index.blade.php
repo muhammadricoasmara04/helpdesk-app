@@ -2,9 +2,40 @@
 
 @section('container')
     <!-- Card Wrapper -->
-    <input type="text" id="ticket-search" placeholder="Cari tiket..." class="border rounded px-3 py-1 mb-3 w-full">
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <!-- Search bar -->
+        <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto focus:ring focus:ring-blue-200 focus:border-blue-400 transition" />
+
+        <!-- Filters + Reset -->
+        <div class="flex flex-wrap gap-2 md:gap-3 items-center">
+            <select id="status-filter"
+                class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
+                <option value="">Semua Status</option>
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+                <option value="closed">Closed</option>
+            </select>
+
+            <select id="priority-filter"
+                class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
+                <option value="">Semua Prioritas</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+
+            <button id="reset-filter" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded transition">
+                Reset
+            </button>
+        </div>
+    </div>
+
 
     <div class="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
+
         <table class="min-w-full text-sm text-gray-700">
             <thead class="bg-gray-50 border-b">
                 <tr class="text-left text-gray-600 uppercase text-xs tracking-wider">

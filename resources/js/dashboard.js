@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
     const currentUserId = user?.id;
-
+    let tickets = [];
     function formatDate(dateString) {
         if (!dateString) return "-";
         const date = new Date(dateString);
@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            const tickets = response.data?.data || [];
+            tickets = response.data?.data || [];
+            console.log("🟢 Data tiket dari API:", tickets);
             renderTickets(tickets);
         } catch (error) {
             console.error("Error saat memuat tiket:", error);
@@ -183,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 // Update tampilan langsung tanpa reload
                 btn.outerHTML = `
-                    <a href="dashboard/ticket-reply-admin/${ticketId}"
+                    <a href="ticket-reply-admin/${ticketId}"
                         class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
                         💬 Chat
                     </a>
@@ -197,6 +198,51 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    function filterTickets() {
+        const searchValue = document
+            .getElementById("search-input")
+            .value.toLowerCase();
+        const statusValue = document
+            .getElementById("status-filter")
+            .value.toLowerCase();
+        const priorityValue = document
+            .getElementById("priority-filter")
+            .value.toLowerCase();
+
+        const filtered = tickets.filter((t) => {
+            const matchSearch =
+                t.subject?.toLowerCase().includes(searchValue) ||
+                t.ticket_code?.toLowerCase().includes(searchValue) ||
+                t.employee_name?.toLowerCase().includes(searchValue);
+
+            const matchStatus =
+                !statusValue || t.status?.slug?.toLowerCase() === statusValue;
+            const matchPriority =
+                !priorityValue ||
+                t.priority?.name?.toLowerCase() === priorityValue;
+
+            return matchSearch && matchStatus && matchPriority;
+        });
+
+        renderTickets(filtered);
+    }
+
     // 🔥 Jalankan pertama kali
     await loadTickets();
+
+    document
+        .getElementById("search-input")
+        ?.addEventListener("input", filterTickets);
+    document
+        .getElementById("status-filter")
+        ?.addEventListener("change", filterTickets);
+    document
+        .getElementById("priority-filter")
+        ?.addEventListener("change", filterTickets);
+    document.getElementById("reset-filter")?.addEventListener("click", () => {
+        document.getElementById("search-input").value = "";
+        document.getElementById("status-filter").value = "";
+        document.getElementById("priority-filter").value = "";
+        renderTickets(tickets);
+    });
 });
