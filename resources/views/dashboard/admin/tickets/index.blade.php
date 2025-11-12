@@ -1,7 +1,6 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-    <!-- Card Wrapper -->
 
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <!-- Search bar -->

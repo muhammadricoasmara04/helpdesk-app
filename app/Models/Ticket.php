@@ -21,6 +21,7 @@ class Ticket extends Model
         'organization_name',
         'subject',
         'description',
+        'assigned_to',
     ];
     public function status()
     {

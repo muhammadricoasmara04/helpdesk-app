@@ -115,28 +115,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // === Tombol Aksi (kondisional)
             let actionButton = "";
-            if (ticket.assigned_to) {
+
+            const statusSlug = ticket.status?.slug?.toLowerCase() || "-";
+
+            // 🔒 Jika tiket sudah closed
+            if (statusSlug === "closed") {
+                actionButton = `
+        <a href="ticket-reply-admin/${ticket.id}" class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
+            Closed
+        </a>
+    `;
+            } else if (ticket.assigned_to) {
                 if (ticket.assigned_to === currentUserId) {
                     // Admin yang sedang menangani
                     actionButton = `
-                    <a href="ticket-reply-admin/${ticket.id}"
-                       class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
-                        💬 Chat
-                    </a>`;
+            <a href="ticket-reply-admin/${ticket.id}"
+               class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
+                💬 Chat
+            </a>`;
                 } else {
                     // Tiket sedang di-handle admin lain
                     actionButton = `
-                    <span class="inline-flex items-center gap-1 bg-yellow-500 text-white text-xs font-medium px-3 py-1.5 rounded-md">
-                        ⏳ Proses
-                    </span>`;
+            <span class="inline-flex items-center gap-1 bg-yellow-500 text-white text-xs font-medium px-3 py-1.5 rounded-md">
+                ⏳ Proses
+            </span>`;
                 }
             } else {
                 // Belum ada admin handle → tampil tombol assign
                 actionButton = `
-                <button data-id="${ticket.id}"
-                        class="assign-btn inline-flex items-center gap-1 bg-green-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-green-700 transition">
-                    🔧 Assign to Me
-                </button>`;
+        <button data-id="${ticket.id}"
+                class="assign-btn inline-flex items-center gap-1 bg-green-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-green-700 transition">
+            🔧 Assign to Me
+        </button>`;
             }
 
             // === Susunan tabel ===

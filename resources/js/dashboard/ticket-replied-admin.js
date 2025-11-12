@@ -2,8 +2,6 @@ import axios from "axios";
 import "../bootstrap";
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("💬 Ticket Reply Chat Admin Loaded");
-
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
     const token = localStorage.getItem("token");
@@ -27,8 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
         typeof ticketStatus === "object" && ticketStatus !== null
             ? ticketStatus.slug
             : ticketStatus;
-
-    console.log("DEBUG: statusSlug =", statusSlug);
 
  
     if (!ticketId) {

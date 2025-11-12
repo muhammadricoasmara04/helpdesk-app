@@ -123,6 +123,7 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
+                            stepSize: 5,
                             precision: 0,
                             color: '#4b5563'
                         },

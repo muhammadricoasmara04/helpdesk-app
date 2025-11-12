@@ -1,6 +1,37 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <!-- Search bar -->
+        <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto focus:ring focus:ring-blue-200 focus:border-blue-400 transition" />
+
+        <!-- Filters + Reset -->
+        <div class="flex flex-wrap gap-2 md:gap-3 items-center">
+            <select id="status-filter"
+                class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
+                <option value="">Semua Status</option>
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+                <option value="closed">Closed</option>
+            </select>
+
+            <select id="priority-filter"
+                class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
+                <option value="">Semua Prioritas</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+
+            <button id="reset-filter" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded transition">
+                Reset
+            </button>
+        </div>
+    </div>
+
+
     <div class="bg-white shadow-lg rounded-2xl border border-gray-100 overflow-hidden">
         <div
             class="p-5 border-b border-gray-200 flex justify-between items-center bg-linear-to-r from-blue-600 to-indigo-600">

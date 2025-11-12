@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\User;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TicketUserReplyController extends Controller
 {
@@ -17,18 +18,19 @@ class TicketUserReplyController extends Controller
     public function uploadAttachment(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);
-
-        // Validasi file
         $request->validate([
-            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf|max:2048', // max 2MB
+            'attachments'   => 'nullable|array',
+            'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,docx',
         ]);
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('attachments', 'public');
+                $path = $file->store("users/attachments/{$ticket->id}", 'public');
 
                 // Simpan ke tabel ticket_attachments (pastikan modelnya ada)
                 $ticket->attachments()->create([
+                    'id' => Str::uuid(),
+                    'ticket_id' => $ticket->id,
                     'file_path' => $path,
                 ]);
             }
