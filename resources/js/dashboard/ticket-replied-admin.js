@@ -32,7 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const addMessage = (message, isOwn = false, time = null, sender = null) => {
+    const addMessage = (
+        message,
+        isOwn = false,
+        time = null,
+        sender = null,
+        isRead = false
+    ) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add(
             "flex",
@@ -88,6 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
             msgDiv.appendChild(timeEl);
         }
 
+        if (isOwn) {
+            const readIndicator = document.createElement("span");
+            readIndicator.classList.add("read-indicator", "ml-2", "text-xs");
+            readIndicator.textContent = isRead ? "✅✅" : "✅";
+            readIndicator.style.color = isRead ? "#22c55e" : "#9ca3af"; // hijau kalau sudah dibaca
+            msgDiv.appendChild(readIndicator);
+        }
+
         // if (isOwn) {
         //     const readIndicator = document.createElement("span");
         //     readIndicator.classList.add("read-indicator", "ml-2", "text-xs");
@@ -113,7 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
             chatBox.innerHTML = "";
             const replies = response.data.data || response.data || [];
             replies.forEach((reply) =>
-                addMessage(reply.message, reply.is_own, reply.created_at)
+                addMessage(
+                    reply.message,
+                    reply.is_own,
+                    reply.created_at,
+                    reply.user?.name ?? "User",
+                    reply.is_read
+                )
             );
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
@@ -135,7 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? new Date(reply.created_at)
                 : new Date();
 
-            addMessage(message, true, time);
+            addMessage(message, true, time, null, false);
+
             messageInput.value = "";
         } catch (error) {
             console.error("❌ Gagal mengirim pesan:", error);
@@ -216,19 +237,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const allOwnMessages = chatBox.querySelectorAll(".message-own");
             allOwnMessages.forEach((msg) => {
-                let check = msg.querySelector(".read-indicator");
-
-                // kalau belum ada, buat baru
-                if (!check) {
-                    check = document.createElement("span");
-                    check.classList.add("read-indicator", "ml-2", "text-xs");
-                    msg.appendChild(check);
+                const check = msg.querySelector(".read-indicator");
+                if (check) {
+                    check.textContent = "✅✅";
+                    check.style.color = "#22c55e"; // hijau
                 }
-
-                check.textContent = "✅"; // sudah dibaca
-                check.style.color = "#22c55e"; // hijau (opsional)
             });
         });
+
     updateChatUI(statusSlug);
     loadMessages().then(() => {
         console.log("✅ Messages loaded, now listening TicketRead...");

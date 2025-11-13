@@ -229,11 +229,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     window.Echo.channel(`ticket.${ticketId}`)
-        .listen(".TicketReplied", (e) => {
+        .listen(".TicketReplied", async (e) => {
             console.log("💬 New reply:", e);
 
+            // tampilkan pesan dari orang lain
             if (e.user_id !== token) {
                 addMessage(e.message, false, e.created_at, e.sender_name);
+
+                // 🔥 Tambahkan trigger "read" di sini
+                try {
+                    await axios.get(`${baseUrl}/ticket-replies/${ticketId}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                } catch (err) {
+                    console.error("❌ Gagal menandai pesan dibaca:", err);
+                }
             }
         })
         .listen(".TicketStatusUpdated", (e) => {

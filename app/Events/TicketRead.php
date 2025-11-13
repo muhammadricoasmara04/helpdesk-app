@@ -32,10 +32,17 @@ class TicketRead implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('ticket.' . $this->ticketId);
+        return [new Channel('ticket.' . $this->ticketId)];
     }
     public function broadcastAs()
     {
         return 'TicketRead';
+    }
+    public function broadcastWith()
+    {
+        return [
+            'ticket_id' => $this->ticketId,
+            'userId' => $this->userId,
+        ];
     }
 }
