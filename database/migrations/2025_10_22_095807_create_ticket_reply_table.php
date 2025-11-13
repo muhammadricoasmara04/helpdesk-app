@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('ticket_id');
             $table->uuid('user_id');
             $table->text('message');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
 
             $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');

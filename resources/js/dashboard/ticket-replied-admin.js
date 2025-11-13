@@ -1,5 +1,6 @@
 import axios from "axios";
 import "../bootstrap";
+import Swal from "sweetalert2";
 
 document.addEventListener("DOMContentLoaded", () => {
     const baseUrl =
@@ -26,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ? ticketStatus.slug
             : ticketStatus;
 
- 
     if (!ticketId) {
         console.error("❌ Ticket ID not found");
         return;
@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
             isOwn ? "bg-blue-500" : "bg-gray-200",
             isOwn ? "text-white" : "text-black"
         );
+        if (isOwn) {
+            msgDiv.classList.add("message-own"); // Tambahkan ini!
+        }
 
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
@@ -85,6 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
             msgDiv.appendChild(timeEl);
         }
 
+        // if (isOwn) {
+        //     const readIndicator = document.createElement("span");
+        //     readIndicator.classList.add("read-indicator", "ml-2", "text-xs");
+        //     readIndicator.textContent = "✔️"; // belum dibaca
+        //     msgDiv.appendChild(readIndicator);
+        // }
+
         wrapper.appendChild(msgDiv);
         chatBox.appendChild(wrapper);
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -112,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Kirim pesan baru ke API
     const sendMessage = async (message) => {
         try {
             const response = await axios.post(
@@ -152,7 +161,24 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     endChatBtn?.addEventListener("click", async () => {
-        if (!confirm("Yakin ingin mengakhiri chat ini?")) return;
+        Swal.fire({
+            title: "Yakin ingin mengakhiri chat ini?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, akhiri",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Aksi ketika user menekan "Ya"
+                console.log("Chat diakhiri");
+                // contoh: window.location.href = '/logout'; atau fungsi lain
+            } else {
+                // Aksi ketika user menekan "Batal"
+                console.log("Dibatalkan");
+            }
+        });
 
         try {
             const response = await axios.put(
@@ -174,7 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .listen(".TicketReplied", (e) => {
             console.log("💬 New reply:", e);
             if (e.user_id !== token) {
-                
                 addMessage(e.message, false, e.created_at, e.sender_name);
             }
         })
@@ -185,7 +210,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (chatStatusLabel)
                     chatStatusLabel.style.display = "inline-block";
             }
+        })
+        .listen(".TicketRead", (e) => {
+            console.log("👁 Pesan sudah dibaca oleh user:", e.userId);
+
+            const allOwnMessages = chatBox.querySelectorAll(".message-own");
+            allOwnMessages.forEach((msg) => {
+                let check = msg.querySelector(".read-indicator");
+
+                // kalau belum ada, buat baru
+                if (!check) {
+                    check = document.createElement("span");
+                    check.classList.add("read-indicator", "ml-2", "text-xs");
+                    msg.appendChild(check);
+                }
+
+                check.textContent = "✅"; // sudah dibaca
+                check.style.color = "#22c55e"; // hijau (opsional)
+            });
         });
     updateChatUI(statusSlug);
-    loadMessages();
+    loadMessages().then(() => {
+        console.log("✅ Messages loaded, now listening TicketRead...");
+    });
 });

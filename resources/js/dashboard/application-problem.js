@@ -1,10 +1,11 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 document.addEventListener("DOMContentLoaded", () => {
     getDataApplicationProblems();
     loadApplications();
     loadTicketPriorities();
-   
+    console.log("🟢 File applicationProblems.js berhasil dimuat!");
 });
 
 async function getDataApplicationProblems() {
@@ -218,5 +219,62 @@ async function storeApplicationProblem(e) {
                 ? "Sesi login berakhir. Silakan login ulang."
                 : `Gagal menyimpan: ${error.message}`;
         messageEl.className = "text-red-500";
+    }
+}
+
+document.addEventListener("click", async (event) => {
+    const deleteBtn = event.target.closest(".delete-btn");
+    if (!deleteBtn) return;
+
+    const problemId = deleteBtn.dataset.id;
+    if (!problemId) return;
+
+    await deleteApplicationProblem(problemId);
+});
+
+// ✅ Fungsi async untuk hapus data
+async function deleteApplicationProblem(id) {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Belum login. Silakan login terlebih dahulu.");
+        return;
+    }
+
+    const result = await Swal.fire({
+        title: "Yakin ingin menghapus problem ini?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus",
+        cancelButtonText: "Batal",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+        const response = await axios.delete(
+            `${baseUrl}/application-problems/${id}`,
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
+
+        if (response.data.success) {
+            alert("✅ Problem aplikasi berhasil dihapus!");
+            await getDataApplicationProblems(); // reload tabel setelah hapus
+        } else {
+            alert("❌ Gagal menghapus problem aplikasi.");
+        }
+    } catch (error) {
+        console.error("❌ Error saat menghapus:", error);
+        alert(
+            error.response?.status === 401
+                ? "Sesi login berakhir. Silakan login ulang."
+                : `Terjadi kesalahan: ${error.message}`
+        );
     }
 }

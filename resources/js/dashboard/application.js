@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
@@ -231,10 +232,18 @@ async function deleteApplication(id) {
         return;
     }
 
-    const confirmDelete = confirm(
-        "Apakah Anda yakin ingin menghapus aplikasi ini?"
-    );
-    if (!confirmDelete) return;
+    const result = await Swal.fire({
+        title: "Apakah Anda yakin ingin menghapus aplikasi ini?",
+        text: "Tindakan ini tidak dapat dibatalkan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus",
+        cancelButtonText: "Batal",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
         const response = await axios.delete(`${baseUrl}/applications/${id}`, {

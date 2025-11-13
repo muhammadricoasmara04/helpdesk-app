@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 document.addEventListener("DOMContentLoaded", () => {
     getTicketPriorities();
@@ -75,8 +76,9 @@ async function getTicketPriorities() {
                         </div>
                     </td>
         `;
-           
+
                 tableBody.appendChild(row);
+                initDeleteButtons();
             });
         } else {
             setMessageRow("Belum ada data prioritas.");
@@ -118,7 +120,7 @@ function storeTicketPriorities() {
 
         const formData = {
             name: document.getElementById("name").value.trim(),
-           
+
             description: document.getElementById("description").value.trim(),
         };
 
@@ -153,5 +155,76 @@ function storeTicketPriorities() {
             messageEl.textContent = `Gagal menyimpan: ${error.message}`;
             messageEl.className = "text-red-500";
         }
+    });
+}
+
+async function initDeleteButtons() {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-id");
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                Swal.fire(
+                    "Belum login",
+                    "Silakan login terlebih dahulu.",
+                    "warning"
+                );
+                return;
+            }
+
+            // 🔹 Tampilkan konfirmasi SweetAlert
+            const result = await Swal.fire({
+                title: "Apakah Anda yakin ingin menghapus prioritas ini?",
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus",
+                cancelButtonText: "Batal",
+            });
+
+            if (!result.isConfirmed) return;
+
+            try {
+                const response = await axios.delete(
+                    `${baseUrl}/ticket-priority/${id}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                if (response.data.success) {
+                    await Swal.fire({
+                        icon: "success",
+                        title: "Berhasil!",
+                        text: "Prioritas tiket berhasil dihapus.",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+
+                    // 🔄 Reload tabel setelah hapus
+                    await getTicketPriorities();
+                    initDeleteButtons(); // penting: re-attach listener karena DOM di-reload
+                } else {
+                    Swal.fire(
+                        "Gagal!",
+                        "Tidak dapat menghapus prioritas.",
+                        "error"
+                    );
+                }
+            } catch (error) {
+                console.error("Error delete:", error);
+                Swal.fire(
+                    "Terjadi Kesalahan!",
+                    error.response?.data?.message || error.message,
+                    "error"
+                );
+            }
+        });
     });
 }

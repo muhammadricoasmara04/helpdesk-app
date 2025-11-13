@@ -30,7 +30,7 @@ return new class extends Migration
                 ->foreign('ticket_priority_id')
                 ->references('id')
                 ->on('ticket_priority')
-                ->onDelete('cascade'); 
+                ->onDelete('set null');
         });
     }
 

@@ -12,7 +12,7 @@ class TicketReply extends Model
     protected $table = 'ticket_reply';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['ticket_id', 'user_id', 'message'];
+    protected $fillable = ['ticket_id', 'user_id', 'message','is_read',];
 
     protected static function boot()
     {

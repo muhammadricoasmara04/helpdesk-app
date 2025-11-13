@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Swal from "sweetalert2";
 document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.getElementById("tickets-table-body");
     const baseUrl =
@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             tickets = response.data?.data || [];
-            console.log("🟢 Data tiket dari API:", tickets);
             renderTickets(tickets);
         } catch (error) {
             console.error("Error saat memuat tiket:", error);
@@ -178,10 +177,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             const btn = e.target;
             const ticketId = btn.dataset.id;
 
-            const confirmAssign = confirm(
-                "Apakah Anda yakin ingin meng-assign tiket ini ke Anda?"
-            );
-            if (!confirmAssign) return;
+            const result = await Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin meng-assign tiket ini ke Anda?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya, assign!",
+                cancelButtonText: "Batal",
+            });
+
+            if (!result.isConfirmed) return;
 
             try {
                 await axios.post(
@@ -195,7 +200,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // Update tampilan langsung tanpa reload
                 btn.outerHTML = `
                     <a href="ticket-reply-admin/${ticketId}"
-                        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+                        class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
                         💬 Chat
                     </a>
                 `;

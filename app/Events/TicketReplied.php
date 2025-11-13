@@ -44,6 +44,7 @@ class TicketReplied implements ShouldBroadcastNow
             'user_id' => $this->reply->user_id,
             'sender_name' => $this->reply->user->name ?? 'User',
             'created_at' => $this->reply->created_at->toIso8601String(),
+            'is_read' => $this->reply->is_read ?? false,
         ];
     }
 

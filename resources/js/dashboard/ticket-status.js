@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Swal from "sweetalert2";
 document.addEventListener("DOMContentLoaded", () => {
     getTicketStatus();
     storeTicketStatus();
@@ -146,7 +146,18 @@ function deleteTicketStatus() {
         const baseUrl = import.meta.env.VITE_API_BASE_URL;
         const token = localStorage.getItem("token");
 
-        if (!confirm("Yakin ingin menghapus ticket status ini?")) return;
+        const result = await Swal.fire({
+            title: "Yakin ingin menghapus ticket status ini?",
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus",
+            cancelButtonText: "Batal",
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const response = await axios.delete(
