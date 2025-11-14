@@ -36,12 +36,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const addMessage = (message, isOwn = false, time = null) => {
+    const addMessage = (
+        message,
+        isOwn = false,
+        time = null,
+        isRead = false
+    ) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add(
+            "message",
             "flex",
             "my-2",
-            isOwn ? "justify-end" : "justify-start"
+            isOwn ? "justify-end" : "justify-start",
+            isOwn ? "own" : "other"
         );
 
         const msgDiv = document.createElement("div");
@@ -58,28 +65,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
+
         const text = document.createElement("div");
         text.textContent = message;
         msgDiv.appendChild(text);
 
+        // waktu + centang
         if (time) {
-            const timeEl = document.createElement("div");
-            timeEl.classList.add(
+            const metaEl = document.createElement("div");
+            metaEl.classList.add(
                 "text-xs",
-                isOwn ? "text-blue-100" : "text-gray-500",
-                "text-right",
-                "mt-1"
+                "mt-1",
+                "flex",
+                "items-center",
+                "gap-1",
+                "justify-end"
             );
-            // format waktu jadi jam:menit misal 13:45
+
             const t = new Date(time);
-            timeEl.textContent = `${t
+            const formattedTime = `${t
                 .getHours()
                 .toString()
                 .padStart(2, "0")}:${t
                 .getMinutes()
                 .toString()
                 .padStart(2, "0")}`;
-            msgDiv.appendChild(timeEl);
+
+            const timeEl = document.createElement("span");
+            timeEl.textContent = formattedTime;
+            metaEl.appendChild(timeEl);
+            
+            if (isOwn) {
+                const checkEl = document.createElement("span");
+                checkEl.classList.add("check-icon");
+                checkEl.innerHTML = isRead ? "✅✅" : "✅";
+                metaEl.appendChild(checkEl);
+            }
+
+            msgDiv.appendChild(metaEl);
         }
 
         wrapper.appendChild(msgDiv);
@@ -99,7 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
             chatBox.innerHTML = "";
             const replies = response.data.data || response.data || [];
             replies.forEach((reply) =>
-                addMessage(reply.message, reply.is_own, reply.created_at)
+                addMessage(
+                    reply.message,
+                    reply.is_own,
+                    reply.created_at,
+                    reply.is_read
+                )
             );
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
@@ -132,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? new Date(reply.created_at)
                 : new Date();
 
-            addMessage(message, true, time);
+            addMessage(message, true, time, null, false);
             messageInput.value = "";
         } catch (error) {
             console.error("❌ Gagal mengirim pesan:", error);
@@ -253,7 +281,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (chatStatusLabel)
                     chatStatusLabel.style.display = "inline-block";
             }
+        })
+        .listen(".TicketRead", (e) => {
+            console.log("👁 Pesan dibaca oleh admin:", e.userId);
+
+            // Cari semua pesan yang dikirim user sendiri
+            const allOwnMessages = chatBox.querySelectorAll(".own");
+            allOwnMessages.forEach((msg) => {
+                const check = msg.querySelector(".check-icon");
+                if (check) {
+                    check.innerHTML = "✅✅";
+                    check.style.color = "#22c55e"; // hijau
+                }
+            });
         });
+
     updateChatUI(statusSlug);
     loadMessages();
 });

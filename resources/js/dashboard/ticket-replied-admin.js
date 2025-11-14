@@ -77,13 +77,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (time) {
             const t = new Date(time);
-            const timeEl = document.createElement("div");
-            timeEl.classList.add(
+
+            const meta = document.createElement("div");
+            meta.classList.add(
+                "flex",
+                "items-center",
+                "justify-end",
+                "gap-1",
                 "text-xs",
-                isOwn ? "text-blue-100" : "text-gray-500",
-                "text-right",
                 "mt-1"
             );
+
+            // jam
+            const timeEl = document.createElement("span");
             timeEl.textContent = `${t
                 .getHours()
                 .toString()
@@ -91,23 +97,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 .getMinutes()
                 .toString()
                 .padStart(2, "0")}`;
-            msgDiv.appendChild(timeEl);
-        }
+            timeEl.classList.add(isOwn ? "text-blue-100" : "text-gray-500");
+            meta.appendChild(timeEl);
+            // hanya untuk pesan sendiri
+            if (isOwn) {
+                const readIndicator = document.createElement("span");
+                readIndicator.classList.add("read-indicator");
+                readIndicator.textContent = isRead ? "✅✅" : "✅";
+                readIndicator.style.color = isRead ? "#22c55e" : "#9ca3af";
+                meta.appendChild(readIndicator);
+            }
 
-        if (isOwn) {
-            const readIndicator = document.createElement("span");
-            readIndicator.classList.add("read-indicator", "ml-2", "text-xs");
-            readIndicator.textContent = isRead ? "✅✅" : "✅";
-            readIndicator.style.color = isRead ? "#22c55e" : "#9ca3af"; // hijau kalau sudah dibaca
-            msgDiv.appendChild(readIndicator);
+            msgDiv.appendChild(meta);
         }
-
-        // if (isOwn) {
-        //     const readIndicator = document.createElement("span");
-        //     readIndicator.classList.add("read-indicator", "ml-2", "text-xs");
-        //     readIndicator.textContent = "✔️"; // belum dibaca
-        //     msgDiv.appendChild(readIndicator);
-        // }
 
         wrapper.appendChild(msgDiv);
         chatBox.appendChild(wrapper);
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     reply.message,
                     reply.is_own,
                     reply.created_at,
-                    reply.user?.name ?? "User",
+                    null,
                     reply.is_read
                 )
             );
@@ -218,10 +220,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     window.Echo.channel(`ticket.${ticketId}`)
-        .listen(".TicketReplied", (e) => {
-            console.log("💬 New reply:", e);
+        .listen(".TicketReplied", async (e) => {
+            console.log("💬 New message from user:", e);
+
+            // tampilkan pesan user ke admin
             if (e.user_id !== token) {
                 addMessage(e.message, false, e.created_at, e.sender_name);
+
+                // 👁 tandai sebagai dibaca langsung (tanpa refresh)
+                try {
+                    await axios.get(`${baseUrl}/ticket-replies/${ticketId}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                    console.log("👁 Pesan user ditandai dibaca oleh admin.");
+                } catch (err) {
+                    console.error("❌ Gagal menandai dibaca:", err);
+                }
             }
         })
         .listen(".TicketStatusUpdated", (e) => {
