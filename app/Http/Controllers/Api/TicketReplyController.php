@@ -71,6 +71,8 @@ class TicketReplyController extends Controller
         $ticket = Ticket::findOrFail($id);
         $ticket->ticket_status_id = TicketStatus::where('slug', 'closed')->first()->id;
         $ticket->save();
+        $ticket->load('status');
+        Log::info("🔥 USER MENUTUP TICKET, SIAP BROADCAST", ['id' => $ticket->id]);
 
         broadcast(new TicketStatusUpdated($ticket))->toOthers();
 

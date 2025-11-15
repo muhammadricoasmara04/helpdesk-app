@@ -71,6 +71,7 @@
                     </tr>
                 </tbody>
             </table>
+            <div id="pagination" class="flex justify-center items-center gap-2 mt-4"></div>
         </div>
     </div>
 @endsection

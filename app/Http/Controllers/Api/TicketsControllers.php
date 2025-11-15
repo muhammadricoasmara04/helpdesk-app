@@ -16,35 +16,56 @@ class TicketsControllers extends Controller
     public function index(Request $request)
     {
         try {
-            $user = $request->user(); // Ambil user dari token login
+            $user = $request->user();
 
             $query = Ticket::with(['status', 'priority', 'application', 'problem'])
                 ->latest();
 
+            // FILTER EMPLOYEE
             if ($request->has('employee_number')) {
                 $query->where('employee_number', $request->employee_number);
             }
 
-            // Jika role admin, hanya tampilkan tiket yang di-assign ke dia
+            // FILTER ROLE ADMIN
             if ($user->role === 'admin') {
                 $query->where('assigned_to', $user->id);
             }
 
-            $tickets = $query->get();
+            // 🔍 FILTER SEARCH
+            if ($search = $request->search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('subject', 'like', "%$search%")
+                        ->orWhere('ticket_code', 'like', "%$search%")
+                        ->orWhere('employee_name', 'like', "%$search%");
+                });
+            }
+
+            // STATUS FILTER
+            if ($status = $request->status) {
+                $query->whereHas('status', fn($q) => $q->where('slug', $status));
+            }
+
+            // PRIORITY FILTER
+            if ($priority = $request->priority) {
+                $query->whereHas('priority', function ($q) use ($priority) {
+                    $q->whereRaw('LOWER(name) = ?', [strtolower($priority)]);
+                });
+            }
+
+            $tickets = $query->paginate($request->get('per_page', 10));
 
             return response()->json([
                 'success' => true,
-                'message' => 'Tickets retrieved successfully.',
                 'data' => $tickets
-            ], 200);
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Server error while retrieving tickets.',
-                'error' => $e->getMessage()
+                'message' => $e->getMessage()
             ], 500);
         }
     }
+
 
     public function store(Request $request)
     {

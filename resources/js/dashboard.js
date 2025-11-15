@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const currentUserId = user?.id;
     let tickets = [];
+    const paginationContainer = document.getElementById("pagination");
+    let currentPage = 1;
+    let lastPage = 1;
+
     function formatDate(dateString) {
         if (!dateString) return "-";
         const date = new Date(dateString);
@@ -28,26 +32,82 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    async function loadTickets() {
+    function renderPagination() {
+        paginationContainer.innerHTML = "";
+
+        // Prev button
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "Prev";
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.className =
+            "px-3 py-1 rounded border border-gray-300 bg-white hover:bg-gray-100 disabled:opacity-50";
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                loadTickets(currentPage - 1);
+            }
+        });
+        paginationContainer.appendChild(prevBtn);
+
+        // Pages
+        for (let i = 1; i <= lastPage; i++) {
+            const pageBtn = document.createElement("button");
+            pageBtn.textContent = i;
+            pageBtn.className = `px-3 py-1 rounded border border-gray-300 ${
+                i === currentPage
+                    ? "bg-blue-600 text-white"
+                    : "bg-white hover:bg-gray-100"
+            }`;
+            pageBtn.addEventListener("click", () => {
+                loadTickets(i);
+            });
+            paginationContainer.appendChild(pageBtn);
+        }
+
+        // Next button
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Next";
+        nextBtn.disabled = currentPage === lastPage;
+        nextBtn.className =
+            "px-3 py-1 rounded border border-gray-300 bg-white hover:bg-gray-100 disabled:opacity-50";
+        nextBtn.addEventListener("click", () => {
+            if (currentPage < lastPage) {
+                loadTickets(currentPage + 1);
+            }
+        });
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    async function loadTickets(page = 1) {
+        const searchValue = document.getElementById("search-input").value;
+        const statusValue = document.getElementById("status-filter").value;
+        const priorityValue = document.getElementById("priority-filter").value;
+
         try {
             const response = await axios.get(`${baseUrl}/tickets`, {
                 headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    page,
+                    per_page: 10,
+                    search: searchValue,
+                    status: statusValue,
+                    priority: priorityValue,
+                },
             });
 
-            tickets = response.data?.data || [];
-            renderTickets(tickets);
-        } catch (error) {
-            console.error("Error saat memuat tiket:", error);
-            const message =
-                error.response?.data?.message ||
-                "Token tidak valid atau sesi login telah berakhir.";
-            tableBody.innerHTML = `
-                <tr><td colspan="9" class="text-center text-red-500">${message}</td></tr>`;
+            console.log({
+                search: searchValue,
+                status: statusValue,
+                priority: priorityValue,
+            });
 
-            if (error.response?.status === 401) {
-                localStorage.removeItem("token");
-                window.location.href = "/login";
-            }
+            tickets = response.data.data.data;
+            currentPage = response.data.data.current_page;
+            lastPage = response.data.data.last_page;
+
+            renderTickets(tickets);
+            renderPagination();
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -112,12 +172,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     priorityBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">-</span>`;
             }
 
-            // === Tombol Aksi (kondisional)
             let actionButton = "";
 
             const statusSlug = ticket.status?.slug?.toLowerCase() || "-";
 
-            // 🔒 Jika tiket sudah closed
             if (statusSlug === "closed") {
                 actionButton = `
         <a href="ticket-reply-admin/${ticket.id}" class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
@@ -144,7 +202,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 actionButton = `
         <button data-id="${ticket.id}"
                 class="assign-btn inline-flex items-center gap-1 bg-green-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-green-700 transition">
-            🔧 Assign to Me
+        Assign to Me
         </button>`;
             }
 
@@ -196,8 +254,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
+                // window.location.href = `/dashboard/ticket-reply-admin/${ticketId}`;
 
-                // Update tampilan langsung tanpa reload
                 btn.outerHTML = `
                     <a href="ticket-reply-admin/${ticketId}"
                         class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
@@ -242,22 +300,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderTickets(filtered);
     }
 
-    // 🔥 Jalankan pertama kali
     await loadTickets();
 
     document
         .getElementById("search-input")
-        ?.addEventListener("input", filterTickets);
+        .addEventListener("input", () => loadTickets(1));
+
     document
         .getElementById("status-filter")
-        ?.addEventListener("change", filterTickets);
+        .addEventListener("change", () => loadTickets(1));
+
     document
         .getElementById("priority-filter")
-        ?.addEventListener("change", filterTickets);
+        .addEventListener("change", () => loadTickets(1));
+
     document.getElementById("reset-filter")?.addEventListener("click", () => {
         document.getElementById("search-input").value = "";
         document.getElementById("status-filter").value = "";
         document.getElementById("priority-filter").value = "";
-        renderTickets(tickets);
+
+        loadTickets(1);
     });
 });

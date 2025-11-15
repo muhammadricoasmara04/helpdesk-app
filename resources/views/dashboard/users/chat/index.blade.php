@@ -32,14 +32,14 @@
                 <div class="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
                     <h2 class="text-lg font-semibold">💬 Live Chat Tiket</h2>
                     <span
-                        class="ttext-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Menunggu' }}</span>
+                        class="assign text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Menunggu' }}</span>
                     <button id="end-chat-btn"
                         class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md transition-all duration-200 flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        Akhiri Chat
+                        Close
                     </button>
 
                     <span id="chat-status-label"

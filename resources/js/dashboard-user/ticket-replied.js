@@ -94,11 +94,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const timeEl = document.createElement("span");
             timeEl.textContent = formattedTime;
             metaEl.appendChild(timeEl);
-            
+
             if (isOwn) {
                 const checkEl = document.createElement("span");
                 checkEl.classList.add("check-icon");
-                checkEl.innerHTML = isRead ? "✅✅" : "✅";
+                checkEl.innerHTML = isRead ? "✓✓" : "✓";
+                checkEl.style.color = isRead ? "#00FFFF" : "#9ca3af";
                 metaEl.appendChild(checkEl);
             }
 
@@ -185,7 +186,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     endChatBtn?.addEventListener("click", async () => {
-        if (!confirm("Yakin ingin mengakhiri chat ini?")) return;
+        const result = await Swal.fire({
+            title: "Yakin?",
+            text: "Yakin ingin mengakhiri chat ini?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, akhiri",
+            cancelButtonText: "Batal",
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const response = await axios.put(
@@ -195,11 +205,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
+
             if (response.data.success) {
                 updateChatUI("closed");
+                Swal.fire({
+                    icon: "success",
+                    title: "Chat berhasil diakhiri",
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
             }
         } catch (error) {
             console.error("❌ Gagal mengakhiri chat:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Terjadi kesalahan saat mengakhiri chat.",
+            });
         }
     });
 
@@ -276,22 +298,35 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .listen(".TicketStatusUpdated", (e) => {
             console.log("💬 Ticket status updated:", e.status);
-            if (e.status === "closed") {
-                if (endChatBtn) endChatBtn.style.display = "none";
-                if (chatStatusLabel)
-                    chatStatusLabel.style.display = "inline-block";
+            const assignedLabel = document.querySelector(".assign");
+            const isClosed = e.status === "closed";
+
+            if (endChatBtn)
+                endChatBtn.style.display = isClosed ? "none" : "inline-block";
+            if (chatStatusLabel)
+                chatStatusLabel.style.display = isClosed
+                    ? "inline-block"
+                    : "none";
+            if (assignedLabel)
+                assignedLabel.textContent = e.assigned_to || "Menunggu";
+            if (isClosed) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Chat telah ditutup",
+                    text: "Ticket sudah diakhiri oleh lawan bicara.",
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
             }
         })
         .listen(".TicketRead", (e) => {
             console.log("👁 Pesan dibaca oleh admin:", e.userId);
-
-            // Cari semua pesan yang dikirim user sendiri
             const allOwnMessages = chatBox.querySelectorAll(".own");
             allOwnMessages.forEach((msg) => {
                 const check = msg.querySelector(".check-icon");
                 if (check) {
-                    check.innerHTML = "✅✅";
-                    check.style.color = "#22c55e"; // hijau
+                    check.innerHTML = "✓✓";
+                    check.style.color = "#00FFFF";
                 }
             });
         });

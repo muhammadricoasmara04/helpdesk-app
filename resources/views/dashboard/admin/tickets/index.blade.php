@@ -1,7 +1,6 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <!-- Search bar -->
         <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
@@ -13,8 +12,7 @@
                 class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
                 <option value="">Semua Status</option>
                 <option value="open">Open</option>
-                <option value="in-progress">In Progress</option>
-                <option value="resolved">Resolved</option>
+                <option value="in-progress">On Progress</option>
                 <option value="closed">Closed</option>
             </select>
 
@@ -57,6 +55,7 @@
                 </tr>
             </tbody>
         </table>
+        <div id="pagination" class="flex justify-center items-center gap-2 mt-4"></div>
     </div>
 @endsection
 @push('scripts')
