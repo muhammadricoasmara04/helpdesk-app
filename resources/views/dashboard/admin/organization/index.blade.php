@@ -2,10 +2,10 @@
 
 @section('container')
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Daftar Organisasi</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Daftar Unit Kerja</h1>
         <a href="{{ route('organization.create') }}"
             class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors">
-            + Tambah Organisasi
+            + Tambah Unit Kerja
         </a>
     </div>
 
@@ -20,7 +20,7 @@
             <thead class="bg-gray-50 sticky top-0 z-10">
                 <tr class="text-gray-700 text-left">
                     <th class="px-6 py-3 border-b font-semibold">No</th>
-                    <th class="px-6 py-3 border-b font-semibold">Nama Organisasi</th>
+                    <th class="px-6 py-3 border-b font-semibold">Nama Unit Kerja</th>
                     <th class="px-6 py-3 border-b font-semibold">Status</th>
                     <th class="px-6 py-3 border-b font-semibold">Tanggal Dibuat</th>
                     <th class="px-6 py-3 border-b font-semibold text-center">Aksi</th>
@@ -45,7 +45,7 @@
                             <form action="{{ route('organization.destroy', $org->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" onclick="return confirm('Hapus organisasi ini?')"
+                                <button type="submit" onclick="return confirm('Hapus Unit Kerja ini?')"
                                     class="text-red-600 hover:underline font-medium">
                                     Hapus
                                 </button>
@@ -54,7 +54,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center py-6 text-gray-500">Belum ada data organisasi</td>
+                        <td colspan="5" class="text-center py-6 text-gray-500">Belum ada data Unit Kerja</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -34,6 +34,30 @@
         @if (session('user'))
             localStorage.setItem('user', JSON.stringify(@json(session('user'))));
         @endif
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const userButton = document.getElementById('userDropdownButton');
+            const userMenu = document.getElementById('userDropdownMenu');
+
+            // Toggle sidebar
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
+            // Toggle user dropdown
+            userButton.addEventListener('click', () => {
+                userMenu.classList.toggle('hidden');
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (!userButton.contains(e.target) && !userMenu.contains(e.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+        });
     </script>
 </body>
 

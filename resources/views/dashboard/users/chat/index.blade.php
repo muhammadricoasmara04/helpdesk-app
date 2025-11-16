@@ -39,12 +39,12 @@
                             stroke-width="2" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        Close
+                        Akhiri Tiket
                     </button>
 
                     <span id="chat-status-label"
                         class="bg-green-500 text-white text-xs px-3 py-1.5 rounded-full shadow-md hidden">
-                        ✅ Chat Selesai
+                        Tiket Ditutup
                     </span>
                 </div>
 

@@ -32,14 +32,13 @@
                         @csrf
                         <div class="divide-y divide-gray-200">
                             <div class="py-8 text-base leading-6 space-y-6 text-gray-700 sm:text-lg sm:leading-7">
-                                {{-- Email --}}
                                 <div class="relative">
-                                    <input autocomplete="off" id="email" name="email" type="email"
+                                    <input autocomplete="off" id="nip" name="nip" type="nip"
                                         class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-cyan-500"
-                                        placeholder="Email address" required />
-                                    <label for="email"
+                                        placeholder="NIP" required />
+                                    <label for="nip"
                                         class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
-                                        Email Address
+                                        NIP
                                     </label>
                                 </div>
 
@@ -65,11 +64,6 @@
                         </div>
                     </form>
 
-                    {{-- Link ke register --}}
-                    <p class="mt-6 text-center text-sm text-gray-600">
-                        Belum punya akun?
-                        <a href="/register" class="text-cyan-600 hover:underline">Daftar di sini</a>
-                    </p>
                 </div>
             </div>
         </div>

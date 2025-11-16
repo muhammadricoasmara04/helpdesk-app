@@ -146,6 +146,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sendMessage = async (message) => {
         try {
+            if (statusSlug?.toLowerCase() === "closed") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Ticket Ditutup",
+                    text: "Anda tidak dapat mengirim pesan baru pada ticket yang sudah ditutup.",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#3085d6",
+                });
+                return;
+            }
             const response = await axios.post(
                 `${baseUrl}/ticket-replies`,
                 { ticket_id: ticketId, message },
@@ -185,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     endChatBtn?.addEventListener("click", async () => {
         Swal.fire({
-            title: "Yakin ingin mengakhiri chat ini?",
+            title: "Yakin ingin Akhiri Tiket ini?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -209,9 +219,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (response.data.success) {
                     updateChatUI("closed");
+                    Swal.fire({
+                        icon: "success",
+                        title: "Tiket berhasil diakhiri",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        window.location.reload();
+                    });
                 }
             } catch (error) {
-                console.error("❌ Gagal mengakhiri chat:", error);
+                console.error("❌ Gagal mengakhiri tiket:", error);
             }
         });
     });

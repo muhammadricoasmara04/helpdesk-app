@@ -168,24 +168,46 @@ async function storeApplication(e) {
         });
 
         if (response.data.success) {
-            messageEl.textContent = "Aplikasi berhasil ditambahkan!";
-            messageEl.className = "text-green-600";
+            // 🔥 Swal ketika sukses
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Aplikasi berhasil ditambahkan!",
+                timer: 3000,
+                showConfirmButton: false,
+            });
 
             // Reset form
             e.target.reset();
+
+            // Redirect setelah 3 detik
+            setTimeout(() => {
+                window.location.href =
+                    "http://127.0.0.1:8000/dashboard/application";
+            }, 3000);
         } else {
-            messageEl.textContent = "Gagal menambahkan aplikasi.";
-            messageEl.className = "text-red-500";
+            Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Gagal menambahkan aplikasi.",
+            });
         }
     } catch (error) {
         console.error("Error saat menambahkan aplikasi:", error);
 
+        let errMsg = "Gagal menyimpan data.";
+
         if (error.response && error.response.status === 401) {
-            messageEl.textContent = "Sesi login berakhir. Silakan login ulang.";
+            errMsg = "Sesi login berakhir. Silakan login ulang.";
         } else {
-            messageEl.textContent = `Gagal menyimpan: ${error.message}`;
+            errMsg = `Gagal: ${error.message}`;
         }
-        messageEl.className = "text-red-500";
+
+        Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: errMsg,
+        });
     }
 }
 
@@ -251,11 +273,22 @@ async function deleteApplication(id) {
         });
 
         if (response.data.success) {
-            alert("Aplikasi berhasil dihapus!");
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Aplikasi berhasil dihapus!",
+                timer: 2000,
+                showConfirmButton: false,
+            });
+
             // Reload data aplikasi setelah delete
             getDataApplication();
         } else {
-            alert("Gagal menghapus aplikasi.");
+            Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Gagal menghapus aplikasi.",
+            });
         }
     } catch (error) {
         console.error("Error saat menghapus aplikasi:", error);

@@ -1,14 +1,14 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-    <h1 class="text-2xl font-bold mb-6 text-gray-800">Tambah Organisasi</h1>
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">Tambah Unit Kerja</h1>
 
     <div class="max-w-2xl bg-white rounded-2xl shadow p-6 border border-gray-200">
         <form action="{{ route('organization.store') }}" method="POST" class="space-y-4">
             @csrf
 
             <div>
-                <label for="organization" class="block font-semibold mb-1 text-gray-700">Nama Organisasi</label>
+                <label for="organization" class="block font-semibold mb-1 text-gray-700">Nama Unit Kerja</label>
                 <input type="text" id="organization" name="organization" required
                     class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
                     placeholder="Masukkan nama organisasi">

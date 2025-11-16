@@ -94,14 +94,16 @@ function storeTicketStatus() {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const baseUrl = import.meta.env.VITE_API_BASE_URL;
         const token = localStorage.getItem("token");
-        const messageEl = document.getElementById("responseMessage");
 
         if (!token) {
-            messageEl.textContent =
-                "Belum login. Silakan login terlebih dahulu.";
-            messageEl.className = "text-red-500";
+            Swal.fire({
+                icon: "error",
+                title: "Belum login",
+                text: "Silakan login terlebih dahulu.",
+            });
             return;
         }
 
@@ -110,27 +112,59 @@ function storeTicketStatus() {
             description: document.getElementById("description").value.trim(),
         };
 
+        if (!data.name || !data.description) {
+            Swal.fire({
+                icon: "error",
+                title: "Form tidak lengkap",
+                text: "Semua field wajib diisi.",
+            });
+            return;
+        }
+
         try {
-            messageEl.textContent = "Menyimpan...";
-            messageEl.className = "text-gray-500";
+            Swal.fire({
+                icon: "info",
+                title: "Menyimpan...",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading(),
+            });
 
             const res = await axios.post(`${baseUrl}/ticket-status`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
+            Swal.close();
+
             if (res.data.success) {
-                messageEl.textContent =
-                    "✅ Ticket Status berhasil ditambahkan!";
-                messageEl.className = "text-green-600";
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil!",
+                    text: "Ticket Status berhasil ditambahkan!",
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+
                 form.reset();
+
+                setTimeout(() => {
+                    window.location.href =
+                        "http://127.0.0.1:8000/dashboard/ticket-status";
+                }, 3000);
             } else {
-                messageEl.textContent = "❌ Gagal menambahkan data.";
-                messageEl.className = "text-red-500";
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal!",
+                    text: "Gagal menambahkan Ticket Status.",
+                });
             }
         } catch (error) {
             console.error(error);
-            messageEl.textContent = "Terjadi kesalahan saat menyimpan.";
-            messageEl.className = "text-red-500";
+
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Terjadi kesalahan saat menyimpan.",
+            });
         }
     });
 }

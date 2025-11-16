@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     endChatBtn?.addEventListener("click", async () => {
         const result = await Swal.fire({
             title: "Yakin?",
-            text: "Yakin ingin mengakhiri chat ini?",
+            text: "Yakin ingin Akhiri Tiket ini?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Ya, akhiri",
@@ -210,17 +210,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 updateChatUI("closed");
                 Swal.fire({
                     icon: "success",
-                    title: "Chat berhasil diakhiri",
+                    title: "Tiket berhasil diakhiri",
                     timer: 1500,
                     showConfirmButton: false,
+                }).then(() => {
+                    window.location.reload();
                 });
             }
         } catch (error) {
-            console.error("❌ Gagal mengakhiri chat:", error);
+            console.error("❌ Gagal mengakhiri Tiket:", error);
             Swal.fire({
                 icon: "error",
                 title: "Gagal!",
-                text: "Terjadi kesalahan saat mengakhiri chat.",
+                text: "Terjadi kesalahan saat mengakhiri Tiket.",
             });
         }
     });
@@ -312,10 +314,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isClosed) {
                 Swal.fire({
                     icon: "info",
-                    title: "Chat telah ditutup",
-                    text: "Ticket sudah diakhiri oleh lawan bicara.",
+                    title: "Tiket telah ditutup",
+                    text: "Tiket sudah diakhiri oleh lawan bicara.",
                     timer: 2500,
                     showConfirmButton: false,
+                }).then(() => {
+                    window.location.reload();
                 });
             }
         })

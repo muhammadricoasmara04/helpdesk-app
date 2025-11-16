@@ -107,32 +107,41 @@ function storeTicketPriorities() {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const baseUrl = import.meta.env.VITE_API_BASE_URL;
         const token = localStorage.getItem("token");
-        const messageEl = document.getElementById("responseMessage");
 
         if (!token) {
-            messageEl.textContent =
-                "Belum login. Silakan login terlebih dahulu.";
-            messageEl.className = "text-red-500";
+            Swal.fire({
+                icon: "error",
+                title: "Belum login",
+                text: "Silakan login terlebih dahulu.",
+            });
             return;
         }
 
         const formData = {
             name: document.getElementById("name").value.trim(),
-
             description: document.getElementById("description").value.trim(),
         };
 
         if (!formData.name || !formData.description) {
-            messageEl.textContent = "Semua field wajib diisi.";
-            messageEl.className = "text-red-500";
+            Swal.fire({
+                icon: "error",
+                title: "Form tidak lengkap",
+                text: "Semua field wajib diisi.",
+            });
             return;
         }
 
         try {
-            messageEl.textContent = "Menyimpan data...";
-            messageEl.className = "text-gray-500";
+            // Loading Swal
+            Swal.fire({
+                icon: "info",
+                title: "Menyimpan data...",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading(),
+            });
 
             const response = await axios.post(
                 `${baseUrl}/ticket-priority`,
@@ -142,18 +151,38 @@ function storeTicketPriorities() {
                 }
             );
 
+            Swal.close();
+
             if (response.data.success) {
-                messageEl.textContent = "Prioritas berhasil ditambahkan!";
-                messageEl.className = "text-green-600";
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil!",
+                    text: "Prioritas berhasil ditambahkan!",
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+
                 form.reset();
+
+                setTimeout(() => {
+                    window.location.href =
+                        "http://127.0.0.1:8000/dashboard/ticket-priority";
+                }, 3000);
             } else {
-                messageEl.textContent = "Gagal menambahkan prioritas.";
-                messageEl.className = "text-red-500";
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal!",
+                    text: "Gagal menambahkan prioritas.",
+                });
             }
         } catch (error) {
             console.error("Error:", error);
-            messageEl.textContent = `Gagal menyimpan: ${error.message}`;
-            messageEl.className = "text-red-500";
+
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: `Gagal menyimpan: ${error.message}`,
+            });
         }
     });
 }

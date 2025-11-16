@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
-                // window.location.href = `/dashboard/ticket-reply-admin/${ticketId}`;
+                window.location.href = `/dashboard/ticket-reply-admin/${ticketId}`;
 
                 btn.outerHTML = `
                     <a href="ticket-reply-admin/${ticketId}"

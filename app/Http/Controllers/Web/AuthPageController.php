@@ -27,7 +27,7 @@ class AuthPageController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'nip' => 'required|string',
             'password' => 'required|string',
         ]);
 
@@ -41,7 +41,7 @@ class AuthPageController extends Controller
         if (!isset($data['token'])) {
             return back()->withErrors(['email' => $data['message'] ?? 'Login gagal']);
         }
-        $user = User::where('email', $data['user']['email'])->first();
+        $user = User::where('nip', $data['user']['nip'])->first();
         Auth::login($user);
         Session::put('api_token', $data['token']);
         Session::put('user', $data['user']);

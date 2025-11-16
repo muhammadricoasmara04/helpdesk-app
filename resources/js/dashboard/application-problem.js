@@ -164,11 +164,13 @@ async function storeApplicationProblem(e) {
 
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const token = localStorage.getItem("token");
-    const messageEl = document.getElementById("responseMessage");
 
     if (!token) {
-        messageEl.textContent = "Belum login. Silakan login terlebih dahulu.";
-        messageEl.className = "text-red-500";
+        Swal.fire({
+            icon: "error",
+            title: "Belum login",
+            text: "Silakan login terlebih dahulu.",
+        });
         return;
     }
 
@@ -187,14 +189,23 @@ async function storeApplicationProblem(e) {
         !formData.application_id ||
         !formData.ticket_priority_id
     ) {
-        messageEl.textContent = "Semua field wajib diisi.";
-        messageEl.className = "text-red-500";
+        Swal.fire({
+            icon: "error",
+            title: "Form incomplete",
+            text: "Semua field wajib diisi.",
+        });
         return;
     }
 
     try {
-        messageEl.textContent = "Menyimpan data...";
-        messageEl.className = "text-gray-500";
+        Swal.fire({
+            icon: "info",
+            title: "Menyimpan data...",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
 
         const response = await axios.post(
             `${baseUrl}/application-problems`,
@@ -204,21 +215,43 @@ async function storeApplicationProblem(e) {
             }
         );
 
+        Swal.close(); // tutup loading
+
         if (response.data.success) {
-            messageEl.textContent = "Problem aplikasi berhasil ditambahkan!";
-            messageEl.className = "text-green-600";
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Problem aplikasi berhasil ditambahkan!",
+                timer: 3000,
+                showConfirmButton: false,
+            });
+
             e.target.reset();
+
+            setTimeout(() => {
+                window.location.href =
+                    "http://127.0.0.1:8000/dashboard/application-problems";
+            }, 3000);
         } else {
-            messageEl.textContent = "Gagal menambahkan problem aplikasi.";
-            messageEl.className = "text-red-500";
+            Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Gagal menambahkan problem aplikasi.",
+            });
         }
     } catch (error) {
         console.error("Error saat menambahkan problem aplikasi:", error);
-        messageEl.textContent =
+
+        let errMsg =
             error.response?.status === 401
                 ? "Sesi login berakhir. Silakan login ulang."
                 : `Gagal menyimpan: ${error.message}`;
-        messageEl.className = "text-red-500";
+
+        Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: errMsg,
+        });
     }
 }
 
@@ -264,10 +297,20 @@ async function deleteApplicationProblem(id) {
         );
 
         if (response.data.success) {
-            alert("✅ Problem aplikasi berhasil dihapus!");
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Problem aplikasi berhasil dihapus!",
+                timer: 2000,
+                showConfirmButton: false,
+            });
             await getDataApplicationProblems(); // reload tabel setelah hapus
         } else {
-            alert("❌ Gagal menghapus problem aplikasi.");
+            Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Gagal menghapus problem aplikasi.",
+            });
         }
     } catch (error) {
         console.error("❌ Error saat menghapus:", error);

@@ -18,15 +18,16 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => 'required|email',
+            'nip'    => 'required',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('nip', $credentials['nip'])->first();
+
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json([
-                'message' => 'Email atau password salah.',
+                'message' => 'NIP atau password salah.',
             ], 401);
         }
 
@@ -39,6 +40,7 @@ class AuthController extends Controller
             'message' => 'Login berhasil.',
             'user'    => [
                 'id'      => $user->id,
+                'nip'   => $user->nip,
                 'name'    => $user->name,
                 'email'   => $user->email,
                 'role_id' => $user->role_id,
@@ -56,15 +58,21 @@ class AuthController extends Controller
     {
         try {
             $data = $request->validate([
+                'nip'          => 'required|string|max:255',
                 'name'          => 'required|string|max:255',
                 'email'         => 'required|email|unique:users,email',
                 'password'      => 'required|string|min:6|confirmed',
-                'role'          => 'nullable|string|in:admin,user',
+                'role' => 'nullable|string|in:admin,staff,user',
                 'position_name'          => 'required|string|max:255',
                 'organization'  => 'nullable|string|exists:organizations,organization',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Cek apakah email sudah terdaftar
+           if (isset($e->errors()['nip'])) {
+                return response()->json([
+                    'message' => 'NIP sudah terdaftar.'
+                ], 409); // 409 Conflict
+            }
+
             if (isset($e->errors()['email'])) {
                 return response()->json([
                     'message' => 'Email sudah terdaftar.'
@@ -87,6 +95,7 @@ class AuthController extends Controller
 
         // Buat user baru
         $user = User::create([
+            'nip'   => $data['nip'],
             'name'             => $data['name'],
             'email'            => $data['email'],
             'password'         => Hash::make($data['password']),
@@ -101,6 +110,7 @@ class AuthController extends Controller
             'message' => 'Registrasi berhasil.',
             'user'    => [
                 'id'            => $user->id,
+                'nip'          => $user->nip,
                 'name'          => $user->name,
                 'email'         => $user->email,
                 'role_id'       => $user->role_id,

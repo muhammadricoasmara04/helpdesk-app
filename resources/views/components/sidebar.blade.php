@@ -1,11 +1,10 @@
 <!-- Sidebar -->
-<div class="flex flex-col w-64 bg-gray-800 rounded-r-lg h-screen overflow-y-auto">
-
+<div id="sidebar"
+    class="hidden lg:flex flex-col w-64 bg-linear-to-b from-gray-700 to-blue-500 rounded-r-lg h-screen overflow-y-auto transition-transform duration-300">
     {{-- Header --}}
     <div class="flex items-center justify-center py-6 border-b border-gray-700">
         <div class="flex items-center gap-2">
-            <svg class="w-10 h-10 text-blue-400" viewBox="0 0 512 512" fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-10 h-10 text-blue-400" viewBox="0 0 512 512" fill="currentColor">
                 <path
                     d="M364.61 390.213C304.625 450.196 207.37 450.196 147.386 390.213C117.394 360.22 102.398 320.911 102.398 281.6C102.398 242.291 117.394 202.981 147.386 172.989C147.386 230.4 153.6 281.6 230.4 307.2C230.4 256 256 102.4 294.4 76.7999C320 128 334.618 142.997 364.608 172.989C394.601 202.981 409.597 242.291 409.597 281.6C409.597 320.911 394.601 360.22 364.61 390.213Z" />
             </svg>
@@ -19,8 +18,8 @@
     @endphp
 
     {{-- Navigation --}}
-    <nav
-        class="flex flex-col flex-1 overflow-y-auto bg-linear-to-b from-gray-700 to-blue-500 px-3 py-6 gap-2 rounded-b-2xl">
+    <nav class="flex flex-col flex-1 overflow-y-auto px-3 py-6 gap-2">
+
         @if ($user['role'] === 'admin')
             <x-link route="dashboard"
                 icon="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z">
@@ -59,12 +58,12 @@
 
             <x-link route="organization.index"
                 icon="M3 12l2-2m0 0l7-7 7 7m-9 2v8m4 0v-8m-6 8h12a2 2 0 002-2V10a2 2 0 00-.586-1.414l-7-7a2 2 0 00-2.828 0l-7 7A2 2 0 003 10v8a2 2 0 002 2z">
-                Organisasi
+                Unit Kerja
             </x-link>
         @else
             <x-link route="dashboard.user"
                 icon="M5.121 17.804A7.975 7.975 0 0112 15c1.933 0 3.683.686 5.121 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z">
-                Dashboard User
+                Dashboard
             </x-link>
 
             <x-link route="user.ticket.index"
