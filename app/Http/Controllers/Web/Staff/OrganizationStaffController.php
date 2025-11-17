@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 
 class OrganizationStaffController extends Controller
 {
-     public function index()
+    public function index()
     {
         $organizations = Organization::orderBy('created_at', 'desc')->paginate(10);
         return view('dashboard.staff.organization.index', compact('organizations'));
+    }
+    public function show($id)
+    {
+        $organization = Organization::findOrFail($id);
+        return view('dashboard.staff.organization.show', compact('organization'));
     }
 }

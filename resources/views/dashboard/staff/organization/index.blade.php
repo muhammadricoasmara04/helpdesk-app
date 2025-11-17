@@ -40,7 +40,7 @@
                         </td>
                         <td class="px-6 py-3 text-gray-600">{{ $org->created_at->format('d M Y') }}</td>
                         <td class="px-6 py-3 text-center flex space-x-4">
-                            <a href="{{ route('organization.edit', $org->id) }}"
+                            <a href="{{ route('staff.organization.show', $org->id) }}"
                                 class="text-yellow-600 hover:underline font-medium">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">

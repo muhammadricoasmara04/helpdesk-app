@@ -244,7 +244,7 @@ async function getApplicationDetail() {
         document.getElementById('application_name').textContent = app.application_name || '-';
         document.getElementById('application_code').textContent = app.application_code || '-';
         document.getElementById('description').textContent = app.description || '-';
-        document.getElementById('organization_id').textContent = app.organization_id || '-';
+        document.getElementById('organization_id').textContent = app.organization.organization || '-';
         document.getElementById('create_id').textContent = app.creator?.name || '-';
         document.getElementById('updated_id').textContent = app.updater?.name || '-';
     } catch (error) {

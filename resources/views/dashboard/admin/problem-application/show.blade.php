@@ -1,42 +1,75 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-    <div class="min-h-screen bg-[#0f2d52] py-10 px-6">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-blue-300 pb-2">
+    <div class="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 flex justify-center">
+        <div class="max-w-3xl w-full">
+            {{-- Header --}}
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-blue-300 pb-3">
                 🧩 Detail Problem
             </h2>
 
-            <div class="bg-white shadow-2xl rounded-2xl p-8 border border-gray-200">
-                <div class="space-y-5 text-gray-700">
-                    <div>
-                        <h3 class="text-2xl font-semibold text-[#0f2d52]">{{ $problem->problem_name }}</h3>
+            {{-- Card --}}
+            <div class="bg-white shadow-xl rounded-3xl p-8 border border-gray-200">
+                <div class="space-y-6">
+
+                    <!-- Problem Name -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <span class="text-gray-600 font-medium">Nama Problem</span>
+                        <span class="text-gray-900 font-semibold mt-2 sm:mt-0">{{ $problem->problem_name }}</span>
                     </div>
 
-                    <div class="border-t border-gray-300 pt-4 space-y-3">
-                        <p><strong class="text-[#0f2d52]">Deskripsi:</strong> {{ $problem->description }}</p>
-                        <p><strong class="text-[#0f2d52]">Aplikasi:</strong> {{ $problem->application->application_name ?? '-' }}</p>
-                        <p><strong class="text-[#0f2d52]">Dibuat oleh:</strong> {{ $problem->creator->name ?? '-' }}</p>
-                        <p><strong class="text-[#0f2d52]">Diperbarui oleh:</strong> {{ $problem->updater->name ?? '-' }}</p>
+                    <!-- Deskripsi -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-start bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <span class="text-gray-600 font-medium">Deskripsi</span>
+                        <span class="text-gray-900 mt-2 sm:mt-0">{{ $problem->description }}</span>
                     </div>
 
-                    <div class="border-t border-gray-300 pt-4 text-sm text-gray-600">
-                        <p><strong class="text-[#0f2d52]">Tanggal Dibuat:</strong>
-                            {{ $problem->created_at ? $problem->created_at->format('d M Y, H:i') : '-' }}
-                        </p>
-                        <p><strong class="text-[#0f2d52]">Terakhir Diperbarui:</strong>
-                            {{ $problem->updated_at ? $problem->updated_at->format('d M Y, H:i') : '-' }}
-                        </p>
+                    <!-- Aplikasi -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <span class="text-gray-600 font-medium">Aplikasi</span>
+                        <span
+                            class="text-gray-900 font-semibold mt-2 sm:mt-0">{{ $problem->application->application_name ?? '-' }}</span>
                     </div>
+
+                    <!-- Dibuat & Diperbarui oleh -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <span class="text-gray-600 font-medium">Dibuat oleh</span>
+                        <span class="text-gray-900 font-semibold mt-2 sm:mt-0">{{ $problem->creator->name ?? '-' }}</span>
+                    </div>
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <span class="text-gray-600 font-medium">Diperbarui oleh</span>
+                        <span class="text-gray-900 font-semibold mt-2 sm:mt-0">{{ $problem->updater->name ?? '-' }}</span>
+                    </div>
+
+                    <!-- Tanggal Dibuat & Terakhir Diperbarui -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm text-gray-600 text-sm">
+                        <span class="font-medium">Tanggal Dibuat</span>
+                        <span
+                            class="mt-1 sm:mt-0">{{ $problem->created_at ? $problem->created_at->format('d M Y, H:i') : '-' }}</span>
+                    </div>
+                    <div
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm text-gray-600 text-sm">
+                        <span class="font-medium">Terakhir Diperbarui</span>
+                        <span
+                            class="mt-1 sm:mt-0">{{ $problem->updated_at ? $problem->updated_at->format('d M Y, H:i') : '-' }}</span>
+                    </div>
+
                 </div>
 
-                <div class="flex justify-end mt-8 space-x-3">
+                <!-- Buttons -->
+                <div class="flex flex-col sm:flex-row justify-end mt-8 gap-3">
                     <a href="{{ route('application-problem.edit', $problem->id) }}"
-                        class="bg-[#0f2d52] hover:bg-[#173d6d] text-white px-5 py-2 rounded-lg shadow-md transition duration-200">
+                        class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium shadow-md transition">
                         ✏️ Edit
                     </a>
                     <a href="{{ route('application-problems') }}"
-                        class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-lg shadow-md transition duration-200">
+                        class="px-5 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-medium shadow-md transition">
                         ↩️ Kembali
                     </a>
                 </div>

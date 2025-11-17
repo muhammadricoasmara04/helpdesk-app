@@ -14,4 +14,10 @@ class UserStaffController extends Controller
         $users = User::paginate(10);
         return view('dashboard.staff.users.index', compact('users'));
     }
+
+     public function show(string $id)
+    {
+        $user = User::with(['role', 'organization'])->findOrFail($id);
+        return view('dashboard.staff.users.show', compact('user'));
+    }
 }

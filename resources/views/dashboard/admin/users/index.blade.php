@@ -23,7 +23,7 @@
                     <th class="px-6 py-3 border-b font-semibold">Nama</th>
                     <th class="px-6 py-3 border-b font-semibold">Email</th>
                     <th class="px-6 py-3 border-b font-semibold">Role</th>
-                    <th class="px-6 py-3 border-b font-semibold">Organisasi</th>
+                    <th class="px-6 py-3 border-b font-semibold">Unit Kerja</th>
                     <th class="px-6 py-3 border-b font-semibold">Tanggal Dibuat</th>
                     <th class="px-6 py-3 border-b font-semibold">Aksi</th>
                 </tr>
