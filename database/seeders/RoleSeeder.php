@@ -27,8 +27,11 @@ class RoleSeeder extends Seeder
             );
 
             $organizations = [
-                'Acme Corp' => 'f2a5976f-a0a6-4b47-b3f1-ed3dee8e586e',
-                'Beta Ltd'  => '38cf7d3c-0618-4f9b-b0bb-74e544c736d0',
+                'Sekretariat Jenderal' => 'f2a5976f-a0a6-4b47-b3f1-ed3dee8e586e',
+                'Inspektorat Jenderal'  => '38cf7d3c-0618-4f9b-b0bb-74e544c736d0',
+                'Direktorat Jenderal Imigrasi'  => '12b0ae20-21fc-4712-80f9-51b13d79c5bb',
+                'Direktorat Jenderal Pemasyarakatan'  => '981a3067-6dc9-4ca9-9563-b34634794101',
+                'Badan Pengembangan Sumber Daya Manusia'  => 'f5063926-daef-485d-836f-a7b4ad425820',
             ];
 
             foreach ($organizations as $orgName => $uuid) {

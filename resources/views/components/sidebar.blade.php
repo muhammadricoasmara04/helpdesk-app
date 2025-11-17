@@ -4,13 +4,10 @@
     {{-- Header --}}
     <div class="flex items-center justify-center py-6 border-b border-gray-700">
         <div class="flex items-center gap-2">
-            <svg class="w-10 h-10 text-blue-400" viewBox="0 0 512 512" fill="currentColor">
-                <path
-                    d="M364.61 390.213C304.625 450.196 207.37 450.196 147.386 390.213C117.394 360.22 102.398 320.911 102.398 281.6C102.398 242.291 117.394 202.981 147.386 172.989C147.386 230.4 153.6 281.6 230.4 307.2C230.4 256 256 102.4 294.4 76.7999C320 128 334.618 142.997 364.608 172.989C394.601 202.981 409.597 242.291 409.597 281.6C409.597 320.911 394.601 360.22 364.61 390.213Z" />
-            </svg>
-            <span class="text-xl font-semibold text-white tracking-wide">My Dashboard</span>
+            <img src="/img/logo.png" alt="Logo" class="w-auto h-auto object-contain p-2">
         </div>
     </div>
+
 
     @php
         $user = session('user');

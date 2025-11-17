@@ -24,6 +24,9 @@
             <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
 
                 <div class="max-w-md mx-auto">
+                    <div class="flex justify-center mb-4">
+                        <img src="{{ asset('img/logo-dark.png') }}" alt="Logo" class="w-[300px] h-20 object-contain">
+                    </div>
                     <div class="text-center mb-6">
                         <h1 class="text-2xl font-semibold text-gray-800">Login</h1>
                     </div>

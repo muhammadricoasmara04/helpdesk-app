@@ -11,6 +11,11 @@
         <input type="text" name="name" class="w-full border rounded p-2" value="{{ old('name') }}" required>
     </div>
 
+     <div>
+        <label class="block text-gray-700 mb-1">NIP</label>
+        <input type="text" name="nip" class="w-full border rounded p-2" value="{{ old('nip') }}" required>
+    </div>
+
     <div>
         <label class="block text-gray-700 mb-1">Email</label>
         <input type="email" name="email" class="w-full border rounded p-2" value="{{ old('email') }}" required>
