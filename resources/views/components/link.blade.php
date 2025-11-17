@@ -3,20 +3,37 @@
     use Illuminate\Support\Str;
 
     $current = Route::currentRouteName();
-    $base = Str::beforeLast($route, '.'); // contoh: 'organization.index' -> 'organization'
 
-    $isActive =
-        $current === $route ||
-        Str::startsWith($current, $base . '.') ||
-        (Str::startsWith($current, $base . '-') &&
-            !Str::startsWith($current, $base . '-problems') &&
-            !Str::startsWith($current, $base . '-status') &&
-            !Str::startsWith($current, $base . '-priority'));
+    // DETEKSI ROLENYA
+    $isStaff = Str::startsWith($route, 'staff.');
 
-    if (Str::contains($current, 'ticket-replied') && Str::contains($base, 'user.ticket')) {
-        $isActive = true;
+    if ($isStaff) {
+        // BASE STAFF = ambil prefix sebelum titik kedua
+        // contoh:
+        // staff.application -> staff.application
+        // staff.ticket.index -> staff.ticket
+        // staff.users.index -> staff.users
+        // staff.organization.index -> staff.organization
+
+        $parts = explode('.', $route);
+        $base = count($parts) >= 2 ? $parts[0] . '.' . $parts[1] : $route;
+
+        $isActive =
+            $current === $route || Str::startsWith($current, $base . '.'); // route exact // sub-route
+    } else {
+        // LOGIKA LAMA (admin & user)
+        $base = Str::beforeLast($route, '.');
+
+        $isActive =
+            $current === $route ||
+            Str::startsWith($current, $base . '.') ||
+            (Str::startsWith($current, $base . '-') &&
+                !Str::startsWith($current, $base . '-problems') &&
+                !Str::startsWith($current, $base . '-status') &&
+                !Str::startsWith($current, $base . '-priority'));
     }
 @endphp
+
 
 <a href="{{ route($route) }}"
     class="flex items-center px-4 py-2 text-sm font-medium rounded-2xl transition-all duration-150

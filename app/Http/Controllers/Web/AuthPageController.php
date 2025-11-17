@@ -39,7 +39,7 @@ class AuthPageController extends Controller
         $data = $response->getData(true); // ambil array dari JSON
 
         if (!isset($data['token'])) {
-            return back()->withErrors(['email' => $data['message'] ?? 'Login gagal']);
+            return back()->withErrors(['nip' => $data['message'] ?? 'Login gagal']);
         }
         $user = User::where('nip', $data['user']['nip'])->first();
         Auth::login($user);

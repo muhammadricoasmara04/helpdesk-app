@@ -47,7 +47,7 @@
     </div>
 
     <div>
-        <label class="block text-gray-700 mb-1">Organisasi</label>
+        <label class="block text-gray-700 mb-1">Unit Kerja</label>
         <select name="organization_id" class="w-full border rounded p-2" required>
             <option value="">-- Pilih Organisasi --</option>
             @foreach ($organizations as $organization)

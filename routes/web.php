@@ -5,6 +5,14 @@ use App\Http\Controllers\Web\ApplicationController;
 use App\Http\Controllers\Web\AuthPageController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\OrganizationController;
+use App\Http\Controllers\Web\Staff\ApplicationProblemStaffController;
+use App\Http\Controllers\Web\Staff\ApplicationStaffController;
+use App\Http\Controllers\Web\Staff\DashboardStaffController;
+use App\Http\Controllers\Web\Staff\OrganizationStaffController;
+use App\Http\Controllers\Web\Staff\TicketPriorityStaffController;
+use App\Http\Controllers\Web\Staff\TicketStaffController;
+use App\Http\Controllers\Web\Staff\TicketStatusStaffController;
+use App\Http\Controllers\Web\Staff\UserStaffController;
 use App\Http\Controllers\Web\TicketController;
 use App\Http\Controllers\Web\TicketPriorityController;
 use App\Http\Controllers\Web\TicketReplyController;
@@ -101,6 +109,53 @@ Route::middleware(['auth', 'role:admin'])
             Route::get('/{id}/edit', [OrganizationController::class, 'edit'])->name('organization.edit');
             Route::put('/{id}', [OrganizationController::class, 'update'])->name('organization.update');
             Route::delete('/{id}', [OrganizationController::class, 'destroy'])->name('organization.destroy');
+        });
+    });
+
+Route::middleware(['auth', 'role:staff'])
+    ->prefix('dashboard/staff')
+    ->group(function () {
+        // Dashboard Staff
+        Route::get('/', [DashboardStaffController::class, 'index'])->name('dashboard.staff');
+        // Ticket Staff
+        Route::prefix('ticket')->group(function () {
+            Route::get('/', [TicketStaffController::class, 'index'])->name('staff.ticket.index');
+
+            Route::get('/search', [TicketStaffController::class, 'search'])->name('staff.tickets.search');
+        });
+
+        // application problems
+        Route::prefix('application-problems')->group(function () {
+            Route::get('/', [ApplicationProblemStaffController::class, 'index'])->name('staff.application-problems');
+            Route::get('/{id}', [ApplicationProblemStaffController::class, 'show'])->name('application-problem.show');
+        });
+
+        Route::prefix('application')->group(function () {
+            Route::get('/', [ApplicationStaffController::class, 'index'])->name('staff.application');
+            Route::get('/{id}', [ApplicationStaffController::class, 'show'])->name('staff.application.show');
+        });
+
+        // 🔹 Organization Management
+        Route::prefix('organization')->group(function () {
+            Route::get('/', [OrganizationStaffController::class, 'index'])->name('staff.organization.index');
+            Route::get('/{id}', [OrganizationStaffController::class, 'show'])->name('staff.organization.show');
+        });
+
+        // Ticket Status
+        Route::prefix('ticket-status')->group(function () {
+            Route::get('/', [TicketStatusStaffController::class, 'index'])->name('staff.ticket-status');
+            Route::get('/{id}', [TicketStatusStaffController::class, 'show'])->name('staff.ticket-status.show');
+        });
+
+        // Ticket Priority
+        Route::prefix('ticket-priority')->group(function () {
+            Route::get('/', [TicketPriorityStaffController::class, 'index'])->name('staff.ticket-priority');
+            Route::get('/{id}', [TicketPriorityStaffController::class, 'show'])->name('staff.ticket-priority.show');
+        });
+
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserStaffController::class, 'index'])->name('staff.users.index');
+            Route::get('/{id}', [UserStaffController::class, 'show'])->name('staff.users.show');
         });
     });
 

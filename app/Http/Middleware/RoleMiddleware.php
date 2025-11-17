@@ -27,7 +27,12 @@ class RoleMiddleware
             if ($user->role && $user->role->name === 'admin') {
                 return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke halaman user.');
             }
-            return redirect('/dashboard/user')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
+            if ($user->role && $user->role->name === 'user') {
+                return redirect('/dashboard/user')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
+            }
+            if ($user->role && $user->role->name === 'staff') {
+                return redirect('/dashboard/staff')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
+            }
         }
 
         return $next($request);
