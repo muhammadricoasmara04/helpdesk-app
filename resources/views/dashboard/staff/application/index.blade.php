@@ -3,10 +3,6 @@
 @section('container')
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Dashboard Aplikasi</h1>
-        <a href="{{ route('application-store') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors">
-            + Tambah Aplikasi
-        </a>
     </div>
 
     <div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">

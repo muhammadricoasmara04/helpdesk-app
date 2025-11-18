@@ -33,7 +33,7 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-1 text-gray-700">
-                        Nama Jabatan <span class="text-red-500">*</span>
+                        Jabatan <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="position_name" value="{{ auth()->user()->position_name }}" 
                         class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
@@ -42,7 +42,7 @@
 
             <div>
                 <label class="block text-sm font-medium mb-1 text-gray-700">
-                    Nama Organisasi <span class="text-red-500">*</span>
+                    Unit Kerja <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="organization_name" value="{{ old('organization', $organization) }}"
                     class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>

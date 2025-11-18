@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\Staff\ApplicationStaffController;
 use App\Http\Controllers\Web\Staff\DashboardStaffController;
 use App\Http\Controllers\Web\Staff\OrganizationStaffController;
 use App\Http\Controllers\Web\Staff\TicketPriorityStaffController;
+use App\Http\Controllers\Web\Staff\TicketReplyStaffController;
 use App\Http\Controllers\Web\Staff\TicketStaffController;
 use App\Http\Controllers\Web\Staff\TicketStatusStaffController;
 use App\Http\Controllers\Web\Staff\UserStaffController;
@@ -152,6 +153,18 @@ Route::middleware(['auth', 'role:staff'])
             Route::get('/', [TicketPriorityStaffController::class, 'index'])->name('staff.ticket-priority');
             Route::get('/{id}', [TicketPriorityStaffController::class, 'show'])->name('staff.ticket-priority.show');
         });
+
+        Route::prefix('ticket-reply-admin')->group(function () {
+            Route::get('/{id}', [TicketReplyController::class, 'index'])->name('ticket-replied-admin');
+            Route::put('/tickets/{id}/priority', [TicketReplyController::class, 'update'])
+                ->name('tickets.updatePriority');
+        });
+
+        // Route::prefix('ticket-reply-staff')->group(function () {
+        //     Route::get('/{id}', [TicketReplyStaffController::class, 'index'])->name('staff.ticket-replied-admin');
+        //     Route::put('/tickets/{id}/priority', [TicketReplyStaffController::class, 'staff.update'])
+        //         ->name('tickets.updatePriority');
+        // });
 
         Route::prefix('users')->group(function () {
             Route::get('/', [UserStaffController::class, 'index'])->name('staff.users.index');
