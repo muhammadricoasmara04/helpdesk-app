@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (match) {
         const id = match[1];
-        console.log("🟡 Halaman detail aplikasi. ID =", id);
+        console.log("🟡 Halaman detail layanan. ID =", id);
         getDataById(id);
     } else if (
         path.includes("/dashboard/application") ||
         path.includes("/dashboard/staff/application")
     ) {
-        console.log("🟢 Halaman daftar aplikasi.");
+        console.log("🟢 Halaman daftar layanan.");
         getDataApplication();
         const form = document.getElementById("applicationForm");
         if (form) {
@@ -78,7 +78,7 @@ async function getDataApplication() {
         <td class="px-6 py-3 text-center flex justify-center gap-2">
              <a href="${appLink}"
                class="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
-               title="Detail Aplikasi">
+               title="Detail Layanan">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -90,7 +90,7 @@ async function getDataApplication() {
                   userRole === "admin"
                       ? `
             <button class="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition delete-btn" 
-                    data-id="${app.id}" title="Hapus Aplikasi">
+                    data-id="${app.id}" title="Hapus Layanan">
                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
 </svg>
@@ -103,10 +103,10 @@ async function getDataApplication() {
                 tableBody.appendChild(row);
             });
         } else {
-            setMessageRow("Tidak ada data aplikasi tersedia.");
+            setMessageRow("Tidak ada data layanan tersedia.");
         }
     } catch (error) {
-        console.error("Error saat memuat aplikasi:", error);
+        console.error("Error saat memuat layanan:", error);
 
         if (error.response && error.response.status === 401) {
             setMessageRow(
@@ -115,7 +115,7 @@ async function getDataApplication() {
             );
         } else {
             setMessageRow(
-                `Gagal memuat data aplikasi: ${error.message}`,
+                `Gagal memuat data layanan: ${error.message}`,
                 "text-red-500"
             );
         }
@@ -189,7 +189,7 @@ async function storeApplication(e) {
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Aplikasi berhasil ditambahkan!",
+                text: "Layanan berhasil ditambahkan!",
                 timer: 3000,
                 showConfirmButton: false,
             });
@@ -206,11 +206,11 @@ async function storeApplication(e) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal!",
-                text: "Gagal menambahkan aplikasi.",
+                text: "Gagal menambahkan layanan.",
             });
         }
     } catch (error) {
-        console.error("Error saat menambahkan aplikasi:", error);
+        console.error("Error saat menambahkan layanan:", error);
 
         let errMsg = "Gagal menyimpan data.";
 
@@ -248,7 +248,7 @@ async function getApplicationDetail() {
         document.getElementById('create_id').textContent = app.creator?.name || '-';
         document.getElementById('updated_id').textContent = app.updater?.name || '-';
     } catch (error) {
-        console.error("Gagal memuat data aplikasi:", error);
+        console.error("Gagal memuat data layanan:", error);
     }
 }
 
@@ -268,7 +268,7 @@ async function deleteApplication(id) {
     }
 
     const result = await Swal.fire({
-        title: "Apakah Anda yakin ingin menghapus aplikasi ini?",
+        title: "Apakah Anda yakin ingin menghapus layanan ini?",
         text: "Tindakan ini tidak dapat dibatalkan!",
         icon: "warning",
         showCancelButton: true,
@@ -289,26 +289,26 @@ async function deleteApplication(id) {
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Aplikasi berhasil dihapus!",
+                text: "Layanan berhasil dihapus!",
                 timer: 2000,
                 showConfirmButton: false,
             });
 
-            // Reload data aplikasi setelah delete
+            // Reload data layanan setelah delete
             getDataApplication();
         } else {
             Swal.fire({
                 icon: "error",
                 title: "Gagal!",
-                text: "Gagal menghapus aplikasi.",
+                text: "Gagal menghapus layanan.",
             });
         }
     } catch (error) {
-        console.error("Error saat menghapus aplikasi:", error);
+        console.error("Error saat menghapus layanan:", error);
         if (error.response && error.response.status === 401) {
             alert("Sesi login berakhir. Silakan login ulang.");
         } else {
-            alert(`Gagal menghapus aplikasi: ${error.message}`);
+            alert(`Gagal menghapus layanan: ${error.message}`);
         }
     }
 }

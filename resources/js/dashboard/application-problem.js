@@ -127,7 +127,7 @@ async function loadApplications() {
 
         const applications = response.data.data || [];
 
-        selectApp.innerHTML = `<option value="">Pilih Aplikasi...</option>`;
+        selectApp.innerHTML = `<option value="">Pilih Layanan...</option>`;
         applications.forEach((app) => {
             const option = document.createElement("option");
             option.value = app.id;
@@ -135,8 +135,8 @@ async function loadApplications() {
             selectApp.appendChild(option);
         });
     } catch (error) {
-        console.error("Gagal memuat aplikasi:", error);
-        selectApp.innerHTML = `<option value="">Gagal memuat data aplikasi</option>`;
+        console.error("Gagal memuat Layanan:", error);
+        selectApp.innerHTML = `<option value="">Gagal memuat data Layanan</option>`;
     }
 }
 
@@ -234,7 +234,7 @@ async function storeApplicationProblem(e) {
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Problem aplikasi berhasil ditambahkan!",
+                text: "Masalah layanan berhasil ditambahkan!",
                 timer: 3000,
                 showConfirmButton: false,
             });
@@ -249,11 +249,11 @@ async function storeApplicationProblem(e) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal!",
-                text: "Gagal menambahkan problem aplikasi.",
+                text: "Gagal menambahkan problem layanan.",
             });
         }
     } catch (error) {
-        console.error("Error saat menambahkan problem aplikasi:", error);
+        console.error("Error saat menambahkan problem layanan:", error);
 
         let errMsg =
             error.response?.status === 401
@@ -313,7 +313,7 @@ async function deleteApplicationProblem(id) {
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Problem aplikasi berhasil dihapus!",
+                text: "Masalah layanan berhasil dihapus!",
                 timer: 2000,
                 showConfirmButton: false,
             });
@@ -322,7 +322,7 @@ async function deleteApplicationProblem(id) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal!",
-                text: "Gagal menghapus problem aplikasi.",
+                text: "Gagal menghapus masalah layanan.",
             });
         }
     } catch (error) {

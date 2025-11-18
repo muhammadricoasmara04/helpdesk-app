@@ -94,7 +94,7 @@
                     <div class="font-semibold text-gray-600">Client</div>
                     <div class="text-gray-900">{{ $ticket->employee_name }}</div>
 
-                    <div class="font-semibold text-gray-600">Aplikasi</div>
+                    <div class="font-semibold text-gray-600">Layanan</div>
                     <div class="text-gray-900">{{ $ticket->application->application_name }}</div>
 
                     <div class="font-semibold text-gray-600">Assigned</div>

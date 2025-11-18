@@ -4,21 +4,21 @@
 <div class="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 flex justify-center">
     <div class="max-w-3xl w-full">
         {{-- Header --}}
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-3">📱 Detail Aplikasi</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-3">Detail Layanan</h1>
 
         {{-- Card --}}
         <div id="applicationDetail" class="bg-white shadow-xl rounded-3xl p-8 border border-gray-200">
             <div class="space-y-6">
 
-                <!-- Nama Aplikasi -->
+                <!-- Nama Layanan -->
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <span class="text-gray-600 font-medium">Nama Aplikasi</span>
+                    <span class="text-gray-600 font-medium">Nama Layanan</span>
                     <span class="text-gray-900 font-semibold mt-2 sm:mt-0" id="application_name"></span>
                 </div>
 
-                <!-- Kode Aplikasi -->
+                <!-- Kode Layanan -->
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <span class="text-gray-600 font-medium">Kode Aplikasi</span>
+                    <span class="text-gray-600 font-medium">Kode Layanan</span>
                     <span class="text-gray-900 font-semibold mt-2 sm:mt-0" id="application_code"></span>
                 </div>
 

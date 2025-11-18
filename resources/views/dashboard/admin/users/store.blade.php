@@ -49,7 +49,7 @@
     <div>
         <label class="block text-gray-700 mb-1">Unit Kerja</label>
         <select name="organization_id" class="w-full border rounded p-2" required>
-            <option value="">-- Pilih Organisasi --</option>
+            <option value="">-- Pilih Unit Kerja --</option>
             @foreach ($organizations as $organization)
                 <option value="{{ $organization->id }}">{{ $organization->organization }}</option>
             @endforeach

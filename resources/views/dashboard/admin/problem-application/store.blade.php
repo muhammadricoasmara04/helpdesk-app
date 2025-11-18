@@ -1,15 +1,15 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-    <h1 class="text-2xl font-bold mb-6">Tambah Problem Aplikasi</h1>
+    <h1 class="text-2xl font-bold mb-6">Tambah Masalah Layanan</h1>
 
     <div class="max-w-2xl bg-white rounded-2xl shadow p-6">
         <form id="applicationProblemForm" class="space-y-4">
             <div>
-                <label for="problem_name" class="block font-semibold mb-1">Nama Problem</label>
+                <label for="problem_name" class="block font-semibold mb-1">Masalah</label>
                 <input type="text" id="problem_name" name="problem_name"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
-                    placeholder="Masukkan nama problem aplikasi" required>
+                    placeholder="Masukkan masalah layanan" required>
             </div>
 
             <div>
@@ -28,10 +28,10 @@
             </div>
 
             <div>
-                <label for="application_id" class="block font-semibold mb-1">Aplikasi</label>
+                <label for="application_id" class="block font-semibold mb-1">Layanan</label>
                 <select id="application_id" name="application_id"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" required>
-                    <option value="">Memuat daftar aplikasi...</option>
+                    <option value="">Memuat daftar layanan...</option>
                 </select>
             </div>
 

@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <td class="px-5 py-3 font-medium text-gray-800">${
                 ticket.ticket_code || "-"
             }</td>
-            <td class="px-5 py-3">${ticket.subject || "-"}</td>
+            <td class="px-5 py-3 truncate">${ticket.subject || "-"}</td>
             <td class="px-5 py-3">${statusBadge}</td>
             <td class="px-5 py-3">${priorityBadge}</td>
             <td class="px-5 py-3">${

@@ -26,10 +26,10 @@
                         <span class="text-gray-900 mt-2 sm:mt-0">{{ $problem->description }}</span>
                     </div>
 
-                    <!-- Aplikasi -->
+                 
                     <div
                         class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-4 rounded-lg shadow-sm">
-                        <span class="text-gray-600 font-medium">Aplikasi</span>
+                        <span class="text-gray-600 font-medium">Layanan</span>
                         <span
                             class="text-gray-900 font-semibold mt-2 sm:mt-0">{{ $problem->application->application_name ?? '-' }}</span>
                     </div>

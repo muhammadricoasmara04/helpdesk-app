@@ -1,18 +1,18 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-    <h1 class="text-2xl font-bold mb-6">Tambah Aplikasi Baru</h1>
+    <h1 class="text-2xl font-bold mb-6">Tambah Layanan Baru</h1>
 
     <div class="max-w-2xl bg-white rounded-2xl shadow p-6">
         <form id="applicationForm" class="space-y-4">
             <div>
-                <label for="application_name" class="block font-semibold mb-1">Nama Aplikasi</label>
+                <label for="application_name" class="block font-semibold mb-1">Nama Layanan</label>
                 <input type="text" id="application_name" name="application_name"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" placeholder="Masukkan nama aplikasi"
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" placeholder="Masukkan nama layanan"
                     required>
             </div>
             <div>
-                <label for="application_code" class="block font-semibold mb-1">Aplikasi Code</label>
+                <label for="application_code" class="block font-semibold mb-1">Layanan Code</label>
                 <input id="application_code" name="application_code" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
                     rows="3" placeholder="Contoh: SM, SA, TS, AS" required></input>
             </div>
@@ -20,7 +20,7 @@
             <div>
                 <label for="description" class="block font-semibold mb-1">Deskripsi</label>
                 <textarea id="description" name="description" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
-                    rows="3" placeholder="Masukkan deskripsi aplikasi" required></textarea>
+                    rows="3" placeholder="Masukkan deskripsi layanan" required></textarea>
             </div>
 
             <div class="flex justify-end pt-4">

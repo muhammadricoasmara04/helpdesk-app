@@ -3,10 +3,7 @@
 @section('container')
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Ticket Status</h1>
-        <a href="{{ route('ticket-status-store') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors">
-            + Tambah Status
-        </a>
+        
     </div>
     @if (session('success'))
         <div class="bg-green-100 text-green-700 p-3 rounded-md mb-4">

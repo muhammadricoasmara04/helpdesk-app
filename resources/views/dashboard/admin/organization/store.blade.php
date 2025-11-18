@@ -11,7 +11,7 @@
                 <label for="organization" class="block font-semibold mb-1 text-gray-700">Nama Unit Kerja</label>
                 <input type="text" id="organization" name="organization" required
                     class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
-                    placeholder="Masukkan nama organisasi">
+                    placeholder="Masukkan Unit Kerja ">
             </div>
 
             <div>

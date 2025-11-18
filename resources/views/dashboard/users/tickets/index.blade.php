@@ -52,7 +52,7 @@
                         <th class="px-5 py-3 font-semibold">Subject</th>
                         <th class="px-5 py-3 font-semibold">Status</th>
                         <th class="px-5 py-3 font-semibold">Prioritas</th>
-                        <th class="px-5 py-3 font-semibold">Aplikasi</th>
+                        <th class="px-5 py-3 font-semibold">Layanan</th>
                         <th class="px-5 py-3 font-semibold">Masalah</th>
                         <th class="px-5 py-3 font-semibold">Pelapor</th>
                         <th class="px-5 py-3 font-semibold">Tanggal Dibuat</th>

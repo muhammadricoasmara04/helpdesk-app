@@ -30,12 +30,12 @@
 
             <x-link route="application"
                 icon="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3">
-                Aplikasi
+                Layanan
             </x-link>
 
             <x-link route="application-problems"
                 icon="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14z">
-                Masalah Aplikasi
+                Masalah Layanan
             </x-link>
 
             <x-link route="ticket-status"
@@ -80,12 +80,12 @@
 
             <x-link route="staff.application"
                 icon="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3">
-                Aplikasi
+                Layanan
             </x-link>
 
             <x-link route="staff.application-problems"
                 icon="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14z">
-                Masalah Aplikasi
+                Masalah Layanan
             </x-link>
 
             <x-link route="staff.ticket-status"

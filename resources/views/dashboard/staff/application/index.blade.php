@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Dashboard Aplikasi</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Dashboard Layanan</h1>
     </div>
 
     <div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
@@ -10,7 +10,7 @@
             <thead class="bg-gray-50 sticky top-0 z-10">
                 <tr class="text-gray-700 text-left">
                     <th class="px-6 py-3 border-b font-semibold">No</th>
-                    <th class="px-6 py-3 border-b font-semibold">Nama Aplikasi</th>
+                    <th class="px-6 py-3 border-b font-semibold">Nama Layanan</th>
                     <th class="px-6 py-3 border-b font-semibold">Deskripsi</th>
                     <th class="px-6 py-3 border-b font-semibold">Dibuat Oleh</th>
                     <th class="px-6 py-3 border-b font-semibold">Diperbarui Oleh</th>
@@ -21,7 +21,7 @@
             <tbody id="application-table-body" class="divide-y divide-gray-100">
                 <tr class="hover:bg-gray-50 transition">
                     <td colspan="7" class="text-center py-6 text-gray-500">
-                        Memuat data aplikasi...
+                        Memuat data layanan...
                     </td>
                 </tr>
             </tbody>

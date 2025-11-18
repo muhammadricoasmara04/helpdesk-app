@@ -11,7 +11,7 @@
             <!-- Application -->
             <div>
                 <label for="application_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Aplikasi
+                    Layanan
                 </label>
                 <select name="application_id" id="application_id"
                     class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">

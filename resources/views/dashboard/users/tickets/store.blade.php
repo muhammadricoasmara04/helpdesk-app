@@ -4,7 +4,7 @@
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-10 border border-gray-100">
         <h2 class="text-2xl font-semibold mb-2 text-gray-800">Buat Tiket Pengaduan</h2>
         <p class="text-sm text-gray-500 mb-6">
-            Isi form di bawah untuk melaporkan kendala atau permintaan bantuan terkait aplikasi yang kamu gunakan.
+            Isi form di bawah untuk melaporkan kendala atau permintaan bantuan terkait layanan yang kamu gunakan.
         </p>
 
         @if (session('success'))
@@ -35,7 +35,7 @@
                     <label class="block text-sm font-medium mb-1 text-gray-700">
                         Jabatan <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="position_name" value="{{ auth()->user()->position_name }}" 
+                    <input type="text" name="position_name" value="{{ auth()->user()->position_name }}"
                         class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
                 </div>
             </div>
@@ -48,21 +48,21 @@
                     class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
             </div>
 
-            <!-- Aplikasi & Masalah -->
+            \
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1 text-gray-700">
-                        Aplikasi <span class="text-red-500">*</span>
+                        Layanan <span class="text-red-500">*</span>
                     </label>
                     <select id="application_id" name="application_id"
                         class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring focus:ring-blue-100 focus:border-blue-400"
                         required>
-                        <option value="">-- Pilih Aplikasi --</option>
+                        <option value="">-- Pilih Layanan --</option>
                         @foreach ($applications as $app)
                             <option value="{{ $app->id }}">{{ $app->application_name }}</option>
                         @endforeach
                     </select>
-                    <p class="text-xs text-gray-500 mt-1">Pilih aplikasi yang mengalami kendala.</p>
+                    <p class="text-xs text-gray-500 mt-1">Pilih layanan yang mengalami kendala.</p>
                 </div>
 
                 <div>
@@ -74,7 +74,8 @@
                         required>
                         <option value="">-- Pilih Masalah --</option>
                     </select>
-                    <p class="text-xs text-gray-500 mt-1">Jenis masalah akan menyesuaikan dengan aplikasi yang kamu pilih.</p>
+                    <p class="text-xs text-gray-500 mt-1">Jenis masalah akan menyesuaikan dengan layanan yang kamu pilih.
+                    </p>
                 </div>
             </div>
 
@@ -129,7 +130,7 @@
             <div class="flex justify-end">
                 <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors duration-200">
-                     Kirim Tiket
+                    Kirim Tiket
                 </button>
             </div>
         </form>
@@ -142,7 +143,7 @@
         const prioritySelect = document.getElementById('ticket_priority_id');
         const priorityHidden = document.getElementById('ticket_priority_hidden');
 
-        // Saat aplikasi berubah → tampilkan problem yang relevan
+        // Saat layanan berubah → tampilkan problem yang relevan
         appSelect.addEventListener('change', function() {
             const selectedAppId = this.value;
             problemSelect.innerHTML = '<option value="">-- Pilih Masalah --</option>';

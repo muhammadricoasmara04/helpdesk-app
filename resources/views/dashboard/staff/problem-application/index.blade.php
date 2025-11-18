@@ -2,11 +2,8 @@
 
 @section('container')
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Dashboard Masalah Aplikasi</h1>
-        <a href="{{ route('application-problems-store') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors">
-            + Tambah Permasalahan
-        </a>
+        <h1 class="text-2xl font-bold text-gray-800">Dashboard Masalah Layanan</h1>
+        
     </div>
 
     <div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
@@ -16,7 +13,7 @@
                     <th class="px-6 py-3 border-b font-semibold">No</th>
                     <th class="px-6 py-3 border-b font-semibold">Masalah</th>
                     <th class="px-6 py-3 border-b font-semibold">Deskripsi</th>
-                    <th class="px-6 py-3 border-b font-semibold">Aplikasi</th>
+                    <th class="px-6 py-3 border-b font-semibold">Layanan</th>
                     <th class="px-6 py-3 border-b font-semibold">Dibuat Oleh</th>
                     <th class="px-6 py-3 border-b font-semibold">Diperbatui</th>
                     <th class="px-6 py-3 border-b font-semibold">Tanggal Dibuat</th>
@@ -26,7 +23,7 @@
             <tbody id="problems-table-body" class="divide-y divide-gray-100">
                 <tr class="hover:bg-gray-50 transition">
                     <td colspan="7" class="text-center py-6 text-gray-500">
-                        Memuat data masalah aplikasi...
+                        Memuat data masalah layanan...
                     </td>
                 </tr>
             </tbody>

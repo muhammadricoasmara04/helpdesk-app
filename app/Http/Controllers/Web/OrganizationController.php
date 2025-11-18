@@ -28,7 +28,7 @@ class OrganizationController extends Controller
 
         Organization::create($request->only(['organization', 'status']));
 
-        return redirect()->route('organization.index')->with('success', 'Organisasi berhasil ditambahkan.');
+        return redirect()->route('organization.index')->with('success', 'Unit Kerja berhasil ditambahkan.');
     }
 
     public function show(string $id)
@@ -53,7 +53,7 @@ class OrganizationController extends Controller
         $organization = Organization::findOrFail($id);
         $organization->update($request->only(['organization', 'status']));
 
-        return redirect()->route('organization.index')->with('success', 'Organisasi berhasil diperbarui.');
+        return redirect()->route('organization.index')->with('success', 'Unit Kerja berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -61,6 +61,6 @@ class OrganizationController extends Controller
         $organization = Organization::findOrFail($id);
         $organization->delete();
 
-        return redirect()->route('organization.index')->with('success', 'Organisasi berhasil dihapus.');
+        return redirect()->route('organization.index')->with('success', 'Unit Kerja berhasil dihapus.');
     }
 }

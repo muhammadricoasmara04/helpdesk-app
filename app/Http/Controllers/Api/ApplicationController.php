@@ -49,7 +49,7 @@ class ApplicationController extends Controller
             if (!$organizationId) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'User belum terhubung ke organisasi.',
+                    'message' => 'User belum terhubung ke unit kerja.',
                 ], 400);
             }
             $application = Application::create([

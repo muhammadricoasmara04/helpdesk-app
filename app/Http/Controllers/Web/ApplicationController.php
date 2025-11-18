@@ -46,7 +46,7 @@ class ApplicationController extends Controller
 
         $application->update($validated);
 
-        return redirect('/dashboard/application')->with('success', 'Aplikasi berhasil diperbarui.');
+        return redirect('/dashboard/application')->with('success', 'Layanan berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -62,10 +62,10 @@ class ApplicationController extends Controller
 
         if ($response->successful()) {
             return redirect('/dashboard/application')
-                ->with('success', 'Aplikasi berhasil dihapus melalui API.');
+                ->with('success', 'Layanan berhasil dihapus melalui API.');
         } else {
             return redirect('/dashboard/application')
-                ->with('error', 'Gagal menghapus aplikasi: ' . $response->json('message'));
+                ->with('error', 'Gagal menghapus Layanan: ' . $response->json('message'));
         }
     }
 }
