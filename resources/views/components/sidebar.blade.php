@@ -80,36 +80,49 @@
                 Ticket
             </x-link>
         @else
+            {{-- Dashboard --}}
             <x-link route="dashboard.staff"
                 icon="M5.121 17.804A7.975 7.975 0 0112 15c1.933 0 3.683.686 5.121 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z">
                 Dashboard
             </x-link>
 
-            <x-link route="staff.ticket.index"
-                icon="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z">
-                Ticket
-            </x-link>
+            {{-- Group: Ticket --}}
+            <x-link-group title="Ticket" icon="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3"
+                :routes="['staff.ticket.index', 'staff.ticket-status', 'staff.ticket-priority']">
 
-            <x-link route="staff.application"
-                icon="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3">
-                Layanan
-            </x-link>
+                <x-link route="staff.ticket.index"
+                    icon="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z">
+                    Ticket
+                </x-link>
 
-            <x-link route="staff.application-problems"
-                icon="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14z">
-                Masalah Layanan
-            </x-link>
+                <x-link route="staff.ticket-status"
+                    icon="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7zm6 4l2 2 4-4">
+                    Tiket Status
+                </x-link>
 
-            <x-link route="staff.ticket-status"
-                icon="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7zm6 4l2 2 4-4">
-                Tiket Status
-            </x-link>
+                <x-link route="staff.ticket-priority"
+                    icon="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z">
+                    Tiket Prioritas
+                </x-link>
+            </x-link-group>
 
-            <x-link route="staff.ticket-priority"
-                icon="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z">
-                Tiket Prioritas
-            </x-link>
+            {{-- Group: Layanan --}}
+            <x-link-group title="Layanan"
+                icon="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+                :routes="['staff.application', 'staff.application-problems']">
 
+                <x-link route="staff.application"
+                    icon="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3">
+                    Layanan
+                </x-link>
+
+                <x-link route="staff.application-problems"
+                    icon="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14z">
+                    Masalah Layanan
+                </x-link>
+            </x-link-group>
+
+            {{-- Single Links --}}
             <x-link route="staff.users.index"
                 icon="M5.121 17.804A7.975 7.975 0 0112 15c1.933 0 3.683.686 5.121 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z">
                 Manajemen User
