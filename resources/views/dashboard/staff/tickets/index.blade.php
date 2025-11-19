@@ -63,5 +63,5 @@
     </div>
 @endsection
 @push('scripts')
-    @vite('resources/js/dashboard.js')
+    @vite('resources/js/staff/dashboard-ticket.js')
 @endpush

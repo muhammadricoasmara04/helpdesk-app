@@ -160,11 +160,11 @@ Route::middleware(['auth', 'role:staff'])
                 ->name('tickets.updatePriority');
         });
 
-        // Route::prefix('ticket-reply-staff')->group(function () {
-        //     Route::get('/{id}', [TicketReplyStaffController::class, 'index'])->name('staff.ticket-replied-admin');
-        //     Route::put('/tickets/{id}/priority', [TicketReplyStaffController::class, 'staff.update'])
-        //         ->name('tickets.updatePriority');
-        // });
+        Route::prefix('ticket-reply-staff')->group(function () {
+            Route::get('/{id}', [TicketReplyStaffController::class, 'index'])->name('staff.ticket-replied-admin');
+            Route::put('/tickets/{id}/priority', [TicketReplyStaffController::class, 'staff.update'])
+                ->name('tickets.updatePriority');
+        });
 
         Route::prefix('users')->group(function () {
             Route::get('/', [UserStaffController::class, 'index'])->name('staff.users.index');

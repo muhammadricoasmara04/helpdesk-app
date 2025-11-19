@@ -227,5 +227,5 @@
 @endsection
 
 @push('scripts')
-    @vite('resources/js/dashboard/ticket-replied-admin.js')
+    @vite('resources/js/staff/ticket-replied-staff.js')
 @endpush
