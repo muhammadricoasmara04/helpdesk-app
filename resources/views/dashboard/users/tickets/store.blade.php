@@ -48,7 +48,6 @@
                     class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-700" readonly>
             </div>
 
-            \
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1 text-gray-700">

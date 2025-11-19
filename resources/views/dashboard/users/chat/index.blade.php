@@ -105,9 +105,9 @@
                     <div class="font-semibold text-gray-600">Status</div> <span
                         class="{{ $statusColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block w-fit">
                         {{ $ticket->status->name }} </span>
-                    <div class="font-semibold text-gray-600">Priority</div> <span
+                    {{-- <div class="font-semibold text-gray-600">Priority</div> <span
                         class="{{ $priorityColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block w-fit">
-                        {{ $ticket->priority->name }} </span>
+                        {{ $ticket->priority->name }} </span> --}}
 
                     <div class="font-semibold text-gray-600">Created At</div>
                     <div class="text-gray-900">
@@ -195,7 +195,9 @@
         </div>
     </div>
 @endsection
-
+<script>
+    window.existingAttachments = {{ $ticket->attachments->count() }};
+</script>
 @push('scripts')
     @vite('resources/js/dashboard-user/ticket-replied.js')
 @endpush

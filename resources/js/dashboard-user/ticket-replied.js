@@ -230,6 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const uploadAttachment = async (files) => {
         if (!files.length) return;
 
+        // Cek jika tiket sudah ditutup
         if (statusSlug === "closed") {
             Swal.fire({
                 icon: "warning",
@@ -239,6 +240,39 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             return;
         }
+
+        const MAX_SIZE = 500 * 1024; // 500 KB
+        const existing = window.existingAttachments ?? 0;
+        const selected = files.length;
+
+        // Cek ukuran per file
+        for (let file of files) {
+            if (file.size > MAX_SIZE) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Ukuran Terlalu Besar",
+                    text: `File "${file.name}" melebihi batas 500 KB.`,
+                });
+
+                uploadInput.value = "";
+                return;
+            }
+        }
+
+        // Validasi max 5 file total
+        if (existing + selected > 5) {
+            Swal.fire({
+                icon: "error",
+                title: "Maksimal Lampiran",
+                text: `Anda hanya dapat mengunggah maksimal 5 lampiran. 
+Saat ini ada ${existing}, dan Anda memilih ${selected} file.`,
+            });
+
+            // Reset input agar user bisa upload ulang
+            uploadInput.value = "";
+            return;
+        }
+
         const formData = new FormData();
         for (let file of files) {
             formData.append("attachments[]", file);
@@ -254,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     },
                 }
             );
+
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
@@ -262,16 +297,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 showConfirmButton: false,
             });
 
-            // Reload supaya Blade render ulang lampiran baru
+            // Reload untuk update list attachment
             setTimeout(() => {
                 location.reload();
             }, 1500);
         } catch (error) {
             console.error(error);
+
             Swal.fire({
                 icon: "error",
                 title: "Gagal Mengunggah",
-                text: "Terjadi kesalahan saat mengunggah lampiran. Silakan coba lagi.",
+                text:
+                    error.response?.data?.message ??
+                    "Terjadi kesalahan saat mengunggah lampiran. Silakan coba lagi.",
             });
         }
     };

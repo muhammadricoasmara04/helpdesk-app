@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }</td>
             <td class="px-5 py-3">${data.subject || "-"}</td>
             <td class="px-5 py-3">${statusBadge}</td>
-            <td class="px-5 py-3">${priorityBadge}</td>
+            
             <td class="px-5 py-3">${
                 data.application?.application_name || "-"
             }</td>
