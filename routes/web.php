@@ -31,6 +31,12 @@ Route::get('/', fn() => redirect()->route('login'));
 
 Route::get('/login', [AuthPageController::class, 'index'])->name('login');
 Route::post('/login', [AuthPageController::class, 'login'])->name('login.post');
+
+// login SSO
+Route::get('/sso/login', [AuthPageController::class, 'ssoRedirect'])->name('sso.login');
+Route::get('/sso/callback', [AuthPageController::class, 'ssoCallback'])->name('sso.callback');
+
+
 Route::post('/logout', [AuthPageController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'role:admin'])
     ->prefix('dashboard')
