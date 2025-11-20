@@ -186,10 +186,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (ticket.assigned_to === currentUserId) {
                     // Admin yang sedang menangani
                     actionButton = `
-            <a href="ticket-reply-admin/${ticket.id}"
-               class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
-                💬 Chat
-            </a>`;
+           <a href="ticket-reply-admin/${ticket.id}"
+   class="relative inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
+    💬 Chat
+
+    ${
+        ticket.has_unread
+            ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-600 rounded-full animate-pulse"></span>`
+            : ""
+    }
+</a>`;
                 } else {
                     // Tiket sedang di-handle admin lain
                     actionButton = `

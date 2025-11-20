@@ -67,7 +67,7 @@ class AuthController extends Controller
                 'organization'  => 'nullable|string|exists:organizations,organization',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-           if (isset($e->errors()['nip'])) {
+            if (isset($e->errors()['nip'])) {
                 return response()->json([
                     'message' => 'NIP sudah terdaftar.'
                 ], 409); // 409 Conflict
@@ -143,5 +143,27 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function getStaff()
+    {
+        // Ambil role staff
+        $staffRole = Role::where('name', 'staff')->first();
+
+        if (!$staffRole) {
+            return response()->json([
+                'message' => 'Role staff tidak ditemukan'
+            ], 404);
+        }
+
+        // Ambil semua user dengan role staff
+        $staff = User::where('role_id', $staffRole->id)
+            ->select('id', 'name', 'email', 'nip')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $staff
+        ]);
     }
 }

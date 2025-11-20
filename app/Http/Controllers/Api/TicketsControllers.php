@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class TicketsControllers extends Controller
 {
@@ -53,7 +54,14 @@ class TicketsControllers extends Controller
             }
 
             $tickets = $query->paginate($request->get('per_page', 10));
+            $tickets->getCollection()->transform(function ($ticket) use ($user) {
+                $ticket->has_unread = \App\Models\TicketReply::where('ticket_id', $ticket->id)
+                    ->where('user_id', '!=', $user->id) // pesan BUKAN dari user sekarang
+                    ->where('is_read', false)
+                    ->exists();
 
+                return $ticket;
+            });
             return response()->json([
                 'success' => true,
                 'data' => $tickets
@@ -189,23 +197,35 @@ class TicketsControllers extends Controller
 
     public function assign($id, Request $request)
     {
-        $user = $request->user();
+        // Validasi staff_id wajib ada
+        $request->validate([
+            'staff_id' => 'required|exists:users,id'
+        ]);
+
+        // Ambil tiket
         $ticket = Ticket::findOrFail($id);
 
+        // Jika sudah di-assign ke orang lain
         if ($ticket->assigned_to) {
             return response()->json(['message' => 'Tiket sudah di-handle oleh admin lain.'], 403);
         }
 
+        // Ambil status "In Progress"
         $onProgressStatus = TicketStatus::where('name', 'In Progress')->first();
 
-        $ticket->assigned_to = $user->id;
+        // Assign ke staff yang dipilih
+        $ticket->assigned_to = $request->staff_id;
         if ($onProgressStatus) {
             $ticket->ticket_status_id = $onProgressStatus->id;
         }
+
         $ticket->save();
+
+        // Broadcast ke staff yang dituju
         broadcast(new TicketStatusUpdated($ticket))->toOthers();
+
         return response()->json([
-            'message' => 'Tiket berhasil di-assign ke Anda dan status diperbarui menjadi On Progress.',
+            'message' => 'Tiket berhasil di-assign ke staff.',
             'data' => $ticket
         ]);
     }
@@ -238,15 +258,29 @@ class TicketsControllers extends Controller
     {
         try {
             $user = $request->user();
+            $perPage = $request->input('per_page', 10); // default 10 item per halaman
+
             $tickets = Ticket::with(['status', 'priority', 'application', 'problem'])
                 ->where('employee_number', $user->id)
+                ->addSelect([
+                    'has_unread' => \App\Models\TicketReply::selectRaw('COUNT(*)')
+                        ->whereColumn('ticket_id', 'tickets.id')
+                        ->where('user_id', '!=', $user->id) 
+                        ->where('is_read', false)
+                ])
                 ->latest()
-                ->get();
+                ->paginate($perPage);
 
             return response()->json([
                 'success' => true,
                 'message' => 'User tickets retrieved successfully.',
-                'data' => $tickets
+                'data' => $tickets->items(),      // list data
+                'pagination' => [
+                    'current_page' => $tickets->currentPage(),
+                    'last_page' => $tickets->lastPage(),
+                    'per_page' => $tickets->perPage(),
+                    'total' => $tickets->total(),
+                ]
             ], 200);
         } catch (Exception $e) {
             return response()->json([

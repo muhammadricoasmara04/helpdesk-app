@@ -112,6 +112,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function renderTickets(tickets) {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const userRole = user.role || null;
+        const staffList = user.staff || [];
+
+        console.log("Role user:", userRole);
+        console.log("List staff:", staffList);
         if (!tickets.length) {
             tableBody.innerHTML = `
             <tr>
@@ -186,10 +192,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (ticket.assigned_to === currentUserId) {
                     // Admin yang sedang menangani
                     actionButton = `
-            <a href="ticket-reply-admin/${ticket.id}"
-               class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
-                💬 Chat
-            </a>`;
+           <a href="ticket-reply-admin/${ticket.id}"
+   class="relative inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
+    💬 Chat
+
+    ${
+        ticket.has_unread
+            ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-600 rounded-full animate-pulse"></span>`
+            : ""
+    }
+</a>
+`;
                 } else {
                     // Tiket sedang di-handle admin lain
                     actionButton = `
@@ -200,10 +213,24 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 // Belum ada admin handle → tampil tombol assign
                 actionButton = `
-        <button data-id="${ticket.id}"
-                class="assign-btn inline-flex items-center gap-1 bg-green-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-green-700 transition">
-        Assign to Me
-        </button>`;
+        <div class="relative inline-block text-left">
+            <button class="menu-btn px-2 py-1 rounded hover:bg-gray-200" data-id="${ticket.id}">
+                ⋮
+            </button>
+
+            <div class="menu hidden absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10" 
+                 data-id="${ticket.id}">
+                 
+                <button class="assign-to-me w-full text-left px-4 py-2 hover:bg-gray-100" data-id="${ticket.id}">
+                    Ambil Tiket
+                </button>
+
+                <button class="assign-to-staff w-full text-left px-4 py-2 hover:bg-gray-100" data-id="${ticket.id}">
+                    Kirim ke Staff
+                </button>
+            </div>
+        </div>
+    `;
             }
 
             // === Susunan tabel ===
@@ -231,18 +258,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 🧩 Event Delegation untuk Assign
     tableBody.addEventListener("click", async (e) => {
-        
-        if (e.target.classList.contains("assign-btn")) {
-            const btn = e.target;
-            const ticketId = btn.dataset.id;
+        // 🟦 Toggle menu titik tiga
+        if (e.target.classList.contains("menu-btn")) {
+            const id = e.target.dataset.id;
+            const menu = document.querySelector(`.menu[data-id="${id}"]`);
+            menu.classList.toggle("hidden");
+            return;
+        }
+
+        // 🟩 Ambil Tiket (Assign to Me)
+        if (e.target.classList.contains("assign-to-me")) {
+            const ticketId = e.target.dataset.id;
 
             const result = await Swal.fire({
-                title: "Konfirmasi",
-                text: "Apakah Anda yakin ingin meng-assign tiket ini ke Anda?",
+                title: "Ambil Tiket?",
+                text: "Anda akan menangani tiket ini.",
                 icon: "question",
                 showCancelButton: true,
-                confirmButtonText: "Ya, assign!",
-                cancelButtonText: "Batal",
             });
 
             if (!result.isConfirmed) return;
@@ -255,22 +287,74 @@ document.addEventListener("DOMContentLoaded", async () => {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
-                window.location.href = `/dashboard/ticket-reply-admin/${ticketId}`;
 
-                btn.outerHTML = `
-                    <a href="ticket-reply-admin/${ticketId}"
-                        class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
-                        💬 Chat
-                    </a>
-                `;
+                window.location.href = `/dashboard/ticket-reply-admin/${ticketId}`;
             } catch (error) {
-                console.error(error);
-                alert("Gagal meng-assign tiket. Coba lagi.");
-                btn.disabled = false;
-                btn.textContent = "🔧 Assign to Me";
+                Swal.fire("Error", "Gagal mengambil tiket", "error");
             }
+            return;
+        }
+
+        // 🟨 Kirim ke Staff
+        if (e.target.classList.contains("assign-to-staff")) {
+            const ticketId = e.target.dataset.id;
+
+            // Staff diambil dari localStorage
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            const staffList = user.staff || [];
+
+            if (staffList.length === 0) {
+                Swal.fire(
+                    "Tidak ada staff",
+                    "Anda belum memiliki staff terdaftar.",
+                    "warning"
+                );
+                return;
+            }
+
+            const { value: staffId } = await Swal.fire({
+                title: "Delegasikan ke Staff",
+                input: "select",
+                inputOptions: staffList.reduce((acc, staff) => {
+                    acc[staff.id] = staff.name;
+                    return acc;
+                }, {}),
+                inputPlaceholder: "Pilih staff",
+                showCancelButton: true,
+            });
+
+            if (!staffId) return;
+
+            try {
+                await axios.post(
+                    `${baseUrl}/tickets/${ticketId}/assign`,
+                    { staff_id: staffId }, // 👉 INI SUDAH BENAR
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                Swal.fire(
+                    "Berhasil!",
+                    "Tiket berhasil didelegasikan.",
+                    "success"
+                );
+                loadTickets();
+            } catch (error) {
+                Swal.fire("Error", "Gagal mengirim tiket", "error");
+            }
+
+            return;
         }
     });
+
+    async function loadStaff() {
+        const response = await axios.get(`${baseUrl}/staff`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        user.staff = response.data.data;
+        localStorage.setItem("user", JSON.stringify(user));
+    }
 
     function filterTickets() {
         const searchValue = document
@@ -322,4 +406,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         loadTickets(1);
     });
+    loadStaff();
 });

@@ -91,20 +91,25 @@ document.addEventListener("DOMContentLoaded", () => {
             let actionButton = "";
 
             if (data.status?.slug?.toLowerCase() === "closed") {
-                // Kalau tiket sudah close
                 actionButton = `
         <a href="/dashboard/user/ticket-reply/${data.id}" class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
             Closed
         </a>
     `;
             } else {
-                // Kalau belum close
                 actionButton = `
         <a href="/dashboard/user/ticket-reply/${data.id}"
-           class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition">
+           class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition relative">
            💬 Chat
+           ${
+               data.has_unread
+                   ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>`
+                   : ""
+           }
         </a>
     `;
+                console.log("HASUNREAD:", data.has_unread);
+
             }
 
             row.innerHTML = `

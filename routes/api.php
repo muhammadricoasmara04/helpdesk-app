@@ -24,7 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/tickets', [TicketsControllers::class, 'myTickets']);
     Route::post('/tickets/{id}/assign', [TicketsControllers::class, 'assign']);
     Route::put('/tickets/{id}/close', [TicketReplyController::class, 'close']);
-
+    Route::get('/staff', [AuthController::class, 'getStaff']);
+    
     Route::apiResource('tickets', TicketsControllers::class);
     Route::apiResource('applications', ApplicationController::class);
     Route::apiResource('application-problems', ApplicationProblemController::class);
