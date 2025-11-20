@@ -258,30 +258,55 @@ class TicketsControllers extends Controller
     {
         try {
             $user = $request->user();
-            $perPage = $request->input('per_page', 10); // default 10 item per halaman
+            $perPage = $request->input('per_page', 10);
 
-            $tickets = Ticket::with(['status', 'priority', 'application', 'problem'])
+            $query = Ticket::with(['status', 'priority', 'application', 'problem'])
                 ->where('employee_number', $user->id)
                 ->addSelect([
                     'has_unread' => \App\Models\TicketReply::selectRaw('COUNT(*)')
                         ->whereColumn('ticket_id', 'tickets.id')
-                        ->where('user_id', '!=', $user->id) 
+                        ->where('user_id', '!=', $user->id)
                         ->where('is_read', false)
-                ])
-                ->latest()
-                ->paginate($perPage);
+                ]);
+
+            // 🔍 Filter Search
+            if ($request->search) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('subject', 'like', "%$search%")
+                        ->orWhere('ticket_code', 'like', "%$search%")
+                        ->orWhere('employee_name', 'like', "%$search%");
+                });
+            }
+
+            // 📌 Filter Status
+            if ($request->status) {
+                $query->whereHas('status', function ($q) use ($request) {
+                    $q->where('slug', $request->status);
+                });
+            }
+
+            // 📌 Filter Priority
+            if ($request->priority) {
+                $query->whereHas('priority', function ($q) use ($request) {
+                    $q->where('slug', $request->priority);
+                });
+            }
+
+            // Pagination tetap
+            $tickets = $query->latest()->paginate($perPage);
 
             return response()->json([
                 'success' => true,
                 'message' => 'User tickets retrieved successfully.',
-                'data' => $tickets->items(),      // list data
+                'data' => $tickets->items(),
                 'pagination' => [
                     'current_page' => $tickets->currentPage(),
                     'last_page' => $tickets->lastPage(),
                     'per_page' => $tickets->perPage(),
                     'total' => $tickets->total(),
                 ]
-            ], 200);
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,

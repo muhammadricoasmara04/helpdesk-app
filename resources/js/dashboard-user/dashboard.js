@@ -3,8 +3,14 @@ import axios from "axios";
 document.addEventListener("DOMContentLoaded", () => {
     const baseUrl =
         import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+
     const tableBody = document.getElementById("tickets-table-body");
+    const paginationContainer = document.getElementById("pagination");
+
+    let currentPage = 1;
+    let lastPage = 1;
     let tickets = [];
+
     const setMessageRow = (message) => {
         tableBody.innerHTML = `
             <tr>
@@ -13,31 +19,72 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
     };
 
-    async function getMyTickets() {
+    // ========== PAGINATION UI ==========
+    function renderPagination() {
+        paginationContainer.innerHTML = "";
+
+        // Prev button
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "Prev";
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.className = "px-3 py-1 border rounded";
+        prevBtn.onclick = () => getMyTickets(currentPage - 1);
+        paginationContainer.appendChild(prevBtn);
+
+        // Number buttons
+        for (let i = 1; i <= lastPage; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.className = `px-3 py-1 border rounded ${
+                i === currentPage ? "bg-blue-600 text-white" : ""
+            }`;
+            btn.onclick = () => getMyTickets(i);
+            paginationContainer.appendChild(btn);
+        }
+
+        // Next button
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Next";
+        nextBtn.disabled = currentPage === lastPage;
+        nextBtn.className = "px-3 py-1 border rounded";
+        nextBtn.onclick = () => getMyTickets(currentPage + 1);
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    // ========== FETCH DATA ==========
+    async function getMyTickets(page = 1) {
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                setMessageRow("❌ Belum login. Silakan login terlebih dahulu.");
-                return;
-            }
+
+            const searchValue = document.getElementById("search-input").value;
+            const statusValue = document.getElementById("status-filter").value;
+            const priorityValue =
+                document.getElementById("priority-filter").value;
 
             const response = await axios.get(`${baseUrl}/user/tickets`, {
                 headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    page,
+                    per_page: 10,
+                    search: searchValue,
+                    status: statusValue,
+                    priority: priorityValue,
+                },
             });
 
-            tickets = response.data?.data || [];
+            tickets = response.data.data;
+            currentPage = response.data.pagination.current_page;
+            lastPage = response.data.pagination.last_page;
 
-            if (response.data.success && tickets.length > 0) {
-                renderTickets(tickets);
-            } else {
-                setMessageRow("⚠️ Belum ada tiket yang kamu buat.");
-            }
+            renderTickets(tickets);
+            renderPagination();
         } catch (error) {
-            console.error("❌ Error ambil data tiket:", error);
-            setMessageRow("Terjadi kesalahan saat mengambil data tiket.");
+            console.error(error);
+            setMessageRow("❌ Gagal memuat data tiket.");
         }
     }
 
+    // ========== RENDER TABEL ==========
     function renderTickets(ticketsToRender) {
         tableBody.innerHTML = "";
 
@@ -54,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "duration-200"
             );
 
-            // Status badge
+            // Status Badge
             const statusSlug = data.status?.slug?.toLowerCase() || "-";
             let statusBadge = "";
             switch (statusSlug) {
@@ -62,16 +109,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 whitespace-nowrap">Open</span>`;
                     break;
                 case "in-progress":
-                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 whitespace-nowrap">In&nbsp;Progress</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 whitespace-nowrap">In Progress</span>`;
                     break;
                 case "closed":
-                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-red-400 text-gray-700 whitespace-nowrap">Closed</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-red-400 text-white whitespace-nowrap">Closed</span>`;
                     break;
                 default:
-                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">-</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-600 whitespace-nowrap">-</span>`;
             }
 
-            // Priority badge
+            // Priority Badge
             const prioritySlug = data.priority?.slug?.toLowerCase() || "-";
             let priorityBadge = "";
             switch (prioritySlug) {
@@ -85,103 +132,72 @@ document.addEventListener("DOMContentLoaded", () => {
                     priorityBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Low</span>`;
                     break;
                 default:
-                    priorityBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">-</span>`;
+                    priorityBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-600">-</span>`;
             }
 
+            // Action Button
             let actionButton = "";
-
-            if (data.status?.slug?.toLowerCase() === "closed") {
+            if (statusSlug === "closed") {
                 actionButton = `
-        <a href="/dashboard/user/ticket-reply/${data.id}" class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
-            Closed
-        </a>
-    `;
+                    <a href="/dashboard/user/ticket-reply/${data.id}" 
+                       class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
+                        Closed
+                    </a>`;
             } else {
                 actionButton = `
-        <a href="/dashboard/user/ticket-reply/${data.id}"
-           class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition relative">
-           💬 Chat
-           ${
-               data.has_unread
-                   ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>`
-                   : ""
-           }
-        </a>
-    `;
-                console.log("HASUNREAD:", data.has_unread);
-
+                    <a href="/dashboard/user/ticket-reply/${data.id}"
+                       class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-blue-700 transition relative">
+                       💬 Chat
+                       ${
+                           data.has_unread
+                               ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>`
+                               : ""
+                       }
+                    </a>`;
             }
 
+            // Table row
             row.innerHTML = `
-            <td class="px-5 py-3 font-medium text-gray-800">${
-                data.ticket_code || "-"
-            }</td>
-            <td class="px-5 py-3">${data.subject || "-"}</td>
-            <td class="px-5 py-3">${statusBadge}</td>
-            
-            <td class="px-5 py-3">${
-                data.application?.application_name || "-"
-            }</td>
-            <td class="px-5 py-3">${data.problem?.problem_name || "-"}</td>
-            <td class="px-5 py-3">${data.employee_name || "-"}</td>
-            <td class="px-5 py-3 text-gray-500">${new Date(
-                data.created_at
-            ).toLocaleString()}</td>
-           <td class="px-5 py-3 text-center">
-    ${actionButton}
-</td>
-        `;
+                <td class="px-5 py-3 font-medium text-gray-800">${
+                    data.ticket_code || "-"
+                }</td>
+                <td class="px-5 py-3">${data.subject || "-"}</td>
+                <td class="px-5 py-3">${statusBadge}</td>
+                <td class="px-5 py-3">${
+                    data.application?.application_name || "-"
+                }</td>
+                <td class="px-5 py-3">${data.problem?.problem_name || "-"}</td>
+                <td class="px-5 py-3">${data.employee_name || "-"}</td>
+                <td class="px-5 py-3 text-gray-500">${new Date(
+                    data.created_at
+                ).toLocaleString()}</td>
+                <td class="px-5 py-3 text-center">${actionButton}</td>
+            `;
+
             tableBody.appendChild(row);
         });
     }
 
-    function filterTickets() {
-        const searchValue = document
-            .getElementById("search-input")
-            .value.toLowerCase();
-        const statusValue = document
-            .getElementById("status-filter")
-            .value.toLowerCase();
-        const priorityValue = document
-            .getElementById("priority-filter")
-            .value.toLowerCase();
-
-        const filtered = tickets.filter((t) => {
-            const matchSearch =
-                t.subject?.toLowerCase().includes(searchValue) ||
-                t.ticket_code?.toLowerCase().includes(searchValue) ||
-                t.employee_name?.toLowerCase().includes(searchValue);
-
-            const matchStatus =
-                !statusValue || t.status?.slug?.toLowerCase() === statusValue;
-            const matchPriority =
-                !priorityValue ||
-                t.priority?.slug?.toLowerCase() === priorityValue;
-
-            return matchSearch && matchStatus && matchPriority;
-        });
-
-        renderTickets(filtered);
-    }
+    // ========== FILTER HANDLERS ==========
     function initFilters() {
         const searchInput = document.getElementById("search-input");
         const statusFilter = document.getElementById("status-filter");
         const priorityFilter = document.getElementById("priority-filter");
         const resetButton = document.getElementById("reset-filter");
 
-        // Event: search input
-        searchInput?.addEventListener("input", filterTickets);
+        // Live search (auto reload)
+        searchInput?.addEventListener("input", () => getMyTickets(1));
 
-        // Event: dropdown filter
-        statusFilter?.addEventListener("change", filterTickets);
-        priorityFilter?.addEventListener("change", filterTickets);
+        // Dropdown filters
+        statusFilter?.addEventListener("change", () => getMyTickets(1));
+        priorityFilter?.addEventListener("change", () => getMyTickets(1));
 
-        // Event: reset filter
+        // Reset filter
         resetButton?.addEventListener("click", () => {
             searchInput.value = "";
             statusFilter.value = "";
             priorityFilter.value = "";
-            renderTickets(tickets);
+            getMyTickets(1); // Reload all
         });
     }
 
