@@ -126,21 +126,6 @@
                         {{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Belum ditugaskan' }}
                     </div>
 
-                    <div class="font-semibold text-gray-600">Status</div> <span
-                        class="{{ $statusColor }} px-2 py-1 rounded-full text-xs mb-3 inline-block w-fit">
-                        {{ $ticket->status->name }} </span>
-                    <div class="font-semibold text-gray-600">Priority</div>
-                    <select name="ticket_priority_id" form="update-priority-form"
-                        class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none w-full">
-                        @foreach ($priorities as $priority)
-                            <option value="{{ $priority->id }}"
-                                {{ $ticket->ticket_priority_id == $priority->id ? 'selected' : '' }}>
-                                {{ $priority->name }}
-                            </option>
-                        @endforeach
-                    </select>
-
-
                     <div class="font-semibold text-gray-600">Created At</div>
                     <div class="text-gray-900">
                         {{ $ticket->created_at->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
@@ -157,14 +142,46 @@
                     </div>
                 </div>
 
-                <form id="update-priority-form" action="{{ route('tickets.updatePriority', $ticket->id) }}" method="POST"
-                    class="mt-5 flex justify-end">
+                <form action="{{ route('tickets.updatePriority', $ticket->id) }}" method="POST"
+                    class="flex flex-col gap-3">
                     @csrf
                     @method('PUT')
+
+                    <div>
+                        <label class="font-semibold text-gray-600">Status</label>
+                        <select name="ticket_status_id"
+                            class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none w-full">
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status->id }}"
+                                    {{ $ticket->ticket_status_id == $status->id ? 'selected' : '' }}>
+                                    {{ $status->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="font-semibold text-gray-600">Priority</label>
+                        <select name="ticket_priority_id"
+                            class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none w-full">
+                            @foreach ($priorities as $priority)
+                                <option value="{{ $priority->id }}"
+                                    {{ $ticket->ticket_priority_id == $priority->id ? 'selected' : '' }}>
+                                    {{ $priority->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <button type="submit"
-                        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg shadow-md transition">
-                        🔄 Update Priority
+                        class="mt-2 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg shadow-md transition">
+                        Update Status & Prioritas
                     </button>
+                    @if (session('success'))
+                        <div class="mt-2 text-green-600 text-sm font-medium">
+                            ✅ {{ session('success') }}
+                        </div>
+                    @endif
                 </form>
 
                 <!-- Lampiran -->

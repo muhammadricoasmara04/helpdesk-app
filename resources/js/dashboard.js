@@ -282,10 +282,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             try {
                 await axios.post(
                     `${baseUrl}/tickets/${ticketId}/assign`,
-                    {},
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
+                    { staff_id: user.id }, // 👉 kirim ID sendiri
+                    { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 window.location.href = `/dashboard/ticket-reply-admin/${ticketId}`;
