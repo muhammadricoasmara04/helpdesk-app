@@ -160,16 +160,16 @@ Route::middleware(['auth', 'role:staff'])
             Route::get('/{id}', [TicketPriorityStaffController::class, 'show'])->name('staff.ticket-priority.show');
         });
 
-        Route::prefix('ticket-reply-admin')->group(function () {
-            Route::get('/{id}', [TicketReplyController::class, 'index'])->name('ticket-replied-admin');
-            Route::put('/tickets/{id}/priority', [TicketReplyController::class, 'update'])
-                ->name('tickets.updatePriority');
-        });
+        // Route::prefix('ticket-reply-admin')->group(function () {
+        //     Route::get('/{id}', [TicketReplyController::class, 'index'])->name('ticket-replied-admin');
+        //     Route::put('/tickets/{id}/priority', [TicketReplyController::class, 'update'])
+        //         ->name('tickets.updatePriority');
+        // });
 
         Route::prefix('ticket-reply-staff')->group(function () {
-            Route::get('/{id}', [TicketReplyStaffController::class, 'index'])->name('staff.ticket-replied-admin');
-            Route::put('/tickets/{id}/priority', [TicketReplyStaffController::class, 'staff.update'])
-                ->name('tickets.updatePriority');
+            Route::get('/{id}', [TicketReplyStaffController::class, 'index'])->name('staff.ticket-replied-staff');
+            Route::put('/tickets/{id}/priority', [TicketReplyStaffController::class, 'update'])
+                ->name('staff.tickets.updatePriority');
         });
 
         Route::prefix('users')->group(function () {

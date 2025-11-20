@@ -154,8 +154,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 case "closed":
                     statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-red-400 text-gray-700 whitespace-nowrap">Closed</span>`;
                     break;
-                case "resolved":
-                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 whitespace-nowrap">Resolved</span>`;
+                case "pending":
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 whitespace-nowrap">Pending</span>`;
                     break;
                 default:
                     statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">-</span>`;

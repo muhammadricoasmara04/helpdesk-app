@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class Ticket extends Model
 {
     use HasFactory, HasUuids;
+    
     protected $fillable = [
         'ticket_status_id',
         'ticket_priority_id',
