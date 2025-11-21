@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TicketCreated;
 use App\Events\TicketStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
@@ -105,6 +106,7 @@ class TicketsControllers extends Controller
                 'subject' => $validated['subject'],
                 'description' => $validated['description'],
             ]);
+            event(new TicketCreated($ticket));
 
             return response()->json([
                 'success' => true,

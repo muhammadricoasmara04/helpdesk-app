@@ -66,7 +66,9 @@
                             </div>
                         </div>
                     </form>
-
+                    <p class="text-gray-400 text-xs mt-2">
+                        &copy; 2025 Helpdesk. Kementerian Imigrasi dan Pemasyarakatan
+                    </p>
                 </div>
             </div>
         </div>

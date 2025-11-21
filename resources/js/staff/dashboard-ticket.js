@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (statusSlug === "closed") {
                 actionButton = `
-        <a href="ticket-reply-admin/${ticket.id}" class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
+        <a href="ticket-reply-staff/${ticket.id}" class="inline-flex items-center gap-1 bg-gray-400 text-white text-xs font-medium px-3 py-1.5 rounded-md">
             Closed
         </a>
     `;
@@ -255,12 +255,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             try {
                 await axios.post(
                     `${baseUrl}/tickets/${ticketId}/assign`,
-                    {},
+                    { staff_id: currentUserId },
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
-                window.location.href = `/dashboard/staff/ticket-reply-admin/${ticketId}`;
+                window.location.href = `/dashboard/staff/ticket-reply-staff/${ticketId}`;
 
                 btn.outerHTML = `
                     <a href="staff/ticket-reply-admin/${ticketId}"
@@ -269,8 +269,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </a>
                 `;
             } catch (error) {
-                console.error(error);
-                alert("Gagal meng-assign tiket. Coba lagi.");
+                console.log("ERROR RESPONSE:", error.response?.data);
+                console.log("STATUS:", error.response?.status);
+
+                Swal.fire(
+                    "Error",
+                    error.response?.data?.message || "Assign gagal",
+                    "error"
+                );
                 btn.disabled = false;
                 btn.textContent = "🔧 Assign to Me";
             }
@@ -325,6 +331,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("status-filter").value = "";
         document.getElementById("priority-filter").value = "";
 
+        loadTickets(1);
+    });
+
+    window.Echo.channel("tickets").listen(".ticket.created", (data) => {
+        console.log("Tiket baru diterima:", data);
         loadTickets(1);
     });
 });

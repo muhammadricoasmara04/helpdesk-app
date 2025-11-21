@@ -2,11 +2,11 @@
 
 @section('container')
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <!-- Search bar -->
+       
         <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
             class="flex-1 border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto focus:ring focus:ring-blue-200 focus:border-blue-400 transition" />
 
-        <!-- Filters + Reset -->
+       
         <div class="flex flex-wrap gap-2 md:gap-3 items-center">
             <select id="status-filter"
                 class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
@@ -33,7 +33,7 @@
 
     <div class="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
 
-        <div class="overflow-x-auto"> <!-- **** wrapper scroll horizontal **** -->
+        <div class="overflow-x-auto">
             <table class="min-w-full text-sm text-gray-700">
                 <thead class="bg-gray-50 border-b">
                     <tr class="text-left text-gray-600 uppercase text-xs tracking-wider">
