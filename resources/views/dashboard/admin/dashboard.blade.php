@@ -27,7 +27,7 @@
 
             <!-- Open Tickets -->
             <div
-                class="flex items-center p-5 bg-linear-to-br from-green-500 to-emerald-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                class="flex items-center p-5 bg-linear-to-br from-blue-300 to-sky-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
                 <div class="p-3 bg-white/20 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-7 h-7">
@@ -74,7 +74,7 @@
 
             <!-- Closed Tickets -->
             <div
-                class="flex items-center p-5 bg-linear-to-br from-red-500 to-rose-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                class="flex items-center p-5 bg-linear-to-br  from-green-500 to-emerald-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
                 <div class="p-3 bg-white/20 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-7 h-7">
@@ -93,7 +93,7 @@
         <div class="mt-10 bg-white rounded-xl shadow-md p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-gray-700">
-                    Analisis Tiket Closed per Bulan ({{ $year }})
+                    Analisis Tiket per Bulan ({{ $year }})
                 </h2>
 
                 <form method="GET" action="{{ route('dashboard') }}">
@@ -127,8 +127,8 @@
                 datasets: [{
                         label: 'Open',
                         data: @json($openTicketsPerMonth),
-                        borderColor: 'rgba(16, 185, 129, 1)', // green
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)', // blue
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
                         borderWidth: 2,
                         pointRadius: 4,
                         pointBackgroundColor: 'rgba(16, 185, 129, 1)',
@@ -157,8 +157,8 @@
                     {
                         label: 'Closed',
                         data: @json($closedTicketsPerMonth),
-                        borderColor: 'rgba(59, 130, 246, 1)', // blue
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)', // green
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
                         borderWidth: 2,
                         pointRadius: 4,
                         pointBackgroundColor: 'rgba(59, 130, 246, 1)',

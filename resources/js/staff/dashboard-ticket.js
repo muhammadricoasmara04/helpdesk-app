@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 whitespace-nowrap">On&nbsp;Progress</span>`;
                     break;
                 case "closed":
-                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-red-400 text-gray-700 whitespace-nowrap">Closed</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-green-400 text-gray-700 whitespace-nowrap">Closed</span>`;
                     break;
                 case "pending":
                     statusBadge = `<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 whitespace-nowrap">Pending</span>`;

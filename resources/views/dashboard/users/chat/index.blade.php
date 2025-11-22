@@ -4,7 +4,8 @@
         $statusColors = [
             'Open' => 'bg-blue-200 text-blue-800',
             'In Progress' => 'bg-yellow-200 text-yellow-800',
-            'Closed' => 'bg-red-200 text-red-800',
+            'Pending' => 'bg-gray-200 text-gray-800',
+            'Closed' => 'bg-green-200 text-green-800',
         ];
 
         $statusColor = $statusColors[$ticket->status->name] ?? 'bg-gray-200 text-gray-800';

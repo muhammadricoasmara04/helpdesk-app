@@ -160,7 +160,7 @@
                         </select>
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <label class="font-semibold text-gray-600">Priority</label>
                         <select name="ticket_priority_id"
                             class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none w-full">
