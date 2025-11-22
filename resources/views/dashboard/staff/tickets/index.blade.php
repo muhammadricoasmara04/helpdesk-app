@@ -40,11 +40,11 @@
                         <th class="px-5 py-3">Kode Tiket</th>
                         <th class="px-5 py-3">Subject</th>
                         <th class="px-5 py-3">Status</th>
-                        <th class="px-5 py-3">Prioritas</th>
                         <th class="px-5 py-3">Layanan</th>
                         <th class="px-5 py-3">Masalah</th>
                         <th class="px-5 py-3">Pelapor</th>
                         <th class="px-5 py-3">Tanggal Dibuat</th>
+                        <th class="px-5 py-3">Tanggal Perubahan</th>
                         <th class="px-5 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>

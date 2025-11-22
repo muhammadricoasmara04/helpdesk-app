@@ -219,7 +219,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }</td>
             <td class="px-5 py-3 truncate">${ticket.subject || "-"}</td>
             <td class="px-5 py-3">${statusBadge}</td>
-            <td class="px-5 py-3">${priorityBadge}</td>
             <td class="px-5 py-3">${
                 ticket.application?.application_name || "-"
             }</td>
@@ -227,6 +226,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             <td class="px-5 py-3">${ticket.employee_name || "-"}</td>
             <td class="px-5 py-3 text-gray-500">${formatDate(
                 ticket.created_at
+            )}</td>
+            <td class="px-5 py-3 text-gray-500">${formatDate(
+                ticket.updated_at
             )}</td>
             <td class="px-5 py-3 text-center">${actionButton}</td>
         `;

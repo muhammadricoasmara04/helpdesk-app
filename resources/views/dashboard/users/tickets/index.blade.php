@@ -55,6 +55,7 @@
                         <th class="px-5 py-3 font-semibold">Masalah</th>
                         <th class="px-5 py-3 font-semibold">Pelapor</th>
                         <th class="px-5 py-3 font-semibold">Tanggal Dibuat</th>
+                                    <th class="px-5 py-3 font-semibold">Tanggal Peruabahan</th>
                         <th class="px-5 py-3 text-center font-semibold">Aksi</th>
                     </tr>
                 </thead>

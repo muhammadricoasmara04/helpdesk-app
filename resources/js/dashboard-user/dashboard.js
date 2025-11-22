@@ -171,9 +171,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 }</td>
                 <td class="px-5 py-3">${data.problem?.problem_name || "-"}</td>
                 <td class="px-5 py-3">${data.employee_name || "-"}</td>
-                <td class="px-5 py-3 text-gray-500">${new Date(
-                    data.created_at
-                ).toLocaleString()}</td>
+                    <td class="px-5 py-3 text-gray-500">
+                ${new Date(data.created_at).toLocaleDateString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                })} 
+                ${new Date(data.created_at).toLocaleTimeString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })}
+            </td>
+
+            <td class="px-5 py-3 text-gray-500">
+                ${new Date(data.updated_at).toLocaleDateString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                })} 
+                ${new Date(data.updated_at).toLocaleTimeString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })}
+            </td>
+
                 <td class="px-5 py-3 text-center">${actionButton}</td>
             `;
 

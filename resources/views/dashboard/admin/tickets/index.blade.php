@@ -2,11 +2,11 @@
 
 @section('container')
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-       
+
         <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
             class="flex-1 border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto focus:ring focus:ring-blue-200 focus:border-blue-400 transition" />
 
-       
+
         <div class="flex flex-wrap gap-2 md:gap-3 items-center">
             <select id="status-filter"
                 class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
@@ -40,11 +40,11 @@
                         <th class="px-5 py-3">Kode Tiket</th>
                         <th class="px-5 py-3">Subject</th>
                         <th class="px-5 py-3">Status</th>
-                        <th class="px-5 py-3">Prioritas</th>
                         <th class="px-5 py-3">Layanan</th>
                         <th class="px-5 py-3">Masalah</th>
                         <th class="px-5 py-3">Pelapor</th>
                         <th class="px-5 py-3">Tanggal Dibuat</th>
+                        <th class="px-5 py-3">Tanggal Perubahan</th>
                         <th class="px-5 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
