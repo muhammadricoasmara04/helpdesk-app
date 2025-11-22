@@ -11,25 +11,71 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // COUNT TOTAL TICKET PER STATUS (REALTIME)
         $totalTickets = Ticket::count();
         $openTickets = Ticket::whereHas('status', fn($q) => $q->where('slug', 'open'))->count();
         $onProgressTickets = Ticket::whereHas('status', fn($q) => $q->where('slug', 'in-progress'))->count();
+        $pendingTickets = Ticket::whereHas('status', fn($q) => $q->where('slug', 'pending'))->count();
         $closedTickets = Ticket::whereHas('status', fn($q) => $q->where('slug', 'closed'))->count();
 
+        // Tahun dipilih user atau default tahun ini
         $year = $request->input('year', now()->year);
-        $closedTicketsMonthly = DB::table('tickets')
-            ->join('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
+
+        // ============================
+        // 1. Closed Tickets Per Month
+        // ============================
+        $closedQuery = Ticket::join('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
             ->select(
                 DB::raw('EXTRACT(MONTH FROM tickets.updated_at) AS month'),
                 DB::raw('COUNT(*) AS total')
             )
             ->where('ticket_status.slug', 'closed')
-            ->whereRaw('EXTRACT(YEAR FROM tickets.updated_at) = ?', [$year])
+            ->whereRaw("EXTRACT(YEAR FROM tickets.updated_at) = $year")
             ->groupBy(DB::raw('EXTRACT(MONTH FROM tickets.updated_at)'))
-            ->orderBy(DB::raw('EXTRACT(MONTH FROM tickets.updated_at)'))
             ->get();
 
-        // Siapkan daftar bulan
+        // ============================
+        // 2. Open Tickets Per Month
+        // ============================
+        $openQuery = Ticket::join('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
+            ->select(
+                DB::raw('EXTRACT(MONTH FROM tickets.created_at) AS month'),
+                DB::raw('COUNT(*) AS total')
+            )
+            ->where('ticket_status.slug', 'open')
+            ->whereRaw("EXTRACT(YEAR FROM tickets.created_at) = $year")
+            ->groupBy(DB::raw('EXTRACT(MONTH FROM tickets.created_at)'))
+            ->get();
+
+        // ============================
+        // 3. In-Progress Tickets Per Month
+        // ============================
+        $progressQuery = Ticket::join('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
+            ->select(
+                DB::raw('EXTRACT(MONTH FROM tickets.updated_at) AS month'),
+                DB::raw('COUNT(*) AS total')
+            )
+            ->where('ticket_status.slug', 'in-progress')
+            ->whereRaw("EXTRACT(YEAR FROM tickets.updated_at) = $year")
+            ->groupBy(DB::raw('EXTRACT(MONTH FROM tickets.updated_at)'))
+            ->get();
+
+        // ============================
+        // 4. Pending Tickets Per Month
+        // ============================
+        $pendingQuery = Ticket::join('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
+            ->select(
+                DB::raw('EXTRACT(MONTH FROM tickets.updated_at) AS month'),
+                DB::raw('COUNT(*) AS total')
+            )
+            ->where('ticket_status.slug', 'pending')
+            ->whereRaw("EXTRACT(YEAR FROM tickets.updated_at) = $year")
+            ->groupBy(DB::raw('EXTRACT(MONTH FROM tickets.updated_at)'))
+            ->get();
+
+        // ============================
+        // Daftar bulan
+        // ============================
         $months = [
             1 => 'Januari',
             2 => 'Februari',
@@ -45,23 +91,42 @@ class DashboardController extends Controller
             12 => 'Desember',
         ];
 
-        // Inisialisasi semua bulan dengan nilai 0
-        $closedTicketsPerMonth = array_fill(1, 12, 0);
+        // ============================
+        // Inisialisasi 12 bulan ke 0
+        // ============================
+        $openPM = $progressPM = $pendingPM = $closedPM = array_fill(1, 12, 0);
 
-        // Isi data berdasarkan hasil query
-        foreach ($closedTicketsMonthly as $data) {
-            $month = (int) $data->month;
-            $closedTicketsPerMonth[$month] = $data->total;
+        // Masukkan hasil query ke array
+        foreach ($openQuery as $d) {
+            $openPM[(int)$d->month] = $d->total;
+        }
+        foreach ($progressQuery as $d) {
+            $progressPM[(int)$d->month] = $d->total;
+        }
+        foreach ($pendingQuery as $d) {
+            $pendingPM[(int)$d->month] = $d->total;
+        }
+        foreach ($closedQuery as $d) {
+            $closedPM[(int)$d->month] = $d->total;
         }
 
+        // ============================
+        // Return ke Blade
+        // ============================
         return view('dashboard.admin.dashboard', [
             'totalTickets' => $totalTickets,
             'openTickets' => $openTickets,
             'onProgressTickets' => $onProgressTickets,
+            'pendingTickets' => $pendingTickets,
             'closedTickets' => $closedTickets,
+
             'year' => $year,
             'months' => array_values($months),
-            'closedTicketsPerMonth' => array_values($closedTicketsPerMonth),
+
+            'openTicketsPerMonth' => array_values($openPM),
+            'onProgressTicketsPerMonth' => array_values($progressPM),
+            'pendingTicketsPerMonth' => array_values($pendingPM),
+            'closedTicketsPerMonth' => array_values($closedPM),
         ]);
     }
 }
