@@ -31,7 +31,7 @@
                 class="flex-1 flex flex-col border-r border-gray-200 rounded-lg shadow-sm overflow-hidden">
                 {{-- Header --}}
                 <div class="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold">💬 Live Chat Tiket</h2>
+                    <h2 class="text-lg font-semibold">💬Chat</h2>
                     <span
                         class="assign text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">{{ $ticket->assignedTo ? $ticket->assignedTo->name : 'Menunggu' }}</span>
                     <button id="end-chat-btn"

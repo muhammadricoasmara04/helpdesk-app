@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 🔥 2. Update status label
                 if (chatStatusLabel) {
                     chatStatusLabel.style.display = "inline-block";
-                    chatStatusLabel.textContent = "Chat Ditutup";
+                    chatStatusLabel.textContent = "Tiket Ditutup";
                     chatStatusLabel.classList.add("closed-status");
                 }
 

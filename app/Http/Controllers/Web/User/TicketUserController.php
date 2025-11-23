@@ -12,12 +12,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Events\TicketCreated;
+use App\Events\TicketReplied;
 use App\Models\Organization;
 use App\Models\TicketAttachment;
+use App\Models\TicketReply;
 
 class TicketUserController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         return view('dashboard.users.tickets.index');
     }
@@ -83,6 +86,15 @@ class TicketUserController extends Controller
         $ticket->subject = $validated['subject'];
         $ticket->description = $validated['description'] ?? null;
         $ticket->save();
+        $reply = TicketReply::create([
+            'ticket_id' => $ticket->id,
+            'message'   => $ticket->description,
+            'user_id'   => Auth::id(),  
+            'is_read'   => false,
+        ]);
+
+        // Jika mau broadcast real-time ke admin
+        broadcast(new TicketReplied($reply))->toOthers();
 
         // ✅ Simpan lampiran
         if ($request->hasFile('attachments')) {

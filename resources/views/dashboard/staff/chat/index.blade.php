@@ -28,7 +28,7 @@
                 {{-- Header --}}
                 <div class="bg-linear-to-r from-blue-600 to-blue-500 text-white px-6 py-4 flex items-center justify-between">
                     <h2 class="text-lg font-semibold flex items-center gap-2">
-                        💬 <span>Live Chat Tiket</span>
+                        💬 <span>Chat</span>
                     </h2>
                     <span class="text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
                         {{ $ticket->employee_name }}
