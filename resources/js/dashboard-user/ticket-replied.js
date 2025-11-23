@@ -40,7 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
         message,
         isOwn = false,
         time = null,
-        isRead = false
+        isRead = false,
+        attachment = null
     ) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add(
@@ -66,9 +67,34 @@ document.addEventListener("DOMContentLoaded", () => {
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
 
-        const text = document.createElement("div");
-        text.textContent = message;
-        msgDiv.appendChild(text);
+        // 🔥 Jika ada attachment → tampilkan preview file
+        if (attachment) {
+            const ext = attachment.name.split(".").pop().toLowerCase();
+
+            if (["jpg", "jpeg", "png"].includes(ext)) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(attachment);
+                img.classList.add("w-40", "rounded-xl");
+                msgDiv.appendChild(img);
+            } else if (ext === "pdf") {
+                msgDiv.innerHTML = `
+                <div class="flex items-center gap-2">
+                    📄 <span class="text-sm">${attachment.name}</span>
+                </div>
+            `;
+            } else {
+                msgDiv.innerHTML = `
+                <div class="flex items-center gap-2">
+                    📎 <span class="text-sm">${attachment.name}</span>
+                </div>
+            `;
+            }
+        } else {
+            // 📄 Pesan teks biasa
+            const text = document.createElement("div");
+            text.textContent = message;
+            msgDiv.appendChild(text);
+        }
 
         // waktu + centang
         if (time) {
@@ -227,6 +253,57 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // const addAttachmentPreview = (file, isOwn = true) => {
+    //     const wrapper = document.createElement("div");
+    //     wrapper.classList.add(
+    //         "message",
+    //         "flex",
+    //         "my-2",
+    //         isOwn ? "justify-end" : "justify-start",
+    //         isOwn ? "own" : "other"
+    //     );
+
+    //     const msgDiv = document.createElement("div");
+    //     msgDiv.classList.add(
+    //         "p-2",
+    //         "rounded-2xl",
+    //         "inline-block",
+    //         "shadow",
+    //         "bg-gray-100",
+    //         "text-black"
+    //     );
+    //     msgDiv.style.maxWidth = "60%";
+    //     msgDiv.style.width = "fit-content";
+
+    //     const ext = file.name.split(".").pop().toLowerCase();
+
+    //     if (["jpg", "jpeg", "png"].includes(ext)) {
+    //         // preview gambar
+    //         const img = document.createElement("img");
+    //         img.src = URL.createObjectURL(file);
+    //         img.classList.add("w-40", "rounded-xl");
+    //         msgDiv.appendChild(img);
+    //     } else if (ext === "pdf") {
+    //         // preview PDF icon
+    //         msgDiv.innerHTML = `
+    //         <div class="flex items-center gap-2">
+    //             📄 <span class="text-sm">${file.name}</span>
+    //         </div>
+    //     `;
+    //     } else {
+    //         // preview file lain
+    //         msgDiv.innerHTML = `
+    //         <div class="flex items-center gap-2">
+    //             📎 <span class="text-sm">${file.name}</span>
+    //         </div>
+    //     `;
+    //     }
+
+    //     wrapper.appendChild(msgDiv);
+    //     chatBox.appendChild(wrapper);
+    //     chatBox.scrollTop = chatBox.scrollHeight;
+    // };
+
     const uploadAttachment = async (files) => {
         if (!files.length) return;
 
@@ -289,18 +366,17 @@ Saat ini ada ${existing}, dan Anda memilih ${selected} file.`,
                 }
             );
 
+            for (let file of files) {
+                addMessage(null, true, new Date(), false, file);
+            }
+
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: "Lampiran berhasil diunggah.",
-                timer: 2000,
+                timer: 1200,
                 showConfirmButton: false,
             });
-
-            // Reload untuk update list attachment
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
         } catch (error) {
             console.error(error);
 
