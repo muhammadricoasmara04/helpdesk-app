@@ -1,6 +1,10 @@
 @extends('layouts.main-dashboard')
 @section('container')
     @php
+        $maxFiles = 5;
+        $used = $ticket->attachments->count();
+        $remaining = $maxFiles - $used;
+
         $statusColors = [
             'Open' => 'bg-blue-200 text-blue-800',
             'In Progress' => 'bg-yellow-200 text-yellow-800',
@@ -126,7 +130,6 @@
                     </div>
                 </div>
 
-                <!-- Lampiran -->
                 <div class="mt-6">
                     <div class="flex items-center justify-between mb-3 border-b pb-1">
                         <h2 class="font-semibold text-gray-700 flex items-center gap-2">
@@ -141,54 +144,20 @@
                             </svg>
                             Tambah
                         </label>
+
                         <input type="file" id="attachment-upload" name="attachments[]" class="hidden" multiple
                             accept=".jpg,.jpeg,.png,.pdf">
                     </div>
-                    @if ($ticket->attachments->isNotEmpty())
-                        <div class="grid grid-cols-2 gap-4">
-                            @foreach ($ticket->attachments as $attachment)
-                                @php
-                                    $filePath = asset('storage/' . $attachment->file_path);
-                                    $extension = strtolower(pathinfo($attachment->file_path, PATHINFO_EXTENSION));
-                                @endphp
 
-                                @if (in_array($extension, ['jpg', 'jpeg', 'png']))
-                                    <!-- Preview Gambar -->
-                                    <div
-                                        class="border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition-transform transform hover:scale-105">
-                                        <a href="{{ $filePath }}" target="_blank">
-                                            <img src="{{ $filePath }}" alt="Lampiran"
-                                                class="w-full h-28 object-cover rounded-xl">
-                                        </a>
-                                    </div>
-                                @elseif ($extension === 'pdf')
-                                    <!-- PDF Icon -->
-                                    <div
-                                        class="border border-gray-200 rounded-xl bg-gray-50 p-3 flex flex-col items-center justify-center hover:bg-gray-100 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-7 text-red-600 mb-1">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                        </svg>
-                                        <a href="{{ $filePath }}" target="_blank"
-                                            class="text-blue-600 text-sm hover:underline">Lihat PDF</a>
-                                    </div>
-                                @else
-                                    <!-- File Lain -->
-                                    <div
-                                        class="border border-gray-200 rounded-xl bg-white p-3 flex flex-col items-center justify-center hover:shadow-md transition">
-                                        <span class="text-gray-600 text-xs truncate max-w-[100px] mb-1">
-                                            {{ basename($attachment->file_path) }}
-                                        </span>
-                                        <a href="{{ $filePath }}" target="_blank"
-                                            class="text-blue-600 text-xs hover:underline">Download</a>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-gray-400 text-sm italic text-center mt-3">Tidak ada lampiran.</p>
-                    @endif
+                    <div class="text-sm text-gray-600 mt-2">
+                        <span class="font-semibold">{{ $used }}</span> dari
+                        <span class="font-semibold">{{ $maxFiles }}</span> lampiran terpakai
+                        @if ($remaining > 0)
+                            <span class="text-green-600">(sisa {{ $remaining }} lagi)</span>
+                        @else
+                            <span class="text-red-600">(limit tercapai)</span>
+                        @endif
+                    </div>
                 </div>
             </div>
 
