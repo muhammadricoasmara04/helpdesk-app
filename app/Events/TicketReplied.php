@@ -46,10 +46,10 @@ class TicketReplied implements ShouldBroadcastNow
             'created_at' => $this->reply->created_at->toIso8601String(),
             'is_read' => $this->reply->is_read ?? false,
 
-            'file_url' => $this->reply->file_url ?? null,
-            'file_path' => $this->reply->file_path ?? null,
-            'file_type' => $this->reply->file_type ?? null,
-            'mime_type' => $this->reply->mime_type ?? null,
+            'file_url' => $this->reply->file_path
+                ? asset('storage/' . $this->reply->file_path)
+                : null,
+            'file_type' => $this->reply->mime_type ?? null
         ];
     }
 

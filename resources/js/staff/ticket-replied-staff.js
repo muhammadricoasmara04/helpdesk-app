@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     e.sender_name,
                     false,
                     e.file_url,
-                    e.fileType
+                    e.file_type
                 );
 
                 // 👁 tandai sebagai dibaca langsung (tanpa refresh)
@@ -392,6 +392,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     check.style.color = "#00FFFF"; // hijau
                 }
             });
+        })
+        .listen(".AttachmentUploaded", (e) => {
+            console.log("📎 Lampiran baru diterima:", e);
+
+            // Cek apakah file dari user lain
+            if (e.userId !== token) {
+                addMessage(
+                    null, // text kosong
+                    false, // bukan pesan kita
+                    new Date(), // waktu sekarang
+                    e.senderName, // pengirim
+                    false, // isRead
+                    e.fileUrl, // FILE URL
+                    e.fileType // FILE TYPE
+                );
+            }
         });
 
     updateChatUI(statusSlug);

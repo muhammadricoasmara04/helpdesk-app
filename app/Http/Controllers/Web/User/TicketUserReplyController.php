@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Web\User;
 
+use App\Events\AttachmentUploaded;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class TicketUserReplyController extends Controller
@@ -48,6 +50,13 @@ class TicketUserReplyController extends Controller
                     'ticket_id' => $ticket->id,
                     'file_path' => $path,
                 ]);
+                event(new AttachmentUploaded(
+                    $ticket->id,
+                    asset('storage/' . $path),
+                    $file->getClientOriginalExtension(),
+                    Auth::user()->name,
+                    Auth::id()
+                ));
             }
         }
 
