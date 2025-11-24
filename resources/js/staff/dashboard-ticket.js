@@ -336,8 +336,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         loadTickets(1);
     });
 
-    window.Echo.channel("tickets").listen(".ticket.created", (data) => {
-        console.log("Tiket baru diterima:", data);
-        loadTickets(1);
-    });
+    window.Echo.channel("tickets.live")
+        .listen(".TicketReplied", (e) => {
+            console.log("📩 Pesan baru masuk:", e);
+            loadTickets(1); // reload ulang data tiket
+        })
+        .listen(".AttachmentUploaded", (e) => {
+            console.log("📎 Attachment baru:", e);
+            loadTickets(1);
+        });
 });

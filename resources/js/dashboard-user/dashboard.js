@@ -222,6 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
             getMyTickets(1); // Reload all
         });
     }
+    window.Echo.channel("tickets.live").listen(".TicketReplied", (e) => {
+        getMyTickets(currentPage);
+    });
 
     getMyTickets();
     initFilters();

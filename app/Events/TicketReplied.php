@@ -32,7 +32,10 @@ class TicketReplied implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return [new Channel('ticket.' . $this->reply->ticket_id)];
+        return [
+            new Channel('ticket.' . $this->reply->ticket_id),
+            new Channel('tickets.live'),
+        ];
     }
 
     public function broadcastWith()

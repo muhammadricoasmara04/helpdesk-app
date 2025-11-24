@@ -30,7 +30,10 @@ class TicketStatusUpdated implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return [new Channel('ticket.' . $this->ticket->id)];
+        return [
+            new Channel('ticket.' . $this->ticket->id),
+            new Channel('tickets.live'),
+        ];
     }
     public function broadcastWith()
     {

@@ -406,5 +406,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         loadTickets(1);
     });
+    window.Echo.channel("tickets.live")
+        .listen(".TicketReplied", (e) => {
+            console.log("📩 Pesan baru masuk:", e);
+            loadTickets(1); // reload ulang data tiket
+        })
+        .listen(".AttachmentUploaded", (e) => {
+            console.log("📎 Attachment baru:", e);
+            loadTickets(1);
+        });
     loadStaff();
 });
