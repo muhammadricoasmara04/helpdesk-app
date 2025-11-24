@@ -37,7 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
         isOwn = false,
         time = null,
         sender = null,
-        isRead = false
+        isRead = false,
+        fileUrl = null,
+        fileType = null
     ) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add(
@@ -57,13 +59,13 @@ document.addEventListener("DOMContentLoaded", () => {
             isOwn ? "bg-blue-500" : "bg-gray-200",
             isOwn ? "text-white" : "text-black"
         );
-        if (isOwn) {
-            msgDiv.classList.add("message-own"); // Tambahkan ini!
-        }
+
+        if (isOwn) msgDiv.classList.add("message-own");
 
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
 
+        // ⬅ tampilkan label pengirim (untuk pesan dari user ke admin)
         if (sender && !isOwn) {
             const senderEl = document.createElement("div");
             senderEl.classList.add("text-xs", "text-gray-500", "mb-1");
@@ -71,10 +73,57 @@ document.addEventListener("DOMContentLoaded", () => {
             msgDiv.appendChild(senderEl);
         }
 
-        const text = document.createElement("div");
-        text.textContent = message;
-        msgDiv.appendChild(text);
+        // ============================
+        //  🔥  TAMPILKAN FILE / FOTO
+        // ============================
+        if (fileUrl) {
+            const ext = fileUrl.split(".").pop().toLowerCase();
 
+            const isImage = ["jpg", "jpeg", "png", "gif", "webp"].includes(ext);
+
+            if (isImage) {
+                // 🖼 TAMPILKAN GAMBAR LANGSUNG
+                const img = document.createElement("img");
+                img.src = fileUrl;
+                img.classList.add("rounded-lg", "cursor-pointer");
+                img.style.maxWidth = "220px";
+                img.style.maxHeight = "180px";
+                img.style.objectFit = "cover";
+
+                // klik → buka tab baru
+                img.addEventListener("click", () =>
+                    window.open(fileUrl, "_blank")
+                );
+
+                msgDiv.appendChild(img);
+            } else {
+                // 📄 FILE BIASA (PDF, DOCX, XLSX, CSV)
+                const icon = document.createElement("div");
+                icon.classList.add(
+                    "text-sm",
+                    isOwn ? "text-blue-100" : "text-gray-600"
+                );
+                icon.innerHTML = `
+            <a href="${fileUrl}" target="_blank" class="underline">
+                📄 Download File (${ext.toUpperCase()})
+            </a>
+        `;
+                msgDiv.appendChild(icon);
+            }
+        }
+
+        // ============================
+        //  🔥  TAMPILKAN TEKS JIKA ADA
+        // ============================
+        if (message) {
+            const text = document.createElement("div");
+            text.textContent = message;
+            msgDiv.appendChild(text);
+        }
+
+        // ============================
+        //  🔥  TIME + READ INDICATOR
+        // ============================
         if (time) {
             const t = new Date(time);
 
@@ -88,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "mt-1"
             );
 
-            // jam
             const timeEl = document.createElement("span");
             timeEl.textContent = `${t
                 .getHours()
@@ -97,9 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 .getMinutes()
                 .toString()
                 .padStart(2, "0")}`;
+
             timeEl.classList.add(isOwn ? "text-blue-100" : "text-gray-500");
             meta.appendChild(timeEl);
-            // hanya untuk pesan sendiri
+
             if (isOwn) {
                 const readIndicator = document.createElement("span");
                 readIndicator.classList.add("read-indicator");
@@ -121,22 +170,57 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await axios.get(
                 `${baseUrl}/ticket-replies/${ticketId}`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             );
 
             chatBox.innerHTML = "";
-            const replies = response.data.data || response.data || [];
-            replies.forEach((reply) =>
+
+            // Ambil data
+            let replies = response.data.data.replies || [];
+            let attachments = response.data.data.attachments || [];
+
+            // Normalisasi replies → text bubble
+            replies = replies.map((r) => ({
+                type: "text",
+                message: r.message,
+                isOwn: r.is_own,
+                time: r.created_at,
+                sender_name: r.sender_name,
+                isRead: r.is_read,
+                attachment: null,
+                fileType: null,
+            }));
+
+            // Normalisasi attachments → file bubble
+            attachments = attachments.map((a) => ({
+                type: "file",
+                message: null,
+                isOwn: a.is_own,
+                time: a.created_at,
+                sender_name: a.sender_name,
+                isRead: false,
+                attachment: a.url || `/storage/${a.file_path}`,
+                fileType: a.type || a.mime_type,
+            }));
+
+            // Gabungkan semua chat
+            let all = [...replies, ...attachments];
+
+            // Urutkan berdasarkan created_at
+            all.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+            // Render semua pesan sesuai urutan
+            all.forEach((msg) => {
                 addMessage(
-                    reply.message,
-                    reply.is_own,
-                    reply.created_at,
-                    null,
-                    reply.is_read
-                )
-            );
+                    msg.message,
+                    msg.isOwn,
+                    msg.time,
+                    msg.sender_name,
+                    msg.isRead,
+                    msg.attachment,
+                    msg.fileType
+                );
+            });
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
             chatBox.innerHTML =

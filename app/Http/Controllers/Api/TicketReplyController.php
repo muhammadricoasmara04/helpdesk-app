@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TicketReply;
 use App\Events\TicketReplied;
 use App\Models\Ticket;
+use App\Models\TicketAttachment;
 use App\Models\TicketStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,10 +61,19 @@ class TicketReplyController extends Controller
             broadcast(new TicketRead($ticket_id, $userId))->toOthers();
         }
 
+        $attachments = TicketAttachment::where('ticket_id', $ticket_id)
+            ->get()
+            ->map(function ($att) {
+                $att->url = asset("storage/{$att->file_path}");
+                return $att;
+            });
 
         return response()->json([
             'success' => true,
-            'data' => $replies,
+            'data' => [
+                'replies' => $replies,
+                'attachments' => $attachments,
+            ],
         ]);
     }
     public function close($id)

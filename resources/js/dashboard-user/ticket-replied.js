@@ -67,36 +67,79 @@ document.addEventListener("DOMContentLoaded", () => {
         msgDiv.style.maxWidth = "75%";
         msgDiv.style.width = "fit-content";
 
-        // 🔥 Jika ada attachment → tampilkan preview file
-        if (attachment) {
-            const ext = attachment.name.split(".").pop().toLowerCase();
-
-            if (["jpg", "jpeg", "png"].includes(ext)) {
-                const img = document.createElement("img");
-                img.src = URL.createObjectURL(attachment);
-                img.classList.add("w-40", "rounded-xl");
-                msgDiv.appendChild(img);
-            } else if (ext === "pdf") {
-                msgDiv.innerHTML = `
-                <div class="flex items-center gap-2">
-                    📄 <span class="text-sm">${attachment.name}</span>
-                </div>
-            `;
-            } else {
-                msgDiv.innerHTML = `
-                <div class="flex items-center gap-2">
-                    📎 <span class="text-sm">${attachment.name}</span>
-                </div>
-            `;
-            }
-        } else {
-            // 📄 Pesan teks biasa
-            const text = document.createElement("div");
-            text.textContent = message;
-            msgDiv.appendChild(text);
+        if (message && !attachment) {
+            const textEl = document.createElement("p");
+            textEl.textContent = message;
+            textEl.classList.add("whitespace-pre-wrap");
+            msgDiv.appendChild(textEl);
         }
 
-        // waktu + centang
+        // ---- ATTACHMENT HANDLING ----
+        if (attachment) {
+            const fileName =
+                attachment.name ||
+                attachment.file_name ||
+                attachment.file_path?.split("/").pop() ||
+                "file";
+
+            const ext = fileName.split(".").pop().toLowerCase();
+
+            const fileUrl =
+                attachment.url ||
+                (attachment.file_path
+                    ? `/storage/${attachment.file_path}`
+                    : URL.createObjectURL(attachment));
+
+            console.log("FILE URL:", fileUrl);
+
+            // -------- IMAGE FILE --------
+            if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                const img = document.createElement("img");
+                img.src = fileUrl;
+                img.classList.add("w-40", "rounded-xl", "cursor-pointer");
+
+                link.appendChild(img);
+                msgDiv.appendChild(link);
+            }
+
+            // -------- PDF FILE --------
+            else if (ext === "pdf") {
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                link.innerHTML = `
+            <div class="flex items-center gap-2 cursor-pointer underline">
+                📄 <span>${fileName}</span>
+            </div>
+        `;
+                msgDiv.appendChild(link);
+            }
+
+            // -------- OTHER FILES --------
+            else {
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.download = fileName;
+
+                link.innerHTML = `
+            <div class="flex items-center gap-2 cursor-pointer underline">
+                📎 <span>${fileName}</span>
+            </div>
+        `;
+                msgDiv.appendChild(link);
+            }
+        }
+
+        // TIME + CHECK ICON
         if (time) {
             const metaEl = document.createElement("div");
             metaEl.classList.add(
@@ -117,16 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 .toString()
                 .padStart(2, "0")}`;
 
-            const timeEl = document.createElement("span");
-            timeEl.textContent = formattedTime;
-            metaEl.appendChild(timeEl);
+            metaEl.innerHTML += `<span>${formattedTime}</span>`;
 
             if (isOwn) {
-                const checkEl = document.createElement("span");
-                checkEl.classList.add("check-icon");
-                checkEl.innerHTML = isRead ? "✓✓" : "✓";
-                checkEl.style.color = isRead ? "#00FFFF" : "#9ca3af";
-                metaEl.appendChild(checkEl);
+                metaEl.innerHTML += `<span class="check-icon" style="color:${
+                    isRead ? "#00FFFF" : "#9ca3af"
+                }">${isRead ? "✓✓" : "✓"}</span>`;
             }
 
             msgDiv.appendChild(metaEl);
@@ -147,15 +186,45 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             chatBox.innerHTML = "";
-            const replies = response.data.data || response.data || [];
-            replies.forEach((reply) =>
+
+            let replies = response.data.data.replies || [];
+            let attachments = response.data.data.attachments || [];
+
+            // --- NORMALISASI DATA ---
+            replies = replies.map((r) => ({
+                type: "text",
+                message: r.message,
+                isOwn: r.is_own,
+                time: r.created_at,
+                isRead: r.is_read,
+                attachment: null,
+            }));
+
+            attachments = attachments.map((a) => ({
+                type: "file",
+                message: null,
+                isOwn: a.is_own ?? true,
+                time: a.created_at,
+                isRead: false,
+                attachment: a,
+            }));
+
+            // --- GABUNGKAN SEMUA KE SATU ARRAY ---
+            let all = [...replies, ...attachments];
+
+            // --- SORT BERDASARKAN created_at (ASC) ---
+            all.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+            // --- TAMPILKAN SEMUA PESAN SECARA URUT ---
+            all.forEach((item) => {
                 addMessage(
-                    reply.message,
-                    reply.is_own,
-                    reply.created_at,
-                    reply.is_read
-                )
-            );
+                    item.message,
+                    item.isOwn,
+                    item.time,
+                    item.isRead,
+                    item.attachment
+                );
+            });
         } catch (error) {
             console.error("❌ Gagal memuat pesan:", error);
             chatBox.innerHTML =
@@ -252,57 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
-
-    // const addAttachmentPreview = (file, isOwn = true) => {
-    //     const wrapper = document.createElement("div");
-    //     wrapper.classList.add(
-    //         "message",
-    //         "flex",
-    //         "my-2",
-    //         isOwn ? "justify-end" : "justify-start",
-    //         isOwn ? "own" : "other"
-    //     );
-
-    //     const msgDiv = document.createElement("div");
-    //     msgDiv.classList.add(
-    //         "p-2",
-    //         "rounded-2xl",
-    //         "inline-block",
-    //         "shadow",
-    //         "bg-gray-100",
-    //         "text-black"
-    //     );
-    //     msgDiv.style.maxWidth = "60%";
-    //     msgDiv.style.width = "fit-content";
-
-    //     const ext = file.name.split(".").pop().toLowerCase();
-
-    //     if (["jpg", "jpeg", "png"].includes(ext)) {
-    //         // preview gambar
-    //         const img = document.createElement("img");
-    //         img.src = URL.createObjectURL(file);
-    //         img.classList.add("w-40", "rounded-xl");
-    //         msgDiv.appendChild(img);
-    //     } else if (ext === "pdf") {
-    //         // preview PDF icon
-    //         msgDiv.innerHTML = `
-    //         <div class="flex items-center gap-2">
-    //             📄 <span class="text-sm">${file.name}</span>
-    //         </div>
-    //     `;
-    //     } else {
-    //         // preview file lain
-    //         msgDiv.innerHTML = `
-    //         <div class="flex items-center gap-2">
-    //             📎 <span class="text-sm">${file.name}</span>
-    //         </div>
-    //     `;
-    //     }
-
-    //     wrapper.appendChild(msgDiv);
-    //     chatBox.appendChild(wrapper);
-    //     chatBox.scrollTop = chatBox.scrollHeight;
-    // };
 
     const uploadAttachment = async (files) => {
         if (!files.length) return;
