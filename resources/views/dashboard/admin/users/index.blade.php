@@ -34,7 +34,9 @@
                         <td class="px-6 py-3">{{ $loop->iteration }}</td>
                         <td class="px-6 py-3">{{ $user->name }}</td>
                         <td class="px-6 py-3">{{ $user->email }}</td>
-                        <td class="px-6 py-3">{{ $user->role->name ?? '-' }}</td>
+                        <td class="px-6 py-3">
+                            {{ $user->role->name === 'staff' ? 'Operator' : ucfirst($user->role->name) }}
+                        </td>
                         <td class="px-6 py-3">{{ $user->organization->organization ?? '-' }}</td>
                         <td class="px-6 py-3">{{ $user->created_at->format('d M Y') }}</td>
                         <td class="px-6 py-3 space-x-2 flex">

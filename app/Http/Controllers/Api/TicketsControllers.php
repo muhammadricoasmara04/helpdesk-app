@@ -20,8 +20,7 @@ class TicketsControllers extends Controller
         try {
             $user = $request->user();
 
-            $query = Ticket::with(['status', 'priority', 'application', 'problem'])
-                ->latest();
+            $query = Ticket::with(['status', 'priority', 'application', 'problem']);
 
             // FILTER EMPLOYEE
             if ($request->has('employee_number')) {
@@ -54,15 +53,31 @@ class TicketsControllers extends Controller
                 });
             }
 
+            $query->leftJoin('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
+                ->orderByRaw("
+        CASE ticket_status.slug
+            WHEN 'open' THEN 1
+            WHEN 'in-progress' THEN 2
+            WHEN 'pending' THEN 3
+            WHEN 'close' THEN 4
+            ELSE 5
+        END
+    ")
+                ->orderBy('tickets.created_at', 'asc')
+                ->select('tickets.*');
+
             $tickets = $query->paginate($request->get('per_page', 10));
+
+            // CEK PESAN BELUM DIBACA
             $tickets->getCollection()->transform(function ($ticket) use ($user) {
                 $ticket->has_unread = \App\Models\TicketReply::where('ticket_id', $ticket->id)
-                    ->where('user_id', '!=', $user->id) // pesan BUKAN dari user sekarang
+                    ->where('user_id', '!=', $user->id)
                     ->where('is_read', false)
                     ->exists();
 
                 return $ticket;
             });
+
             return response()->json([
                 'success' => true,
                 'data' => $tickets
@@ -74,6 +89,7 @@ class TicketsControllers extends Controller
             ], 500);
         }
     }
+
 
 
     public function store(Request $request)
