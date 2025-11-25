@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Web\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketPriority;
 use App\Models\TicketStatus;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TicketReplyStaffController extends Controller
@@ -17,7 +19,11 @@ class TicketReplyStaffController extends Controller
 
         $ticket = Ticket::findOrFail($ticket_id);
         $priorities = TicketPriority::all();
-        return view('dashboard.staff.chat.index', compact('ticket', 'priorities', 'statuses'));
+
+        $staffRoleId = Role::where('name', 'staff')->first()->id;
+
+        $staffList = User::where('role_id', $staffRoleId)->get();
+        return view('dashboard.staff.chat.index', compact('ticket', 'priorities', 'statuses', 'staffList'));
     }
     public function update(Request $request, $id)
     {
@@ -33,5 +39,20 @@ class TicketReplyStaffController extends Controller
         ]);
 
         return back()->with('success', 'Status dan Prioritas tiket berhasil diperbarui.');
+    }
+
+
+    public function delegate(Request $request, Ticket $ticket)
+    {
+        $request->validate([
+            'assigned_to' => 'required|exists:users,id'
+        ]);
+
+        // Update assigned staff
+        $ticket->assigned_to = $request->assigned_to;
+        $ticket->save();
+
+        return redirect()->route('staff.ticket.index')
+            ->with('success', 'Tiket berhasil didelegasikan.');
     }
 }

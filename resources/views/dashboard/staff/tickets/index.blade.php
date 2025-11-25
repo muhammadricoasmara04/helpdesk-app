@@ -30,7 +30,11 @@
         </div>
     </div>
 
-
+    @if (session('success'))
+        <div class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
 
         <div class="overflow-x-auto"> <!-- **** wrapper scroll horizontal **** -->

@@ -185,6 +185,42 @@
                         </div>
                     @endif
                 </form>
+
+                <button onclick="openDelegasiModal()"
+                    class="bg-purple-600 hover:bg-purple-700 text-white w-full py-2 rounded-lg shadow-md transition">
+                    Delegasikan Tiket
+                </button>
+
+                <!-- Modal Delegasi -->
+                <div id="delegasi-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white w-96 p-6 rounded-xl shadow-xl">
+                        <h2 class="text-lg font-bold mb-4">Delegasikan Tiket</h2>
+
+                        <form method="POST" action="{{ route('staff.tickets.delegate', $ticket->id) }}">
+                            @csrf
+                            @method('PUT')
+
+                            <label class="text-sm font-semibold text-gray-600">Pilih Staff Baru</label>
+                            <select name="assigned_to" class="w-full border rounded-lg px-3 py-2 mt-1">
+                                @foreach ($staffList as $staff)
+                                    @if ($staff->id !== auth()->id())
+                                        <option value="{{ $staff->id }}">{{ $staff->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+
+                            <div class="flex justify-end mt-5 gap-2">
+                                <button type="button" onclick="closeDelegasiModal()"
+                                    class="px-3 py-2 rounded-lg border">Batal</button>
+
+                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+                                    Delegasikan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
 
 

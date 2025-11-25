@@ -414,4 +414,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMessages().then(() => {
         console.log("✅ Messages loaded, now listening TicketRead...");
     });
+
+    window.openDelegasiModal = () => {
+        document.getElementById("delegasi-modal").classList.remove("hidden");
+    };
+
+    window.closeDelegasiModal = () => {
+        document.getElementById("delegasi-modal").classList.add("hidden");
+    };
 });
