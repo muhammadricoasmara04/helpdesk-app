@@ -81,7 +81,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const searchValue = document.getElementById("search-input").value;
         const statusValue = document.getElementById("status-filter").value;
         const priorityValue = document.getElementById("priority-filter").value;
-
+        const startDate = document.getElementById("start-date").value;
+        const endDate = document.getElementById("end-date").value;
         try {
             const response = await axios.get(`${baseUrl}/tickets`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -91,6 +92,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     search: searchValue,
                     status: statusValue,
                     priority: priorityValue,
+                    start_date: startDate,
+                    end_date: endDate,
                 },
             });
 
@@ -116,8 +119,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const userRole = user.role || null;
         const staffList = user.staff || [];
 
-        console.log("Role user:", userRole);
-        console.log("List staff:", staffList);
         if (!tickets.length) {
             tableBody.innerHTML = `
             <tr>
@@ -399,11 +400,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         .getElementById("priority-filter")
         .addEventListener("change", () => loadTickets(1));
 
+    document
+        .getElementById("start-date")
+        .addEventListener("change", () => loadTickets(1));
+
+    document
+        .getElementById("end-date")
+        .addEventListener("change", () => loadTickets(1));
+
     document.getElementById("reset-filter")?.addEventListener("click", () => {
         document.getElementById("search-input").value = "";
         document.getElementById("status-filter").value = "";
         document.getElementById("priority-filter").value = "";
-
+        document.getElementById("start-date").value = "";
+        document.getElementById("end-date").value = "";
         loadTickets(1);
     });
     window.Echo.channel("tickets.live")

@@ -9,8 +9,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <p>Logged in user: {{ Auth::user() ? Auth::user()->name : 'Not logged in' }}</p>
-        <p>Role: {{ Auth::user()?->role ?? 'N/A' }}</p>
+       
         <form action="{{ url('/dashboard/ticket-status/' . $status->id) }}" method="POST">
             @csrf
             @method('PUT')

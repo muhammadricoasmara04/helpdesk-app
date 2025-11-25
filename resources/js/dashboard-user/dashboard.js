@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const statusValue = document.getElementById("status-filter").value;
             const priorityValue =
                 document.getElementById("priority-filter").value;
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
 
             const response = await axios.get(`${baseUrl}/user/tickets`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -69,6 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     search: searchValue,
                     status: statusValue,
                     priority: priorityValue,
+                    start_date: startDate,
+                    end_date: endDate,
                 },
             });
 
@@ -206,19 +210,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const statusFilter = document.getElementById("status-filter");
         const priorityFilter = document.getElementById("priority-filter");
         const resetButton = document.getElementById("reset-filter");
-
+        const startDate = document.getElementById("start-date");
+        const endDate = document.getElementById("end-date");
         // Live search (auto reload)
         searchInput?.addEventListener("input", () => getMyTickets(1));
 
         // Dropdown filters
         statusFilter?.addEventListener("change", () => getMyTickets(1));
         priorityFilter?.addEventListener("change", () => getMyTickets(1));
-
+        startDate?.addEventListener("change", () => getMyTickets(1));
+        endDate?.addEventListener("change", () => getMyTickets(1));
         // Reset filter
         resetButton?.addEventListener("click", () => {
             searchInput.value = "";
             statusFilter.value = "";
             priorityFilter.value = "";
+            startDate.value = "";
+            endDate.value = "";
             getMyTickets(1); // Reload all
         });
     }

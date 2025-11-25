@@ -1,34 +1,69 @@
 @extends('layouts.main-dashboard')
 
 @section('container')
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <!-- Search bar -->
-        <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
-            class="flex-1 border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto focus:ring focus:ring-blue-200 focus:border-blue-400 transition" />
+    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
 
-        <!-- Filters + Reset -->
-        <div class="flex flex-wrap gap-2 md:gap-3 items-center">
-            <select id="status-filter"
-                class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
-                <option value="">Semua Status</option>
-                <option value="open">Open</option>
-                <option value="in-progress">On Progress</option>
-                <option value="closed">Closed</option>
-            </select>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-            <select id="priority-filter"
-                class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
-                <option value="">Semua Prioritas</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-            </select>
+            <!-- Search bar -->
+            <div class="relative flex-1">
+                <input id="search-input" type="text" placeholder="Cari tiket berdasarkan subject, kode, atau pelapor..."
+                    class="w-full border border-gray-300 rounded-xl pl-11 pr-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition" />
 
-            <button id="reset-filter" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded transition">
-                Reset
-            </button>
+                <!-- Icon -->
+                <span class="absolute top-2.5 left-3 text-gray-400">
+                    🔍
+                </span>
+            </div>
+
+            <!-- Filter group -->
+            <div class="flex flex-wrap gap-3">
+
+                <select id="status-filter"
+                    class="border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition bg-white">
+                    <option value="">Semua Status</option>
+                    <option value="open">Open</option>
+                    <option value="in-progress">On Progress</option>
+                    <option value="closed">Closed</option>
+                </select>
+
+                <select id="priority-filter"
+                    class="hidden border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition bg-white">
+                    <option value="">Semua Prioritas</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+
+                <!-- Tanggal Tiket -->
+                <div class="relative flex items-center px-2 py-1">
+
+                    <!-- Label posisi absolute sehingga tidak mengangkat layout -->
+                    <span class="absolute -top-4 left-1/2 -translate-x-1/2 text-xs text-gray-600 font-medium">
+                        Tanggal Tiket
+                    </span>
+
+                    <div class="flex items-center gap-2">
+                        <input id="start-date" type="date"
+                            class="border border-gray-300 rounded-xl px-4 py-2.5
+            focus:ring-2 focus:ring-blue-300 focus:border-blue-400 bg-white" />
+
+                        <span class="text-gray-500">—</span>
+
+                        <input id="end-date" type="date"
+                            class="border border-gray-300 rounded-xl px-4 py-2.5
+            focus:ring-2 focus:ring-blue-300 focus:border-blue-400 bg-white" />
+                    </div>
+
+                </div>
+                <button id="reset-filter"
+                    class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-xl transition font-medium">
+                    Reset
+                </button>
+            </div>
         </div>
     </div>
+
 
     @if (session('success'))
         <div class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-lg">

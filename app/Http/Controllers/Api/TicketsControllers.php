@@ -32,7 +32,7 @@ class TicketsControllers extends Controller
                 $query->where('assigned_to', $user->id);
             }
 
-            // 🔍 FILTER SEARCH
+            // SEARCH
             if ($search = $request->search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('subject', 'like', "%$search%")
@@ -41,40 +41,48 @@ class TicketsControllers extends Controller
                 });
             }
 
-            // STATUS FILTER
+            // FILTER STATUS
             if ($status = $request->status) {
                 $query->whereHas('status', fn($q) => $q->where('slug', $status));
             }
 
-            // PRIORITY FILTER
+            // FILTER PRIORITY
             if ($priority = $request->priority) {
                 $query->whereHas('priority', function ($q) use ($priority) {
                     $q->whereRaw('LOWER(name) = ?', [strtolower($priority)]);
                 });
             }
 
+            // FILTER TANGGAL (SAFE)
+            if ($request->filled('start_date') && strtotime($request->start_date)) {
+                $query->whereDate('tickets.created_at', '>=', $request->start_date);
+            }
+
+            if ($request->filled('end_date') && strtotime($request->end_date)) {
+                $query->whereDate('tickets.created_at', '<=', $request->end_date);
+            }
+            // CUSTOM SORT BY STATUS + CREATED AT
             $query->leftJoin('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
                 ->orderByRaw("
-        CASE ticket_status.slug
-            WHEN 'open' THEN 1
-            WHEN 'in-progress' THEN 2
-            WHEN 'pending' THEN 3
-            WHEN 'close' THEN 4
-            ELSE 5
-        END
-    ")
+                  CASE ticket_status.slug
+                      WHEN 'open' THEN 1
+                      WHEN 'in-progress' THEN 2
+                      WHEN 'pending' THEN 3
+                      WHEN 'close' THEN 4
+                      ELSE 5
+                  END
+              ")
                 ->orderBy('tickets.created_at', 'asc')
                 ->select('tickets.*');
 
             $tickets = $query->paginate($request->get('per_page', 10));
 
-            // CEK PESAN BELUM DIBACA
+            // UNREAD CHECK
             $tickets->getCollection()->transform(function ($ticket) use ($user) {
                 $ticket->has_unread = \App\Models\TicketReply::where('ticket_id', $ticket->id)
                     ->where('user_id', '!=', $user->id)
                     ->where('is_read', false)
                     ->exists();
-
                 return $ticket;
             });
 
@@ -311,6 +319,27 @@ class TicketsControllers extends Controller
                 });
             }
 
+            if ($request->filled('start_date')) {
+                $query->whereDate('tickets.created_at', '>=', $request->start_date);
+            }
+
+            if ($request->filled('end_date')) {
+                $query->whereDate('tickets.created_at', '<=', $request->end_date);
+            }
+
+
+            $query->leftJoin('ticket_status', 'tickets.ticket_status_id', '=', 'ticket_status.id')
+                ->orderByRaw("
+                  CASE ticket_status.slug
+                      WHEN 'open' THEN 1
+                      WHEN 'in-progress' THEN 2
+                      WHEN 'pending' THEN 3
+                      WHEN 'close' THEN 4
+                      ELSE 5
+                  END
+              ")
+                ->orderBy('tickets.created_at', 'asc')
+                ->select('tickets.*');
             // Pagination tetap
             $tickets = $query->latest()->paginate($perPage);
 
