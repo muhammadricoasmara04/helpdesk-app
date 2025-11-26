@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const paginationContainer = document.getElementById("pagination");
     let currentPage = 1;
     let lastPage = 1;
-    
+
     function formatDate(dateString) {
         if (!dateString) return "-";
         const date = new Date(dateString);
@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const priorityValue = document.getElementById("priority-filter").value;
         const startDate = document.getElementById("start-date").value;
         const endDate = document.getElementById("end-date").value;
+        showTableLoading();
         try {
             const response = await axios.get(`${baseUrl}/tickets`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -111,6 +112,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             renderPagination();
         } catch (error) {
             console.error(error);
+        } finally {
+            hideTableLoading();
         }
     }
 

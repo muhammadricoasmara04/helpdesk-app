@@ -59,9 +59,20 @@
                                 {{-- Tombol Submit --}}
                                 <div class="relative">
                                     <button type="submit"
-                                        class="w-full bg-cyan-500 text-white rounded-md py-2 font-medium hover:bg-cyan-600 transition">
+                                        class="w-full bg-cyan-500 text-white rounded-md py-2 font-medium hover:bg-cyan-600 transition"
+                                        id="loginBtn">
                                         Login
                                     </button>
+
+                                    {{-- Spinner kecil --}}
+                                    <div id="spinnerLogin" class="hidden absolute right-3 top-1/2 -translate-y-1/2">
+                                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -73,4 +84,26 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const form = document.querySelector("form");
+            const btn = document.getElementById("loginBtn");
+            const spinner = document.getElementById("spinnerLogin");
+
+            form.addEventListener("submit", () => {
+
+                // disable tombol TAPI TIDAK UBAH DESIGN
+                btn.style.opacity = "0.7";
+                btn.style.cursor = "not-allowed";
+                btn.disabled = true;
+
+                // tampilkan spinner kecil kanan
+                spinner.classList.remove("hidden");
+
+                // tampilkan global full loading
+                showLoading();
+            });
+        });
+    </script>
 @endsection

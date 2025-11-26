@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const priorityValue = document.getElementById("priority-filter").value;
         const startDate = document.getElementById("start-date").value;
         const endDate = document.getElementById("end-date").value;
+        showTableLoading();
         try {
             const response = await axios.get(`${baseUrl}/tickets`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -111,6 +112,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             renderPagination();
         } catch (error) {
             console.error(error);
+        } finally {
+            hideTableLoading();
         }
     }
 

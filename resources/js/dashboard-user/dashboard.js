@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ========== FETCH DATA ==========
     async function getMyTickets(page = 1) {
+        showTableLoading();
         try {
             const token = localStorage.getItem("token");
 
@@ -85,11 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error(error);
             setMessageRow("❌ Gagal memuat data tiket.");
+        } finally {
+            hideTableLoading();
         }
     }
 
     // ========== RENDER TABEL ==========
     function renderTickets(ticketsToRender) {
+        
         tableBody.innerHTML = "";
 
         if (!ticketsToRender.length) {

@@ -19,6 +19,7 @@ export default defineConfig({
                 "resources/js/dashboard-user/ticket-replied.js",
                 "resources/js/staff/ticket-replied-staff.js",
                 "resources/js/staff/dashboard-ticket.js",
+                "resources/js/utils/loading.js",
             ],
             refresh: true,
         }),
