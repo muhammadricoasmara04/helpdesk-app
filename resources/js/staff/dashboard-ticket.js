@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             if (!result.isConfirmed) return;
-
+            showLoading();
             try {
                 await axios.post(
                     `${baseUrl}/tickets/${ticketId}/assign`,
@@ -287,6 +287,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
                 btn.disabled = false;
                 btn.textContent = "🔧 Assign to Me";
+            } finally {
+                hideLoading(); 
             }
         }
     });

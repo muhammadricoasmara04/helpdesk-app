@@ -177,7 +177,7 @@
 
                     <button type="submit"
                         class="mt-2 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg shadow-md transition">
-                        Update Status & Prioritas
+                        Update Status 
                     </button>
                     @if (session('success'))
                         <div class="mt-2 text-green-600 text-sm font-medium">
@@ -200,7 +200,7 @@
                             @csrf
                             @method('PUT')
 
-                            <label class="text-sm font-semibold text-gray-600">Pilih Staff Baru</label>
+                            <label class="text-sm font-semibold text-gray-600">Pilih Operator</label>
                             <select name="assigned_to" class="w-full border rounded-lg px-3 py-2 mt-1">
                                 @foreach ($staffList as $staff)
                                     @if ($staff->id !== auth()->id())

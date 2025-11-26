@@ -186,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const loadMessages = async () => {
+        showLoading();
         try {
             const response = await axios.get(
                 `${baseUrl}/ticket-replies/${ticketId}`,
@@ -241,6 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("❌ Gagal memuat pesan:", error);
             chatBox.innerHTML =
                 '<div class="text-center text-gray-500 mt-5">Gagal memuat pesan.</div>';
+        } finally {
+            hideLoading();
         }
     };
 

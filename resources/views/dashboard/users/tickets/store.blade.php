@@ -121,7 +121,7 @@
                 <input type="file" name="attachments[]" multiple
                     class="w-full border border-gray-300 rounded-lg p-2.5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
                 <p class="text-xs text-gray-500 mt-1">
-                    Kamu bisa mengunggah beberapa file (JPG, PNG, PDF, DOCX). Maks 5MB per file.
+                    Anda bisa mengunggah beberapa file (JPG, PNG, PDF, DOCX). Maks 5MB per file.
                 </p>
             </div>
 
